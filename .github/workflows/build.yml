@@ -163,6 +163,14 @@ jobs:
             fi
           done | sort -V))
 
+          # 6.11 is bugged with nvidia, reverts to simpledrm and fbdev is broken
+          # https://github.com/ublue-os/hwe/issues/287
+          # TODO
+          if [[ "${{ matrix.image_flavor }}" = "nvidia" ]]; then
+            echo "KERNEL=6.10.8-201.fsync.fc40.x86_64" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
           if [ -n "${common_versions[-1]}" ]; then
             echo "KERNEL=${common_versions[-1]}" >> $GITHUB_OUTPUT
           else
