@@ -299,11 +299,14 @@ jobs:
       # to consume. For more details, review the image signing section of the README.
 
       # Sign container
-      - name: Sign container image
-        uses: EyeCantCU/cosign-action/sign@v0.3.0
+      - uses: sigstore/cosign-installer@v3.7.0
         if: github.event_name != 'pull_request'
-        with:
-          containers: ${{ env.IMAGE_NAME }}
-          registry-token: ${{ secrets.GITHUB_TOKEN }}
-          signing-secret: ${{ secrets.SIGNING_SECRET }}
-          tags: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
+
+      - name: Sign container image
+        if: github.event_name != 'pull_request'
+        run: |
+          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}@${TAGS}
+        env:
+          TAGS: ${{ steps.push.outputs.digest }}
+          COSIGN_EXPERIMENTAL: false
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
