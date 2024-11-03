@@ -279,34 +279,35 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push Image to GHCR
-        uses: redhat-actions/push-to-registry@v2
+        uses: Wandalen/wretry.action@v3.5.0
         id: push
+        if: github.event_name != 'pull_request'
         env:
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_PASSWORD: ${{ github.token }}
         with:
-          image: ${{ env.IMAGE_NAME }}
-          tags: ${{ steps.generate-tags.outputs.alias_tags }}
-          registry: ${{ steps.registry_case.outputs.lowercase }}
-          username: ${{ env.REGISTRY_USER }}
-          password: ${{ env.REGISTRY_PASSWORD }}
-          extra-args: |
-            --disable-content-trust
-
-      # This section is optional and only needs to be enabled in you plan on distributing
-      # your project to others to consume. You will need to create a public and private key
-      # using Cosign and save the private key as a repository secret in GitHub for this workflow
-      # to consume. For more details, review the image signing section of the README.
-
-      # Sign container
-      - uses: sigstore/cosign-installer@v3.7.0
-        if: github.event_name != 'pull_request'
+          action: redhat-actions/push-to-registry@v2
+          attempt_limit: 3
+          attempt_delay: 15000
+          with: |
+            image: ${{ env.IMAGE_NAME }}
+            tags: ${{ steps.generate-tags.outputs.alias_tags }}
+            registry: ${{ steps.registry_case.outputs.lowercase }}
+            username: ${{ env.REGISTRY_USER }}
+            password: ${{ env.REGISTRY_PASSWORD }}
+            extra-args: |
+              --compression-format=zstd:chunked
 
       - name: Sign container image
+        uses: EyeCantCU/cosign-action/sign@v0.3.0
+        if: github.event_name != 'pull_request'
+        with:
+          containers: ${{ env.IMAGE_NAME }}
+          registry-token: ${{ secrets.GITHUB_TOKEN }}
+          signing-secret: ${{ secrets.SIGNING_SECRET }}
+          tags: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
+
+      - name: Echo outputs
         if: github.event_name != 'pull_request'
         run: |
-          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}@${TAGS}
-        env:
-          TAGS: ${{ steps.push.outputs.digest }}
-          COSIGN_EXPERIMENTAL: false
-          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          echo "${{ toJSON(steps.push.outputs) }}"
