@@ -172,9 +172,9 @@ jobs:
       - name: Remove auxiliary images
         # We are tight on space, need at least 2x for OSTree
         run: |
-          sudo podman image rm docker://ghcr.io/ublue-os/kinoite-main:${{ env.MAJOR_VERSION }}
-          sudo podman image rm docker://ghcr.io/ublue-os/akmods:${{ env.KERNEL_FLAVOR }}-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
-          sudo podman image rm docker://ghcr.io/ublue-os/akmods-extra:${{ env.KERNEL_FLAVOR }}-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
+          sudo podman image rm ghcr.io/ublue-os/kinoite-main:${{ env.MAJOR_VERSION }}
+          sudo podman image rm ghcr.io/ublue-os/akmods:${{ env.KERNEL_FLAVOR }}-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
+          sudo podman image rm ghcr.io/ublue-os/akmods-extra:${{ env.KERNEL_FLAVOR }}-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
 
       - name: Generate tags
         id: generate-tags
