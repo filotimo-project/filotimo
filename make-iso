@@ -32,11 +32,11 @@ ARCH=x86_64 \
 IMAGE_NAME=filotimo \
 IMAGE_REPO=ghcr.io/filotimo-project \
 IMAGE_TAG=latest \
-VERSION=40 \
+VERSION=41 \
 VARIANT=kinoite \
-ISO_NAME=filotimo-latest-40.iso \
+ISO_NAME=filotimo-latest-41.iso \
 SECURE_BOOT_KEY_URL=https://github.com/ublue-os/akmods/raw/main/certs/public_key.der \
 ENROLLMENT_PASSWORD=filotimo \
 FLATPAK_REMOTE_REFS_DIR=/github/workspace/flatpaks \
 ENABLE_FLATPAK_DEPENDENCIES=false
-sudo podman cp container-installer:/build-container-installer/filotimo-latest-40.iso ./
+sudo podman cp container-installer:/build-container-installer/filotimo-latest-41.iso ./

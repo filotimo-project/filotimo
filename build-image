@@ -2,8 +2,8 @@
 
 TARGET="$1"
 FEDORA_MAJOR_VERSION="$2"
-KERNEL_FLAVOR="fsync"
-REPOS=("fsync-kernel" "akmods" "akmods-extra" "akmods-nvidia")
+KERNEL_FLAVOR="bazzite"
+REPOS=("bazzite-kernel" "akmods" "akmods-extra" "akmods-nvidia")
 
 set -xeu pipefail
 
@@ -11,8 +11,8 @@ declare -A repo_tags
 
 get_tags() {
 repo=$1
-if [[ "$repo" == "fsync-kernel" ]]; then
-    # fsync-kernel uses the format without the initial flavor in the tag
+if [[ "$repo" == "bazzite-kernel" ]]; then
+    # bazzite-kernel uses the format without the initial flavor in the tag
     skopeo list-tags docker://ghcr.io/ublue-os/${repo} | jq -r '.Tags[]' \
     | grep "^${FEDORA_MAJOR_VERSION}-[0-9]\+\.[0-9]\+\.[0-9]\+-[0-9]\+\..*\.fc${FEDORA_MAJOR_VERSION}\.x86_64"
 else
@@ -31,7 +31,7 @@ extract_full_version() {
   echo "$1" | cut -d'-' -f2,3
 }
 
-common_versions=($(echo "${repo_tags[fsync-kernel]}" | while read -r tag; do
+common_versions=($(echo "${repo_tags[bazzite-kernel]}" | while read -r tag; do
   full_version=$(extract_full_version "$tag")
 
   if grep -q "$full_version" <<< "${repo_tags[akmods]}" && \
@@ -46,5 +46,3 @@ if [ -n "${common_versions[-1]}" ]; then
 else
   exit 1
 fi
-
-

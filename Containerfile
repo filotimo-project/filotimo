@@ -1,8 +1,8 @@
 ARG IMAGE_NAME="${IMAGE_NAME:-filotimo}"
-ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-40}"
-ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-fsync}"
+ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-41}"
+ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-bazzite}"
 # Fetch this dynamically outside the containerfile - use the build script
-ARG KERNEL_VERSION="${KERNEL_VERSION:-6.9.12-8.fsync.fc40.x86_64}"
+ARG KERNEL_VERSION="${KERNEL_VERSION:-6.11.4-301.bazzite.fc41.x86_64}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-kinoite-main}"
 ARG SOURCE_ORG="${SOURCE_ORG:-ublue-os}"
 ARG BASE_IMAGE="ghcr.io/${SOURCE_ORG}/${BASE_IMAGE_NAME}"
@@ -16,16 +16,17 @@ FROM ghcr.io/ublue-os/akmods-extra:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${KE
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} as filotimo
 
 ARG IMAGE_NAME="${IMAGE_NAME:-filotimo}"
-ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-40}"
-ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-fsync}"
-ARG KERNEL_VERSION="${KERNEL_VERSION:-6.9.12-8.fsync.fc40.x86_64}"
+ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-41}"
+ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-bazzite}"
+# Fetch this dynamically outside the containerfile - use the build script
+ARG KERNEL_VERSION="${KERNEL_VERSION:-6.11.4-301.bazzite.fc41.x86_64}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-kinoite-main}"
 ARG SOURCE_ORG="${SOURCE_ORG:-ublue-os}"
 ARG BASE_IMAGE="ghcr.io/${SOURCE_ORG}/${BASE_IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR:-filotimo}"
 ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 
-# fsync kernel - remove for f41 once upstream ublue ships it TODO
+# Install kernel
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=kernel,src=/tmp/rpms,dst=/tmp/fsync-rpms \
     rpm-ostree cliwrap install-to-root / && \
@@ -86,10 +87,11 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     ostree container commit
 
 # Install important repos
+# TODO make filotimo repo follow major version, so move to f41
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     echo "${FEDORA_MAJOR_VERSION}" && \
-    curl -Lo /etc/yum.repos.d/filotimo.repo https://download.opensuse.org/repositories/home:/tduck:/filotimolinux/Fedora_"${FEDORA_MAJOR_VERSION}"/home:tduck:filotimolinux.repo && \
-    curl -Lo /etc/yum.repos.d/klassy.repo https://download.opensuse.org/repositories/home:/paul4us/Fedora_"${FEDORA_MAJOR_VERSION}"/home:paul4us.repo && \
+    curl -Lo /etc/yum.repos.d/filotimo.repo https://download.opensuse.org/repositories/home:/tduck:/filotimolinux/Fedora_Rawhide/home:tduck:filotimolinux.repo && \
+    curl -Lo /etc/yum.repos.d/klassy.repo https://download.opensuse.org/repositories/home:/paul4us/Fedora_Rawhide/home:paul4us.repo && \
     curl -Lo /etc/yum.repos.d/_copr_rodoma92-kde-cdemu-manager.repo https://copr.fedorainfracloud.org/coprs/rodoma92/kde-cdemu-manager/repo/fedora-"${FEDORA_MAJOR_VERSION}"/rodoma92-kde-cdemu-manager-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     curl -Lo /etc/yum.repos.d/terra.repo https://terra.fyralabs.com/terra.repo && \
     ostree container commit
@@ -116,17 +118,8 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/terra.repo && \
     ostree container commit
 
-# Replace ppd with tuned - remove for f41 TODO
-RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
-    rpm-ostree override remove \
-        power-profiles-daemon \
-        --install tuned \
-        --install tuned-ppd && \
-    ostree container commit
-
 # Install misc. packages
 # libdvdcss has dubious legality
-# TODO remove pulseaudio-utils for f41 - upstreamed into kinfocenter package
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     rpm-ostree override remove \
         ublue-os-update-services \
@@ -145,7 +138,6 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
         openssl openssl-libs \
         python3-pip \
         i2c-tools \
-        pulseaudio-utils \
         p7zip \
         unzip \
         unrar \
@@ -196,10 +188,11 @@ FROM ghcr.io/ublue-os/akmods-nvidia:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${K
 
 FROM filotimo as filotimo-nvidia
 
-ARG IMAGE_NAME="${IMAGE_NAME:-filotimo-nvidia}"
-ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-40}"
-ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-fsync}"
-ARG KERNEL_VERSION="${KERNEL_VERSION:-6.9.12-8.fsync.fc40.x86_64}"
+ARG IMAGE_NAME="${IMAGE_NAME:-filotimo}"
+ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-41}"
+ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-bazzite}"
+# Fetch this dynamically outside the containerfile - use the build script
+ARG KERNEL_VERSION="${KERNEL_VERSION:-6.11.4-301.bazzite.fc41.x86_64}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-kinoite-main}"
 ARG SOURCE_ORG="${SOURCE_ORG:-ublue-os}"
 ARG BASE_IMAGE="ghcr.io/${SOURCE_ORG}/${BASE_IMAGE_NAME}"
@@ -208,15 +201,16 @@ ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 
 # Install NVIDIA driver, use different copr repo for kf6 supergfxctl plasmoid
 # TODO only install supergfxctl on hybrid systems or find some way to only show it on hybrid systems
-# TODO remove libxcb installation at start once it builds again without it
 # it's confusing visual noise outside of that context
 # https://github.com/ublue-os/hwe/
 # https://github.com/ublue-os/bazzite/blob/main/Containerfile#L950
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=nvidia-akmods,src=/rpms,dst=/tmp/akmods-rpms \
-    rpm-ostree override replace --experimental --from repo=fedora libxcb-1.16-4.fc40.i686 && \
     curl -Lo /etc/yum.repos.d/_copr_jhyub-supergfxctl-plasmoid.repo https://copr.fedorainfracloud.org/coprs/jhyub/supergfxctl-plasmoid/repo/fedora-"${FEDORA_MAJOR_VERSION}"/jhyub-supergfxctl-plasmoid-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
+    rpm-ostree install \
+        mesa-vdpau-drivers.x86_64 \
+        mesa-vdpau-drivers.i686 && \
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
     chmod +x /tmp/nvidia-install.sh && \
     IMAGE_NAME="kinoite" /tmp/nvidia-install.sh && \

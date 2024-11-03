@@ -27,7 +27,8 @@ To view these scripts, use the ${LIGHT_BLUE}ujust${RESET} command.
 
 ${LIGHT_BLUE}fish${RESET} is the default shell on filotimo, which works differently to ${LIGHT_BLUE}bash${RESET} and is not fully POSIX-compliant. To learn more, visit ${BOLD}https://fishshell.com/docs/current/${RESET} or simply type ${LIGHT_BLUE}help${RESET}.
 Many shell scripts do not work with fish. If this is the case, you can simply type ${LIGHT_BLUE}bash${RESET} in a terminal to use ${LIGHT_BLUE}bash${RESET}.
-You can also change your login shell to ${LIGHT_BLUE}bash${RESET} with ${LIGHT_BLUE}sudo usermod --shell bash \$USER${RESET}.
+${LIGHT_BLUE}run0${RESET} is aliased to ${LIGHT_BLUE}sudo${RESET} on ${LIGHT_BLUE}fish${RESET}, but it isn't aliased on ${LIGHT_BLUE}bash${RESET}, ${LIGHT_BLUE}zsh${RESET}, and all other shells.
+You can change your login shell to ${LIGHT_BLUE}bash${RESET} with ${LIGHT_BLUE}sudo usermod --shell bash \$USER${RESET}.
 ${LIGHT_BLUE}fish${RESET} is wrapped with ${LIGHT_BLUE}fishlogin${RESET} ensuring ${BOLD}/etc/profile${RESET} still assigns environment variables.
 
 To disable/re-enable this message, type:

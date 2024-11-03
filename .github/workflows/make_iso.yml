@@ -1,3 +1,4 @@
+# TODO flatpaks still don't work
 name: Build Filotimo ISO
 on:
   schedule:
@@ -32,9 +33,9 @@ jobs:
           set -ex
           image="ghcr.io/filotimo-project/filotimo:latest"
           # Make temp space
-          TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p "${{ github.workspace }}" flatpak.XXX)
+          TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p /github/workspace/ flatpak.XXX)
           # Get list of refs from directory
-          FLATPAK_REFS_DIR="${{ github.workspace }}/flatpaks"
+          FLATPAK_REFS_DIR=/github/workspace/flatpaks
           FLATPAK_REFS_DIR_LIST=$(cat "${FLATPAK_REFS_DIR}"/* | tr '\n' ' ')
           # Generate install script
           cat << EOF > "${TEMP_FLATPAK_INSTALL_DIR}/script.sh"
@@ -63,17 +64,17 @@ jobs:
             IMAGE_NAME=filotimo \
             IMAGE_REPO=ghcr.io/filotimo-project \
             IMAGE_TAG=latest \
-            VERSION=40 \
+            VERSION=41 \
             VARIANT=kinoite \
-            ISO_NAME=filotimo-latest-40.iso \
+            ISO_NAME=filotimo-latest-41.iso \
             SECURE_BOOT_KEY_URL=https://github.com/ublue-os/akmods/raw/main/certs/public_key.der \
             ENROLLMENT_PASSWORD=filotimo \
             FLATPAK_REMOTE_REFS_DIR=/github/workspace/flatpaks \
             ENABLE_FLATPAK_DEPENDENCIES=false
-          docker cp container-installer:/build-container-installer/filotimo-latest-40.iso ./
-          docker cp container-installer:/build-container-installer/filotimo-latest-40.iso-CHECKSUM ./
-          echo "iso_name=filotimo-latest-40.iso" >> $GITHUB_OUTPUT
-          echo "iso_path=$(readlink -f ./filotimo-latest-40.iso)" >> $GITHUB_OUTPUT
+          docker cp container-installer:/build-container-installer/filotimo-latest-41.iso ./
+          docker cp container-installer:/build-container-installer/filotimo-latest-41.iso-CHECKSUM ./
+          echo "iso_name=filotimo-latest-41.iso" >> $GITHUB_OUTPUT
+          echo "iso_path=$(readlink -f ./filotimo-latest-41.iso)" >> $GITHUB_OUTPUT
 
         # This example is for uploading your ISO as a GitHub artifact. You can do something similar using any cloud storage, so long as you copy the output
       - name: Upload ISO as artifact

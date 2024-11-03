@@ -70,3 +70,7 @@ X-KDE-StartupNotify=false
 X-KDE-autostart-phase=2
 NoDisplay=true
 Name=Restart XDG Desktop Portal (bug workaround)' > /etc/xdg/autostart/restart-xdg-desktop-portal.desktop
+
+# Stop tuned touching swappiness
+grep -rIl 'vm.swappiness=' /usr/lib/tuned/profiles | xargs sed -i '/^vm.swappiness=[0-9]\+/s/^/# /'
+

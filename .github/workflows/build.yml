@@ -4,7 +4,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 12 * * 1'
+    - cron: '5 6 */2 * *'
   push:
     branches:
       - main
@@ -16,7 +16,7 @@ env:
   IMAGE_DESC: "Filotimo Linux OCI Image"
   IMAGE_TAG: "latest"
   IMAGE_ARCH: "x86_64"
-  MAJOR_VERSION: "40"
+  MAJOR_VERSION: "41"
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"  # do not edit
 
 
@@ -126,15 +126,15 @@ jobs:
           set -xeu pipefail
 
           FEDORA_MAJOR_VERSION="${{ env.MAJOR_VERSION }}"
-          KERNEL_FLAVOR="fsync"
-          REPOS=("fsync-kernel" "akmods" "akmods-extra" "akmods-nvidia")
+          KERNEL_FLAVOR="bazzite"
+          REPOS=("bazzite-kernel" "akmods" "akmods-extra" "akmods-nvidia")
 
           declare -A repo_tags
 
           get_tags() {
           repo=$1
-          if [[ "$repo" == "fsync-kernel" ]]; then
-              # fsync-kernel uses the format without the initial flavor in the tag
+          if [[ "$repo" == "bazzite-kernel" ]]; then
+              # bazzite-kernel uses the format without the initial flavor in the tag
               skopeo list-tags docker://ghcr.io/ublue-os/${repo} | jq -r '.Tags[]' \
               | grep "^${FEDORA_MAJOR_VERSION}-[0-9]\+\.[0-9]\+\.[0-9]\+-[0-9]\+\..*\.fc${FEDORA_MAJOR_VERSION}\.x86_64"
           else
@@ -153,7 +153,7 @@ jobs:
             echo "$1" | cut -d'-' -f2,3
           }
 
-          common_versions=($(echo "${repo_tags[fsync-kernel]}" | while read -r tag; do
+          common_versions=($(echo "${repo_tags[bazzite-kernel]}" | while read -r tag; do
             full_version=$(extract_full_version "$tag")
 
             if grep -q "$full_version" <<< "${repo_tags[akmods]}" && \
@@ -162,14 +162,6 @@ jobs:
                 echo "$full_version"
             fi
           done | sort -V))
-
-          # 6.11 is bugged with nvidia, reverts to simpledrm and fbdev is broken
-          # https://github.com/ublue-os/hwe/issues/287
-          # TODO
-          if [[ "${{ matrix.image_flavor }}" = "nvidia" ]]; then
-            echo "KERNEL=6.10.8-201.fsync.fc40.x86_64" >> $GITHUB_OUTPUT
-            exit 0
-          fi
 
           if [ -n "${common_versions[-1]}" ]; then
             echo "KERNEL=${common_versions[-1]}" >> $GITHUB_OUTPUT
