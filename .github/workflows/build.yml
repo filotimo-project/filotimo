@@ -23,6 +23,7 @@ env:
   IMAGE_ARCH: "x86_64"
   MAJOR_VERSION: "41"
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"  # do not edit
+  KERNEL_FLAVOR: "bazzite"
 
 
 jobs:
@@ -98,14 +99,14 @@ jobs:
           set -xeu pipefail
 
           FEDORA_MAJOR_VERSION="${{ env.MAJOR_VERSION }}"
-          KERNEL_FLAVOR="bazzite"
-          REPOS=("bazzite-kernel" "akmods" "akmods-extra" "akmods-nvidia")
+          KERNEL_FLAVOR="${{ env.KERNEL_FLAVOR }}"
+          REPOS=("${{ env.KERNEL_FLAVOR }}-kernel" "akmods" "akmods-extra" "akmods-nvidia")
 
           declare -A repo_tags
 
           get_tags() {
           repo=$1
-          if [[ "$repo" == "bazzite-kernel" ]]; then
+          if [[ "$repo" == "${{ env.KERNEL_FLAVOR }}-kernel" ]]; then
               # bazzite-kernel uses the format without the initial flavor in the tag
               skopeo list-tags docker://ghcr.io/ublue-os/${repo} | jq -r '.Tags[]' \
               | grep "^${FEDORA_MAJOR_VERSION}-[0-9]\+\.[0-9]\+\.[0-9]\+-[0-9]\+\..*\.fc${FEDORA_MAJOR_VERSION}\.x86_64"
@@ -125,7 +126,7 @@ jobs:
             echo "$1" | cut -d'-' -f2,3
           }
 
-          common_versions=($(echo "${repo_tags[bazzite-kernel]}" | while read -r tag; do
+          common_versions=($(echo "${repo_tags[${{ env.KERNEL_FLAVOR }}-kernel]}" | while read -r tag; do
             full_version=$(extract_full_version "$tag")
 
             if grep -q "$full_version" <<< "${repo_tags[akmods]}" && \
@@ -149,9 +150,9 @@ jobs:
           command: |
             # pull the base images used for FROM in Containerfile so
             # we can retry on that unfortunately common failure case
-            sudo podman pull docker://ghcr.io/ublue-os/kinoite-main:${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
-            sudo podman pull docker://ghcr.io/ublue-os/akmods:bazzite-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
-            sudo podman pull docker://ghcr.io/ublue-os/akmods-extra:bazzite-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
+            sudo podman pull docker://ghcr.io/ublue-os/kinoite-main:${{ env.MAJOR_VERSION }}
+            sudo podman pull docker://ghcr.io/ublue-os/akmods:${{ env.KERNEL_FLAVOR }}-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
+            sudo podman pull docker://ghcr.io/ublue-os/akmods-extra:${{ env.KERNEL_FLAVOR }}-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
 
             # Add rechunk as well to remove this source of failure
             sudo podman pull ghcr.io/hhd-dev/rechunk:v0.8.3
@@ -171,9 +172,9 @@ jobs:
       - name: Remove auxiliary images
         # We are tight on space, need at least 2x for OSTree
         run: |
-          sudo podman image rm docker://ghcr.io/ublue-os/kinoite-main:${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
-          sudo podman image rm docker://ghcr.io/ublue-os/akmods:bazzite-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
-          sudo podman image rm docker://ghcr.io/ublue-os/akmods-extra:bazzite-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
+          sudo podman image rm docker://ghcr.io/ublue-os/kinoite-main:${{ env.MAJOR_VERSION }}
+          sudo podman image rm docker://ghcr.io/ublue-os/akmods:${{ env.KERNEL_FLAVOR }}-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
+          sudo podman image rm docker://ghcr.io/ublue-os/akmods-extra:${{ env.KERNEL_FLAVOR }}-${{ env.MAJOR_VERSION }}-${{ steps.kernel.outputs.KERNEL }}
 
       - name: Generate tags
         id: generate-tags
