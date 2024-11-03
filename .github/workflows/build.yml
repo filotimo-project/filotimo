@@ -163,7 +163,7 @@ jobs:
           sudo buildah build \
             --build-arg IMAGE_NAME=${{ env.IMAGE_NAME }} \
             --build-arg IMAGE_TAG=${{ env.IMAGE_TAG }} \
-            --build-arg KERNEL_VERSION=${{ steps.kernel.outputs.KERNEL }}
+            --build-arg KERNEL_VERSION=${{ steps.kernel.outputs.KERNEL }} \
             --build-arg FEDORA_MAJOR_VERSION=${{ env.MAJOR_VERSION }} \
             --build-arg TIMESTAMP_TAG=${{ env.TIMESTAMP_TAG }} \
             --target ${{ env.IMAGE_NAME }} \
