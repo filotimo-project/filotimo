@@ -33,9 +33,9 @@ jobs:
           set -ex
           image="ghcr.io/filotimo-project/filotimo:latest"
           # Make temp space
-          TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p /github/workspace/ flatpak.XXX)
+          TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p "${{ github.workspace }}" flatpak.XXX)
           # Get list of refs from directory
-          FLATPAK_REFS_DIR=/github/workspace/flatpaks
+          FLATPAK_REFS_DIR="${{ github.workspace }}/flatpaks"
           FLATPAK_REFS_DIR_LIST=$(cat "${FLATPAK_REFS_DIR}"/* | tr '\n' ' ')
           # Generate install script
           cat << EOF > "${TEMP_FLATPAK_INSTALL_DIR}/script.sh"
