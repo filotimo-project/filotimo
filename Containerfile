@@ -122,7 +122,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     rpm-ostree override remove \
         ublue-os-update-services \
-        toolbox && \
+        toolbox kcron && \
     rpm-ostree install \
         plasma-discover-rpm-ostree \
         distrobox \
