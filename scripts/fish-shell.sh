@@ -4,7 +4,7 @@ set -ouex pipefail
 # Setup fish to inherit profile correctly
 echo '#!/bin/bash -l
 bash --norc --noprofile /etc/profile.d/user-motd.sh
-exec fish -l "$@"' > /usr/bin/fishlogin
+exec env UID=$(id -u -r) EUID=$(id -u) GID=$(id -g) fish -l "$@"' > /usr/bin/fishlogin
 chmod +x /usr/bin/fishlogin
 
 # Set fish as default shell
