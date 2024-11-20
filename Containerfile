@@ -98,7 +98,11 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
 # Install Filotimo packages
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     rm -rf /var/cache/rpm-ostree/repomd && \
-    rpm-ostree override remove zram-generator-defaults fedora-logos desktop-backgrounds-compat plasma-lookandfeel-fedora \
+    rpm-ostree override remove \
+        zram-generator-defaults \
+        fedora-logos desktop-backgrounds-compat \
+        plasma-lookandfeel-fedora \
+        plasma-welcome-fedora \
         --install filotimo-environment \
         --install filotimo-backgrounds \
         --install filotimo-branding \

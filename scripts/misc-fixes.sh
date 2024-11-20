@@ -77,3 +77,8 @@ grep -rIl 'vm.swappiness=' /usr/lib/tuned/profiles | xargs sed -i '/^vm.swappine
 # Allow changing the SDDM background
 touch /etc/sddm-theme.conf.user
 ln -sf /etc/sddm-theme.conf.user /usr/share/sddm/themes/01-breeze-fedora
+
+# Consistent setroubleshoot icons
+cp /usr/share/icons/breeze/apps/48/setroubleshoot_icon.svg /usr/share/icons/hicolor/scalable/apps/setroubleshoot_icon.svg
+cp /usr/share/icons/breeze/apps/48/setroubleshoot_icon.svg /usr/share/icons/hicolor/scalable/apps/setroubleshoot_red_icon.svg
+cp /usr/share/icons/breeze/apps/48/setroubleshoot_icon.svg /usr/share/icons/hicolor/scalable/apps/setroubleshoot_icon-symbolic.svg
