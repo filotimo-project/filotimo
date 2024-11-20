@@ -74,3 +74,6 @@ Name=Restart XDG Desktop Portal (bug workaround)' > /etc/xdg/autostart/restart-x
 # Stop tuned touching swappiness
 grep -rIl 'vm.swappiness=' /usr/lib/tuned/profiles | xargs sed -i '/^vm.swappiness=[0-9]\+/s/^/# /'
 
+# Allow changing the SDDM background
+touch /etc/sddm-theme.conf.user
+ln -sf /etc/sddm-theme.conf.user /usr/share/sddm/themes/01-breeze-fedora

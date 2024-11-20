@@ -6,10 +6,6 @@ RELEASE="$(rpm -E %fedora)"
 # Enable samba for filesharing
 systemctl enable smb
 
-# Enable tuned
-systemctl enable tuned
-systemctl enable tuned-ppd
-
 # Mask hibernate - usually just causes problems
 systemctl mask hibernate.target
 
@@ -42,4 +38,3 @@ RemainAfterExit=true
 WantedBy=multi-user.target
 EOF
 systemctl enable postinstall-install-openh264.service
-
