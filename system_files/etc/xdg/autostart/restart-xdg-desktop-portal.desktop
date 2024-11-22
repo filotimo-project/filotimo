@@ -1,20 +1,7 @@
 [Desktop Entry]
-Comment[en_GB]=
-Comment=
-Exec=/usr/bin/systemctl --user restart xdg-desktop-portal.service
-GenericName[en_GB]=
-GenericName=
-MimeType=
-Name[en_GB]=Restart XDG Desktop Portal (bug workaround)
-Name=Restart XDG Desktop Portal (bug workaround)
-NoDisplay=true
-Path=
-PrefersNonDefaultGPU=false
-StartupNotify=false
-Terminal=false
-TerminalOptions=
 Type=Application
+Exec=/usr/bin/systemctl --user restart xdg-desktop-portal.service
 X-KDE-StartupNotify=false
-X-KDE-SubstituteUID=false
-X-KDE-Username=
 X-KDE-autostart-phase=2
+NoDisplay=true
+Name=Restart XDG Desktop Portal (bug workaround)
