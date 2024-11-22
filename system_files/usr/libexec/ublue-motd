@@ -30,4 +30,4 @@ ${LIGHT_BLUE}fish${RESET} is wrapped with ${LIGHT_BLUE}fishlogin${RESET} ensurin
 
 To disable/re-enable this message, type:
 ${LIGHT_BLUE}ujust toggle-user-motd${RESET}
-----------------------------------------------------------------------------------\n
+----------------------------------------------------------------------------------\n"
