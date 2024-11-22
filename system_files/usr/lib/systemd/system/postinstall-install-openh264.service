@@ -1,0 +1,11 @@
+[Unit]
+Description=Re-layer OpenH264 Codec
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/postinstall-install-openh264
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

@@ -137,7 +137,6 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
         kio-admin \
         kleopatra \
         firewall-config \
-        setroubleshoot \
         openssl openssl-libs \
         python3-pip \
         i2c-tools \
@@ -165,19 +164,22 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
         htop \
         virt-manager \
         podman docker \
-        fish zsh \
+        fish zsh tldr \
         libreoffice && \
     ostree container commit
 
 # Consolidate and install justfiles
 COPY just /tmp/just
-
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just
 
+# Copy in added system files
+COPY system_files /tmp/system_files
+RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
+    rsync -rvK /tmp/system_files/ /
+
 # Add modifications and finalize
 COPY scripts /tmp/scripts
-
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     mkdir -p /var/lib/alternatives && \
     cd /tmp/scripts && \

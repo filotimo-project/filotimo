@@ -1,0 +1,33 @@
+#!/usr/bin/bash
+
+BOLD='\033[1m'
+LIGHT_BLUE='\033[1;34m'
+RESET='\033[0m'
+
+echo -e "${BOLD}Welcome to the filotimo terminal :)${RESET}
+
+filotimo is an immutable and atomic distribution (based on Kinoite), so many terminal commands will work differently to how you're used to.
+
+A container-based workflow is recommended, since the base system is read only.
+To do things needing a mutable system, create a distrobox.
+A distrobox is a container that can have any distribution installed within it, and is integrated with your home folder.
+To create a distrobox, run ${LIGHT_BLUE}distrobox create --image registry.fedoraproject.org/fedora-toolbox:$(grep -oP '(?<=VERSION_ID=)[^"]+' /etc/os-release) --name my-distrobox${RESET}
+Visit ${BOLD}https://github.com/89luca89/distrobox${RESET} to find out more.
+
+To install terminal utilities, use ${LIGHT_BLUE}brew${RESET}. To find out more about a command, type ${LIGHT_BLUE}tldr${RESET} before it.
+
+To install graphical applications, use Flatpaks or AppImages.
+Flatpaks can be easily installed in Discover and through the terminal with the ${LIGHT_BLUE}flatpak${RESET} command, and AppImageLauncher is included with the system for easy integration.
+You can install normal Fedora packages with ${LIGHT_BLUE}dnf${RESET}, but this is not recommended.
+
+Many utility scripts are included with the system.
+To view these scripts, use the ${LIGHT_BLUE}ujust${RESET} command.
+
+${LIGHT_BLUE}fish${RESET} is the default shell on filotimo, which works differently to ${LIGHT_BLUE}bash${RESET}. To learn more, visit ${BOLD}https://fishshell.com/docs/current/${RESET} or simply type ${LIGHT_BLUE}help${RESET}. You can type ${LIGHT_BLUE}bash${RESET} in this terminal in case you need to use it.
+
+You can change your login shell to ${LIGHT_BLUE}bash${RESET} with ${LIGHT_BLUE}sudo usermod --shell bash \$USER${RESET}.
+${LIGHT_BLUE}fish${RESET} is wrapped with ${LIGHT_BLUE}fishlogin${RESET} ensuring ${BOLD}/etc/profile${RESET} still assigns environment variables.
+
+To disable/re-enable this message, type:
+${LIGHT_BLUE}ujust toggle-user-motd${RESET}
+----------------------------------------------------------------------------------\n

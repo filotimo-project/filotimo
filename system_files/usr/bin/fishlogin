@@ -1,0 +1,3 @@
+#!/bin/bash -l
+bash --norc --noprofile /etc/profile.d/user-motd.sh
+exec env UID=$(id -u -r) EUID=$(id -u) GID=$(id -g) fish -l "$@"

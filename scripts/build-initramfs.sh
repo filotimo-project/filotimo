@@ -1,11 +1,7 @@
 #!/usr/bin/bash
 set -oue pipefail
 
-if [[ "${KERNEL_FLAVOR}" == "surface" ]]; then
-    KERNEL_SUFFIX="surface"
-else
-    KERNEL_SUFFIX=""
-fi
+KERNEL_SUFFIX=""
 
 if [ ! -f /usr/libexec/rpm-ostree/wrapped/dracut ]; then
     rpm-ostree cliwrap install-to-root /
