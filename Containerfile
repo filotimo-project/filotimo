@@ -113,7 +113,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
 # Install Filotimo packages
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
-    rm -rf /var/cache/rpm-ostree/repomd && \
     dnf5 -y swap zram-generator-defaults    filotimo-environment && \
     dnf5 -y swap fedora-logos               filotimo-branding    && \
     dnf5 -y swap plasma-lookandfeel-fedora  filotimo-kde-theme   && \
