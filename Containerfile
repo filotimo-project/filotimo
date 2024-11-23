@@ -114,10 +114,20 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     rm -rf /var/cache/rpm-ostree/repomd && \
-    dnf5 -y swap zram-generator-defaults    filotimo-environment    && \
-    dnf5 -y swap fedora-logos               filotimo-branding       && \
-    dnf5 -y swap plasma-lookandfeel-fedora  filotimo-kde-theme      && \
-    dnf5 -y swap desktop-backgrounds-compat filotimo-backgrounds    && \
+    max_attempts=5; \
+    attempt=0; \
+    while (( attempt < max_attempts )); do \
+        ((attempt++)); \
+        dnf5 -y swap zram-generator-defaults    filotimo-environment || continue; \
+        dnf5 -y swap fedora-logos               filotimo-branding    || continue; \
+        dnf5 -y swap plasma-lookandfeel-fedora  filotimo-kde-theme   || continue; \
+        dnf5 -y swap desktop-backgrounds-compat filotimo-backgrounds || continue; \
+        break; \
+    done && \
+    if (( attempt == max_attempts )); then \
+        echo "Couldn't download filotimo packages."; \
+        exit 1; \
+    fi && \
     dnf5 -y remove plasma-welcome-fedora && \
     dnf5 -y install \
         filotimo-environment-fonts \
