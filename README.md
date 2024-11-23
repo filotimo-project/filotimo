@@ -1,5 +1,5 @@
 ### See https://build.opensuse.org/project/show/home:tduck:filotimolinux for our packages (not all are included in this image)
-
+## [Download an ISO here](https://nightly.link/filotimo-project/filotimo/workflows/make_iso/main/filotimo-latest-41.iso)
 TODO: Branch for versions
 Make stable version of image, which follows the creation of a new versioned branch, like bazzite. this version should be reflected in the system.
 Reset rechunker on each feature addition number change, or major upstream version change
