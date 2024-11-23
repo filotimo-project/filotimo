@@ -104,7 +104,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     echo "${FEDORA_MAJOR_VERSION}" && \
-    curl -Lo /etc/yum.repos.d/filotimo.repo https://mirrorcache-au.opensuse.org/repositories/home:/tduck:/filotimolinux/Fedora_"${FEDORA_MAJOR_VERSION}"/home:tduck:filotimolinux.repo && \
+    curl -Lo /etc/yum.repos.d/filotimo.repo https://download.opensuse.org/repositories/home:/tduck:/filotimolinux/Fedora_"${FEDORA_MAJOR_VERSION}"/home:tduck:filotimolinux.repo && \
     curl -Lo /etc/yum.repos.d/klassy.repo https://download.opensuse.org/repositories/home:/paul4us/Fedora_"${FEDORA_MAJOR_VERSION}"/home:paul4us.repo && \
     curl -Lo /etc/yum.repos.d/terra.repo https://terra.fyralabs.com/terra.repo && \
     dnf5 -y copr enable rodoma92/kde-cdemu-manager && \
@@ -114,20 +114,10 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     rm -rf /var/cache/rpm-ostree/repomd && \
-    max_attempts=5; \
-    attempt=0; \
-    while (( attempt < max_attempts )); do \
-        ((attempt++)); \
-        dnf5 -y swap zram-generator-defaults    filotimo-environment || continue; \
-        dnf5 -y swap fedora-logos               filotimo-branding    || continue; \
-        dnf5 -y swap plasma-lookandfeel-fedora  filotimo-kde-theme   || continue; \
-        dnf5 -y swap desktop-backgrounds-compat filotimo-backgrounds || continue; \
-        break; \
-    done && \
-    if (( attempt == max_attempts )); then \
-        echo "Couldn't download filotimo packages."; \
-        exit 1; \
-    fi && \
+    dnf5 -y swap zram-generator-defaults    filotimo-environment && \
+    dnf5 -y swap fedora-logos               filotimo-branding    && \
+    dnf5 -y swap plasma-lookandfeel-fedora  filotimo-kde-theme   && \
+    dnf5 -y swap desktop-backgrounds-compat filotimo-backgrounds && \
     dnf5 -y remove plasma-welcome-fedora && \
     dnf5 -y install \
         filotimo-environment-fonts \
