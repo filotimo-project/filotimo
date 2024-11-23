@@ -1,0 +1,8 @@
+[Unit]
+Description=Wait for Firefox to be installed to configure it
+
+[Path]
+PathExists=/var/lib/flatpak/app/org.mozilla.firefox
+
+[Install]
+WantedBy=default.target

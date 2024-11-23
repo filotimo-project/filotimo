@@ -5,3 +5,4 @@ set -ouex pipefail
 ./misc-fixes.sh
 ./fish-shell.sh
 ./brew.sh
+./nerd-fonts.sh

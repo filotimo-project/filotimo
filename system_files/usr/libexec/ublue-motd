@@ -11,7 +11,7 @@ filotimo is an immutable and atomic distribution (based on Kinoite), so many ter
 A container-based workflow is recommended, since the base system is read only.
 To do things needing a mutable system, create a distrobox.
 A distrobox is a container that can have any distribution installed within it, and is integrated with your home folder.
-To create a distrobox, run ${LIGHT_BLUE}distrobox create --image registry.fedoraproject.org/fedora-toolbox:$(grep -oP '(?<=VERSION_ID=)[^"]+' /etc/os-release) --name my-distrobox${RESET}
+To create a distrobox, run ${LIGHT_BLUE}distrobox create${RESET}.
 Visit ${BOLD}https://github.com/89luca89/distrobox${RESET} to find out more.
 
 To install terminal utilities, use ${LIGHT_BLUE}brew${RESET}. To find out more about a command, type ${LIGHT_BLUE}tldr${RESET} before it.

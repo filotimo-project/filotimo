@@ -26,6 +26,24 @@ ARG BASE_IMAGE="ghcr.io/${SOURCE_ORG}/${BASE_IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR:-filotimo}"
 ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 
+# Fix build skew
+RUN --mount=type=cache,dst=/var/cache/libdnf5 \
+    --mount=type=cache,dst=/var/cache/rpm-ostree \
+    dnf5 -y upgrade \
+        --repo=updates \
+        qt6-qtbase \
+        qt6-qtbase-common \
+        qt6-qtbase-mysql \
+        qt6-qtbase-gui || true && \
+    dnf5 -y upgrade \
+        --repo=updates \
+        elfutils-libelf \
+        elfutils-libs || true && \
+    dnf5 -y upgrade \
+        --repo=updates \
+        glibc || true && \
+    ostree container commit
+
 # Install kernel
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=kernel,src=/tmp/rpms,dst=/tmp/fsync-rpms \
@@ -41,20 +59,16 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
 
 # Install akmod rpms for various firmware and features
 # https://github.com/ublue-os/bazzite/blob/main/Containerfile#L309
-RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
-    curl -Lo /usr/bin/copr https://raw.githubusercontent.com/ublue-os/COPR-command/main/copr && \
-    chmod +x /usr/bin/copr && \
-    curl -Lo /etc/yum.repos.d/_copr_rok-cdemu.repo https://copr.fedorainfracloud.org/coprs/rok/cdemu/repo/fedora-"${FEDORA_MAJOR_VERSION}"/rok-cdemu-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
-    ostree container commit
-
-RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
+RUN --mount=type=cache,dst=/var/cache/libdnf5 \
+    --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=akmods,src=/rpms,dst=/tmp/akmods-rpms \
     --mount=type=bind,from=akmods-extra,src=/rpms,dst=/tmp/akmods-extra-rpms \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo && \
-    rpm-ostree install \
+    dnf5 -y copr enable rok/cdemu && \
+    dnf5 -y install \
         https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
         https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
-    rpm-ostree install \
+    dnf5 -y install \
         /tmp/akmods-rpms/kmods/*xone*.rpm \
         /tmp/akmods-rpms/kmods/*openrazer*.rpm \
         /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm \
@@ -69,7 +83,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
         /tmp/akmods-extra-rpms/kmods/*ryzen-smu*.rpm \
         /tmp/akmods-extra-rpms/kmods/*evdi*.rpm && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo && \
-    rpm-ostree override remove \
+    dnf5 -y remove \
         rpmfusion-free-release \
         rpmfusion-nonfree-release && \
     ostree container commit
@@ -87,28 +101,25 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     ostree container commit
 
 # Install important repos
-RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
+RUN --mount=type=cache,dst=/var/cache/libdnf5 \
+    --mount=type=cache,dst=/var/cache/rpm-ostree \
     echo "${FEDORA_MAJOR_VERSION}" && \
     curl -Lo /etc/yum.repos.d/filotimo.repo https://download.opensuse.org/repositories/home:/tduck:/filotimolinux/Fedora_"${FEDORA_MAJOR_VERSION}"/home:tduck:filotimolinux.repo && \
     curl -Lo /etc/yum.repos.d/klassy.repo https://download.opensuse.org/repositories/home:/paul4us/Fedora_"${FEDORA_MAJOR_VERSION}"/home:paul4us.repo && \
-    curl -Lo /etc/yum.repos.d/_copr_rodoma92-kde-cdemu-manager.repo https://copr.fedorainfracloud.org/coprs/rodoma92/kde-cdemu-manager/repo/fedora-"${FEDORA_MAJOR_VERSION}"/rodoma92-kde-cdemu-manager-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     curl -Lo /etc/yum.repos.d/terra.repo https://terra.fyralabs.com/terra.repo && \
+    dnf5 -y copr enable rodoma92/kde-cdemu-manager && \
     ostree container commit
 
 # Install Filotimo packages
-RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
+RUN --mount=type=cache,dst=/var/cache/libdnf5 \
+    --mount=type=cache,dst=/var/cache/rpm-ostree \
     rm -rf /var/cache/rpm-ostree/repomd && \
-    rpm-ostree override remove \
-        zram-generator-defaults \
-        fedora-logos desktop-backgrounds-compat \
-        plasma-lookandfeel-fedora \
-        plasma-welcome-fedora \
-        --install filotimo-environment \
-        --install filotimo-backgrounds \
-        --install filotimo-branding \
-        --install filotimo-kde-theme && \
-    rpm-ostree install \
-        filotimo-environment-firefox \
+    dnf5 -y swap zram-generator-defaults    filotimo-environment    && \
+    dnf5 -y swap fedora-logos               filotimo-branding       && \
+    dnf5 -y swap plasma-lookandfeel-fedora  filotimo-kde-theme      && \
+    dnf5 -y swap desktop-backgrounds-compat filotimo-backgrounds    && \
+    dnf5 -y remove plasma-welcome-fedora && \
+    dnf5 -y install \
         filotimo-environment-fonts \
         filotimo-environment-ime \
         filotimo-kde-overrides \
@@ -122,15 +133,15 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     ostree container commit
 
 # Install misc. packages
-# libdvdcss has dubious legality
-RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
-    rpm-ostree override remove \
+RUN --mount=type=cache,dst=/var/cache/libdnf5 \
+    --mount=type=cache,dst=/var/cache/rpm-ostree \
+    dnf5 -y remove \
         ublue-os-update-services \
         toolbox kcron && \
-    rpm-ostree install \
+    dnf5 -y install \
         plasma-discover-rpm-ostree \
         distrobox \
-        git gh \
+        git gh glab \
         nodejs-bash-language-server \
         kdenetwork-filesharing \
         ark \
@@ -166,6 +177,8 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
         podman docker \
         fish zsh tldr \
         libreoffice && \
+    dnf5 -y copr disable rodoma92/kde-cdemu-manager && \
+    dnf5 -y copr disable rok/cdemu && \
     ostree container commit
 
 # Consolidate and install justfiles
@@ -209,19 +222,20 @@ ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 # it's confusing visual noise outside of that context
 # https://github.com/ublue-os/hwe/
 # https://github.com/ublue-os/bazzite/blob/main/Containerfile#L950
-RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
+RUN --mount=type=cache,dst=/var/cache/libdnf5 \
+    --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=nvidia-akmods,src=/rpms,dst=/tmp/akmods-rpms \
-    curl -Lo /etc/yum.repos.d/_copr_jhyub-supergfxctl-plasmoid.repo https://copr.fedorainfracloud.org/coprs/jhyub/supergfxctl-plasmoid/repo/fedora-"${FEDORA_MAJOR_VERSION}"/jhyub-supergfxctl-plasmoid-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
+    dnf5 -y copr enable jhyub/supergfxctl-plasmoid && \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
-    rpm-ostree install \
+    dnf5 -y install \
         mesa-vdpau-drivers.x86_64 \
         mesa-vdpau-drivers.i686 && \
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
     chmod +x /tmp/nvidia-install.sh && \
     IMAGE_NAME="kinoite" /tmp/nvidia-install.sh && \
-    rpm-ostree install nvidia-vaapi-driver && \
+    dnf5 -y install nvidia-vaapi-driver && \
     systemctl enable supergfxd && \
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_jhyub-supergfxctl-plasmoid.repo && \
+    dnf5 -y copr disable jhyub/supergfxctl-plasmoid && \
     ostree container commit
 
 COPY scripts /tmp/scripts

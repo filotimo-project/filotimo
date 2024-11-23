@@ -7,6 +7,7 @@ mkdir -p /etc/skel/.local/share/containers/storage/volumes
 # Hide nvtop and htop desktop entries
 sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/htop.desktop
 sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/nvtop.desktop
+sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/nvidia-settings.desktop || true
 
 # Set Konsole default profile
 echo "[Desktop Entry]

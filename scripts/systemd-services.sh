@@ -18,3 +18,6 @@ systemctl enable usr-share-sddm-themes.mount
 
 # Workaround KDE System Monitor not having the correct caps
 systemctl enable kde-sysmonitor-workaround.service
+
+# Configure the firefox flatpak
+systemctl enable firefox-flatpak-configuration.path
