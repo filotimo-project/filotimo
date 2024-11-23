@@ -104,7 +104,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     echo "${FEDORA_MAJOR_VERSION}" && \
-    curl -Lo /etc/yum.repos.d/filotimo.repo https://download.opensuse.org/repositories/home:/tduck:/filotimolinux/Fedora_"${FEDORA_MAJOR_VERSION}"/home:tduck:filotimolinux.repo && \
+    curl -Lo /etc/yum.repos.d/filotimo.repo https://mirrorcache-au.opensuse.org/repositories/home:/tduck:/filotimolinux/Fedora_"${FEDORA_MAJOR_VERSION}"/home:tduck:filotimolinux.repo && \
     curl -Lo /etc/yum.repos.d/klassy.repo https://download.opensuse.org/repositories/home:/paul4us/Fedora_"${FEDORA_MAJOR_VERSION}"/home:paul4us.repo && \
     curl -Lo /etc/yum.repos.d/terra.repo https://terra.fyralabs.com/terra.repo && \
     dnf5 -y copr enable rodoma92/kde-cdemu-manager && \
