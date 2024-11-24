@@ -1,2 +1,2 @@
 [Context]
-filesystems=xdg-config/gtk-3.0:ro;xdg-data/icons;~/.themes;~/.icons;xdg-data/themes;
+filesystems=xdg-config/gtk-3.0:ro;xdg-config/gtk-4.0:ro;xdg-data/icons;~/.themes;~/.icons;xdg-data/themes;
