@@ -4,3 +4,4 @@
 mkdir -p /var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/$(arch)/stable/defaults/pref
 rm -f /var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/$(arch)/stable/defaults/pref/*filotimo*.js
 /usr/bin/cp -rf /usr/share/firefox-config/* /var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/$(arch)/stable/defaults/pref/
+systemctl disable --now firefox-flatpak-configuration.path
