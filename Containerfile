@@ -113,21 +113,27 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
 # Install Filotimo packages
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
-    dnf5 -y --setopt=retries=0 --setopt=fastestmirror=false --setopt=max_parallel_downloads=1 swap zram-generator-defaults    filotimo-environment && \
-    dnf5 -y --setopt=retries=0 --setopt=fastestmirror=false --setopt=max_parallel_downloads=1 swap fedora-logos               filotimo-branding    && \
-    dnf5 -y --setopt=retries=0 --setopt=fastestmirror=false --setopt=max_parallel_downloads=1 swap plasma-lookandfeel-fedora  filotimo-kde-theme   && \
-    dnf5 -y --setopt=retries=0 --setopt=fastestmirror=false --setopt=max_parallel_downloads=1 swap desktop-backgrounds-compat filotimo-backgrounds && \
-    dnf5 -y remove plasma-welcome-fedora && \
-    dnf5 -y install \
-        filotimo-environment-fonts \
-        filotimo-environment-ime \
-        filotimo-kde-overrides \
-        msttcore-fonts-installer \
-        onedriver \
-        appimagelauncher \
-        bup kup python-libfuse \
-        filotimo-atychia \
-        filotimo-plymouth-theme && \
+    dnf5 -y install osc && \
+    mkdir /tmp/filotimo-packages && \
+    osc getbinaries home:tduck:filotimolinux Fedora_"${FEDORA_MAJOR_VERSION}" $(arch) -d /tmp/filotimo-packages && \
+    dnf5 -y install --allowerasing \
+        /tmp/filotimo-packages/filotimo-environment*.rpm \
+        /tmp/filotimo-packages/filotimo-environment-fonts*.rpm \
+        /tmp/filotimo-packages/filotimo-environment-ime*.rpm \
+        /tmp/filotimo-packages/filotimo-branding*.rpm \
+        /tmp/filotimo-packages/filotimo-kde-overrides*.rpm \
+        /tmp/filotimo-packages/filotimo-kde-theme*.rpm \
+        /tmp/filotimo-packages/filotimo-backgrounds*.rpm \
+        /tmp/filotimo-packages/filotimo-atychia*.rpm \
+        /tmp/filotimo-packages/filotimo-plymouth-theme*.rpm \
+        /tmp/filotimo-packages/msttcore-fonts-installer*.rpm \
+        /tmp/filotimo-packages/onedriver*.rpm \
+        /tmp/filotimo-packages/appimagelauncher*.rpm \
+        /tmp/filotimo-packages/bup*.rpm \
+        /tmp/filotimo-packages/kup*.rpm \
+        /tmp/filotimo-packages/python-libfuse*.rpm && \
+    dnf5 -y remove plasma-welcome-fedora osc && \
+    rm -rf /tmp/filotimo-packages && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/terra.repo && \
     ostree container commit
 
