@@ -113,10 +113,10 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
 # Install Filotimo packages
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
-    dnf5 -y swap zram-generator-defaults    filotimo-environment && \
-    dnf5 -y swap fedora-logos               filotimo-branding    && \
-    dnf5 -y swap plasma-lookandfeel-fedora  filotimo-kde-theme   && \
-    dnf5 -y swap desktop-backgrounds-compat filotimo-backgrounds && \
+    dnf5 -y --setopt=retries=0 --setopt=fastestmirror=false --setopt=max_parallel_downloads=1 swap zram-generator-defaults    filotimo-environment && \
+    dnf5 -y --setopt=retries=0 --setopt=fastestmirror=false --setopt=max_parallel_downloads=1 swap fedora-logos               filotimo-branding    && \
+    dnf5 -y --setopt=retries=0 --setopt=fastestmirror=false --setopt=max_parallel_downloads=1 swap plasma-lookandfeel-fedora  filotimo-kde-theme   && \
+    dnf5 -y --setopt=retries=0 --setopt=fastestmirror=false --setopt=max_parallel_downloads=1 swap desktop-backgrounds-compat filotimo-backgrounds && \
     dnf5 -y remove plasma-welcome-fedora && \
     dnf5 -y install \
         filotimo-environment-fonts \
