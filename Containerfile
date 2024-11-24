@@ -125,7 +125,8 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     dnf5 -y remove \
         ublue-os-update-services \
-        toolbox kcron && \
+        toolbox kcron \
+        firefox && \
     dnf5 -y install \
         plasma-discover-rpm-ostree \
         distrobox \
