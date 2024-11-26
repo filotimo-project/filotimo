@@ -5,7 +5,7 @@ pref("widget.use-xdg-desktop-portal.file-picker", 1);
 // Better performance in constrained situations
 pref("browser.low_commit_space_threshold_mb", 750);
 pref("browser.tabs.unloadOnLowMemory", true);
-pref("browser.cache.memory.enable", true)
+pref("browser.cache.memory.enable", true);
 pref("network.ssl_tokens_cache_capacity", 32768); // more TLS token caching (fast reconnects)
 // Keep DNS lookup info longer (in seconds, default = 60 = a minute)
 pref("network.dnsCacheExpiration", 7200); // 7200 = 2 hours. "To reduce load on DNS servers and to speed up response time, Mozilla caches DNS results. This preference controls how long to cache results." / "DNS lookup staying in cache means faster lookup = faster page loads.")
@@ -43,7 +43,7 @@ pref("signon.firefoxRelay.feature", "disabled");
 pref("privacy.query_stripping.enabled", true);
 pref("privacy.query_stripping.enabled.pbmode", true);
 pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
-pref("browser.contentblocking.category", "strict")
+pref("browser.contentblocking.category", "strict");
 pref("extensions.getAddons.showPane", false);
 pref("extensions.webservice.discoverURL", "");
 pref("extensions.getAddons.discovery.api_url", "");
