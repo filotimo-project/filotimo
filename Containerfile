@@ -65,11 +65,10 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=bind,from=akmods-extra,src=/rpms,dst=/tmp/akmods-extra-rpms \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo && \
     dnf5 -y copr enable rok/cdemu && \
+    dnf5 -y copr enable mulderje/facetimehd-kmod && \
     dnf5 -y install \
         https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
         https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
-    tree /tmp/akmods-rpms/ && \
-    tree /tmp/akmods-extra-rpms && \
     dnf5 -y install \
         /tmp/akmods-rpms/kmods/*framework-laptop*.rpm \
         /tmp/akmods-rpms/kmods/*openrazer*.rpm \
@@ -186,6 +185,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y copr disable rodoma92/kde-cdemu-manager && \
     dnf5 -y copr disable rok/cdemu && \
     dnf5 -y copr disable zawertun/kde-kup && \
+    dnf5 -y copr disable mulderje/facetimehd-kmod && \
     ostree container commit
 
 # Consolidate and install justfiles
