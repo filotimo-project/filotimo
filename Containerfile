@@ -69,19 +69,24 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
         https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
     dnf5 -y install \
-        /tmp/akmods-rpms/kmods/*xone*.rpm \
         /tmp/akmods-rpms/kmods/*openrazer*.rpm \
         /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm \
         /tmp/akmods-rpms/kmods/*wl*.rpm \
-        /tmp/akmods-extra-rpms/kmods/*gcadapter_oc*.rpm \
-        /tmp/akmods-extra-rpms/kmods/*nct6687*.rpm \
-        /tmp/akmods-extra-rpms/kmods/*zenergy*.rpm \
-        /tmp/akmods-extra-rpms/kmods/*vhba*.rpm \
+        /tmp/akmods-rpms/kmods/*framework-laptop*.rpm \
+        /tmp/akmods-rpms/kmods/*kvmfr*.rpm \
+        /tmp/akmods-rpms/kmods/*xpadneo*.rpm \
+        /tmp/akmods-rpms/kmods/*xone*.rpm \
         /tmp/akmods-extra-rpms/kmods/*ayaneo-platform*.rpm \
         /tmp/akmods-extra-rpms/kmods/*ayn-platform*.rpm \
         /tmp/akmods-extra-rpms/kmods/*bmi260*.rpm \
+        /tmp/akmods-extra-rpms/kmods/*evdi*.rpm \
+        /tmp/akmods-extra-rpms/kmods/*gcadapter_oc*.rpm \
+        /tmp/akmods-extra-rpms/kmods/*nct6687*.rpm \
+        /tmp/akmods-extra-rpms/kmods/*rtl8814au*.rpm \
+        /tmp/akmods-extra-rpms/kmods/*rtl88xxau*.rpm \
         /tmp/akmods-extra-rpms/kmods/*ryzen-smu*.rpm \
-        /tmp/akmods-extra-rpms/kmods/*evdi*.rpm && \
+        /tmp/akmods-extra-rpms/kmods/*zenergy*.rpm \
+        /tmp/akmods-extra-rpms/kmods/*vhba*.rpm && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo && \
     dnf5 -y remove \
         rpmfusion-free-release \
