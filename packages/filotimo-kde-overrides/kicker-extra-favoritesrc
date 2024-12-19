@@ -1,0 +1,3 @@
+[General]
+Prepend=org.mozilla.firefox.desktop;org.kde.dolphin.desktop;org.mozilla.Thunderbird.desktop;org.kde.elisa.desktop;org.videolan.VLC.desktop;org.kde.kclock.desktop;org.kde.kweather.desktop;libreoffice-writer.desktop;libreoffice-impress.desktop;libreoffice-calc.desktop;org.kde.okular.desktop;systemsettings.desktop;org.kde.discover.desktop
+IgnoreDefaults=true

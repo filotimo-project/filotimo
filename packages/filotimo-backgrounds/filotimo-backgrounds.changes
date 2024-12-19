@@ -1,0 +1,24 @@
+-------------------------------------------------------------------
+Tue Jul 30 07:57:05 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Add Colorism.jpg 
+
+-------------------------------------------------------------------
+Sun Jul 28 13:14:18 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Use symlinks to shrink package size, and change default background 
+
+-------------------------------------------------------------------
+Sat Jul 27 13:02:19 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Set Waves.jpg as SDDM default
+
+-------------------------------------------------------------------
+Sat Jul 27 12:12:43 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Add some abstract wallpapers, remove Passo Giau and set Waves.jpg as the default
+
+-------------------------------------------------------------------
+Thu Jul 11 04:12:42 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Initial for Open Build Service

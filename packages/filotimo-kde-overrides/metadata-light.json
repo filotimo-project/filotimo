@@ -1,0 +1,17 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "tduck973564@gmail.com",
+                "Name": "Thomas Duckworth"
+            }
+        ],
+        "Category": "",
+        "Description": "Filotimo theme by Thomas Duckworth",
+        "Id": "org.filotimoproject.filotimolight.desktop",
+        "License": "GPLv2+",
+        "Name": "Filotimo Light",
+        "Website": "https://github.com/filotimo-project"
+    }
+}

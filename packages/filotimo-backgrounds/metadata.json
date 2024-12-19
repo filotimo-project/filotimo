@@ -1,0 +1,13 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "@author_email@",
+                "Name": "@author_name@"
+            }
+        ],
+        "Id": "@id@",
+        "License": "Unsplash",
+        "Name": "@name@"
+    }
+}

@@ -1,0 +1,15 @@
+[General]
+fixed=IBM Plex Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+font=Inter Variable,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+menuFont=Inter Variable,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+smallestReadableFont=Inter Variable,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+toolBarFont=Inter Variable,9,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+
+[WM]
+activeFont=Inter Variable,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+
+[KDE]
+LookAndFeelPackage=org.filotimoproject.filotimo.desktop
+DefaultLightLookAndFeel=org.filotimoproject.filotimo.desktop
+DefaultDarkLookAndFeel=org.filotimoproject.filotimodark.desktop
+ShowDeleteCommand=false

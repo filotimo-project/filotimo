@@ -1,0 +1,8 @@
+[General]
+clipboardGroup=PostScreenshotCopyImage
+
+[VideoSave]
+preferredVideoFormat=2
+
+[GuiConfig]
+includeDecorations=true

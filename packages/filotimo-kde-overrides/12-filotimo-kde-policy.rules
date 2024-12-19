@@ -1,0 +1,8 @@
+// KDE Automounter is broken with this and passwords for mounting disks is bad UX
+
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.freedesktop.udisks2.filesystem-mount" || action.id == "org.freedesktop.udisks2.filesystem-mount-system") && subject.active) {
+        return polkit.Result.YES;
+    }
+});
+

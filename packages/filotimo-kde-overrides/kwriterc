@@ -1,0 +1,5 @@
+[KTextEditor Renderer]
+Text Font=IBM Plex Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+
+[General]
+Show welcome view for new window=false

@@ -1,0 +1,19 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "tduck973564@gmail.com",
+                "Name": "Thomas Duckworth"
+            }
+        ],
+        "Category": "",
+        "Description": "Filotimo light shell theme",
+        "EnabledByDefault": true,
+        "Id": "filotimo-light",
+        "License": "LGPL",
+        "Name": "Filotimo Light",
+        "Version": "0.0.1",
+        "Website": "https://www.github.com/filotimo-project"
+    },
+    "X-Plasma-API": "5.0"
+}

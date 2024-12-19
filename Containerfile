@@ -100,7 +100,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     rm -rf /tmp/mediatek-firmware && \
     ostree container commit
 
-# Install important repos
+# Install repos
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     echo "${FEDORA_MAJOR_VERSION}" && \
@@ -108,24 +108,28 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     curl -Lo /etc/yum.repos.d/terra.repo https://terra.fyralabs.com/terra.repo && \
     dnf5 -y copr enable rodoma92/kde-cdemu-manager && \
     dnf5 -y copr enable tduck973564/filotimo-packages && \
+    dnf5 -y copr enable zawertun/kde-kup && \
     ostree container commit
 
-COPY temp_packages /tmp/temp_packages
+COPY packages /tmp/packages
+COPY scripts/build-packages.sh /tmp/scripts/build-packages.sh
 # Install Filotimo packages
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
-    dnf5 -y install --allowerasing /tmp/temp_packages/*.rpm && \
+    dnf5 -y install --allowerasing /tmp/packages/*.rpm && \
+    /tmp/scripts/build-packages.sh && \
     dnf5 -y install --allowerasing \
         onedriver \
         filotimo-branding \
-        filotimo-atychia && \
+        filotimo-atychia \
+        filotimo-plymouth-theme && \
     dnf5 -y remove plasma-welcome-fedora && \
-    rm -rf /tmp/temp_packages && \
+    rm -rf /tmp/packages && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/terra.repo && \
     dnf5 -y copr disable tduck973564/filotimo-packages && \
     ostree container commit
 
-# Install misc. packages
+# Install other packages
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     dnf5 -y remove \
@@ -170,9 +174,11 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         virt-manager \
         podman docker \
         fish zsh tldr \
-        libreoffice && \
+        libreoffice \
+        kup && \
     dnf5 -y copr disable rodoma92/kde-cdemu-manager && \
     dnf5 -y copr disable rok/cdemu && \
+    dnf5 -y copr disable zawertun/kde-kup && \
     ostree container commit
 
 # Consolidate and install justfiles

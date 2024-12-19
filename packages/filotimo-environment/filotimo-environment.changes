@@ -1,0 +1,186 @@
+-------------------------------------------------------------------
+Mon Nov  4 06:13:42 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Set GTK_IM_MODULE=fcitx, Electron apps are a scourge on humanity and constantly break this 
+
+-------------------------------------------------------------------
+Mon Nov  4 05:40:30 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Fix libdir for firefox that broke in 41 
+
+-------------------------------------------------------------------
+Sat Oct 12 06:15:26 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Change zram to 2x physical memory
+- https://issuetracker.google.com/issues/227605780 
+
+-------------------------------------------------------------------
+Sun Oct  6 05:41:32 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Drop zstd compression for zram, falls back to default lz4
+- https://github.com/ublue-os/bazzite/commit/5ef67b4290e1bf083fad7beba959b31909c411c7 
+
+-------------------------------------------------------------------
+Mon Sep 30 17:55:03 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Remove ASLR disable workaround for Chromium bug 
+
+-------------------------------------------------------------------
+Mon Sep 30 11:31:46 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Change some firefox options to enable hardware decode 
+
+-------------------------------------------------------------------
+Tue Sep 24 10:24:33 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Revert overrides for Discord and Vesktop
+
+-------------------------------------------------------------------
+Mon Sep 23 05:06:24 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Remove home override for all, only give it to Vesktop and Discord 
+
+-------------------------------------------------------------------
+Wed Sep 18 15:47:02 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Set overrides for discord and vesktop 
+
+-------------------------------------------------------------------
+Sun Sep 15 06:55:49 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Revert /etc/skel podman container fix - can be done in containerfile 
+
+-------------------------------------------------------------------
+Sun Sep 15 04:37:36 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Remove weak depend on firefox 
+
+-------------------------------------------------------------------
+Sun Sep 15 04:37:00 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Stop podman containers playing up on fresh install of immutable distro 
+
+-------------------------------------------------------------------
+Sun Sep  8 08:44:04 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Update sudoers 
+
+-------------------------------------------------------------------
+Sat Sep  7 05:01:38 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Fix broken vm.max_map_count 
+
+-------------------------------------------------------------------
+Sat Aug 31 15:00:36 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Use Inter Variable 
+
+-------------------------------------------------------------------
+Fri Aug  9 11:29:43 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Disable the do not track header by default because it leads to a larger fingerprint 
+
+-------------------------------------------------------------------
+Sun Aug  4 08:44:08 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Set Firefox options to enable DRM support by default, disable telemetry, improve speed and privacy and de-enshittify 
+
+-------------------------------------------------------------------
+Sun Aug  4 08:18:24 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Set Firefox to use XDG picker by default, rather than the GTK one 
+
+-------------------------------------------------------------------
+Fri Aug  2 10:13:51 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Require RPMFusion AppStream data, and set %config(noreplace) for anything in /etc 
+
+-------------------------------------------------------------------
+Thu Aug  1 10:58:05 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=2020436
+
+-------------------------------------------------------------------
+Thu Aug  1 10:25:13 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=2254434 
+
+-------------------------------------------------------------------
+Sun Jul 28 12:32:46 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Rename kde-sudoers to filotimo-sudoers and show pwfeedback on sudo 
+
+-------------------------------------------------------------------
+Tue Jul 23 13:26:40 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Obsolete im-chooser in ime - we want full fcitx integration and it's redundant and is potential for users to break system 
+
+-------------------------------------------------------------------
+Tue Jul 23 13:10:23 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Remove flatpak global defaults allowing wayland for all programs 
+
+-------------------------------------------------------------------
+Mon Jul 22 08:52:31 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Move vm options into 10-filotimo.conf from zram-generator.conf 
+
+-------------------------------------------------------------------
+Sun Jul 14 15:48:34 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Revert to fcitx recommended wayland settings 
+
+-------------------------------------------------------------------
+Sat Jul 13 06:44:22 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Change Fedora ZRam defaults - now do 1.5 times system ram with a minimum of 8GiB and change some vm parameters https://github.com/pop-os/default-settings/pull/163 
+
+-------------------------------------------------------------------
+Fri Jul 12 14:36:14 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Expand aliases with sudo 
+
+-------------------------------------------------------------------
+Fri Jul 12 14:24:59 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Add dnf5 alias directly to bashrc and zshrc, bashrc.d doesn't do anything 
+
+-------------------------------------------------------------------
+Fri Jul 12 11:32:35 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Remove wayland by default - KDE XWayland doesn't scale them anyway, and it breaks IME in some apps notably discord 
+
+-------------------------------------------------------------------
+Fri Jul 12 10:44:18 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Add alias to dnf5 from dnf in bashrc.d - it's faster by a lot 
+
+-------------------------------------------------------------------
+Fri Jul 12 10:22:33 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Put those environment variables back because this is completely shit and borked, and suppress the notifications
+
+-------------------------------------------------------------------
+Fri Jul 12 09:49:25 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Unset some environment variables to stop fcitx complaining 
+
+-------------------------------------------------------------------
+Fri Jul 12 09:14:35 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Set plasma theme as default for fcitx 
+
+-------------------------------------------------------------------
+Fri Jul 12 08:31:23 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Add IME package to enable IME support out of the box
+
+-------------------------------------------------------------------
+Thu Jul 11 07:53:44 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Add kde-sudoers file which exports QT and KDE session information to preserve some things when graphical applications are run with sudo
+
+-------------------------------------------------------------------
+Wed Jul 10 15:50:16 UTC 2024 - Thomas Duckworth <tduck973564@gmail.com>
+
+- Initial for Open Build Service 
