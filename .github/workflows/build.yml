@@ -165,6 +165,7 @@ jobs:
         run: |
           sudo buildah build \
             --cap-add SYS_ADMIN \
+            --cap-add SYS_CHROOT \
             --build-arg IMAGE_NAME=${{ env.IMAGE_NAME }} \
             --build-arg IMAGE_TAG=${{ env.IMAGE_TAG }} \
             --build-arg KERNEL_VERSION=${{ steps.kernel.outputs.KERNEL }} \

@@ -42,7 +42,7 @@ common_versions=($(echo "${repo_tags[bazzite-kernel]}" | while read -r tag; do
 done | sort -V))
 
 if [ -n "${common_versions[-1]}" ]; then
-  podman build . --target "$TARGET" --build-arg KERNEL_VERSION="${common_versions[-1]}" --cap-add SYS_ADMIN
+  podman build . --target "$TARGET" --build-arg KERNEL_VERSION="${common_versions[-1]}" --cap-add SYS_ADMIN --cap-add SYS_CHROOT
 else
   exit 1
 fi
