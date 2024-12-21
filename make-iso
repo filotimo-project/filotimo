@@ -33,7 +33,7 @@ sudo podman rmi ${image}
 
 sudo podman run --name=container-installer --replace --privileged \
 --volume "$(pwd)/flatpaks":"/build-container-installer/flatpaks" \
---volume "$(pwd)/installer/lorax_templates":"/additional_lorax_templates" \
+--volume "$(pwd)/lorax_templates":"/additional_lorax_templates" \
 ghcr.io/jasonn3/build-container-installer:v1.2.2 \
 ADDITIONAL_TEMPLATES="/additional_lorax_templates/remove_root_password_prompt.tmpl" \
 ARCH="x86_64" \
