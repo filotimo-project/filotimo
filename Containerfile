@@ -117,18 +117,22 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y copr enable zawertun/kde-kup && \
     ostree container commit
 
-COPY packages /tmp/packages
-COPY scripts/build-packages.sh /tmp/scripts/build-packages.sh
 # Install Filotimo packages
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     dnf5 -y install --allowerasing /tmp/packages/*.rpm && \
-    /tmp/scripts/build-packages.sh && \
     dnf5 -y install --allowerasing \
         onedriver \
         filotimo-branding \
         filotimo-atychia \
-        filotimo-plymouth-theme && \
+        filotimo-plymouth-theme \
+        filotimo-environment \
+        filotimo-environment-fonts \
+        filotimo-environment-ime \
+        filotimo-kde-overrides \
+        filotimo-kde-theme \
+        filotimo-backgrounds \
+        msttcore-fonts-installer && \
     dnf5 -y remove plasma-welcome-fedora && \
     rm -rf /tmp/packages && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/terra.repo && \
