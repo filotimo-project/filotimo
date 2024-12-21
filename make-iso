@@ -32,9 +32,9 @@ ${image} /temp_flatpak_install_dir/script.sh
 sudo podman rmi ${image}
 
 sudo podman run --name=container-installer --replace --privileged \
-ghcr.io/jasonn3/build-container-installer:v1.2.2 \
 --volume "$(pwd)/flatpaks":"/build-container-installer/flatpaks" \
 --volume "$(pwd)/installer/lorax_templates":"/additional_lorax_templates" \
+ghcr.io/jasonn3/build-container-installer:v1.2.2 \
 ADDITIONAL_TEMPLATES="/additional_lorax_templates/remove_root_password_prompt.tmpl" \
 ARCH="x86_64" \
 ENABLE_CACHE_DNF="false" \
