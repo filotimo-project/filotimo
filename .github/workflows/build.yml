@@ -26,7 +26,7 @@ env:
   KERNEL_FLAVOR: "bazzite"
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
@@ -160,11 +160,50 @@ jobs:
             # Add rechunk as well to remove this source of failure
             sudo podman pull ghcr.io/hhd-dev/rechunk:v0.8.3
 
+      - name: Wait for COPR builds to complete
+      # cursed
+        run: |
+          REPO_OWNER="tduck973564"
+          REPO_NAME="filotimo-packages"
+          STATUSES=("importing" "pending" "starting" "running" "waiting")
+          URL="https://copr.fedorainfracloud.org/api_3/build/list/"
+
+          while true; do
+            ANY_BUILD=false
+            for STATUS in "${STATUSES[@]}"; do
+              RESPONSE=$(curl -s -G --data-urlencode "ownername=$REPO_OWNER" --data-urlencode "projectname=$REPO_NAME" --data-urlencode "status=$STATUS" "$URL")
+              if [[ $? -ne 0 ]]; then
+                echo "api request failed"
+                exit 1
+              fi
+
+              BUILDS=$(echo "$RESPONSE" | jq -c '.items // []')
+              COUNT=$(echo "$BUILDS" | jq '. | length')
+
+              if [[ "$COUNT" -gt 0 ]]; then
+                ANY_BUILD=true
+                echo "$(echo "$STATUS" | tr '[:lower:]' '[:upper:]') ($COUNT):"
+                echo "$BUILDS" | jq -c '.[] | {id: .id, chroots: .chroots}' | while read -r BUILD; do
+                  ID=$(echo "$BUILD" | jq -r '.id')
+                  CHROOTS=$(echo "$BUILD" | jq -c '.chroots')
+                  echo "  - $ID: $CHROOTS"
+                done
+              fi
+            done
+
+            if [[ "$ANY_BUILD" == false ]]; then
+              echo "no builds pending. exiting..."
+              break
+            fi
+
+            echo "rechecking in 10 seconds..."
+            sleep 10
+          done
+      
       - name: Build Image
         id: build_image
         run: |
           sudo buildah build \
-            --cap-add SYS_ADMIN \
             --build-arg IMAGE_NAME=${{ env.IMAGE_NAME }} \
             --build-arg IMAGE_TAG=${{ env.IMAGE_TAG }} \
             --build-arg KERNEL_VERSION=${{ steps.kernel.outputs.KERNEL }} \
