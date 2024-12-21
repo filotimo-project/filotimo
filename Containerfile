@@ -137,6 +137,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y remove plasma-welcome-fedora && \
     rm -rf /tmp/packages && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/terra.repo && \
+    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/klassy.repo && \
     dnf5 -y copr disable tduck973564/filotimo-packages && \
     ostree container commit
 
@@ -186,7 +187,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         podman docker \
         fish zsh tldr \
         libreoffice \
-        kup && \
+        kde-kup && \
     dnf5 -y copr disable rodoma92/kde-cdemu-manager && \
     dnf5 -y copr disable rok/cdemu && \
     dnf5 -y copr disable zawertun/kde-kup && \
