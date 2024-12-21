@@ -1,5 +1,5 @@
 Name:           filotimo-environment
-Version:        0.0
+Version:        {{{ git_dir_version }}}
 Release:        1%{?dist}
 Summary:        Environment configuration for Filotimo.
 URL:            https://github.com/filotimo-project

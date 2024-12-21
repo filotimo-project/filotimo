@@ -11,7 +11,7 @@ Summary: Installer for Microsoft core TrueType fonts for better Windows Compatib
 Name: %{fontname}-fonts-installer
 Obsoletes: msttcorefonts <= 2.6-1
 Provides: msttcorefonts = 2.6-2
-Version: 2.6
+Version: {{{ git_dir_version }}}
 Release: 2%{?dist}
 License: GPLv2
 Group: Fonts

@@ -1,5 +1,5 @@
 Name:           filotimo-backgrounds
-Version:        0.0
+Version:        {{{ git_dir_version }}}
 Release:        1%{?dist}
 Summary:        Wallpapers for Filotimo
 License:        GPLv2+
