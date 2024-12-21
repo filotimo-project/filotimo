@@ -50,3 +50,4 @@ ENROLLMENT_PASSWORD="universalblue" \
 FLATPAK_REMOTE_REFS_DIR="flatpaks" \
 ENABLE_FLATPAK_DEPENDENCIES="false"
 sudo podman cp container-installer:/build-container-installer/filotimo-latest-41.iso ./
+sudo podman cp container-installer:/build-container-installer/filotimo-latest-41.iso-CHECKSUM ./
