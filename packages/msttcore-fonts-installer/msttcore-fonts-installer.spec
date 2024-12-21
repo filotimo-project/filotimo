@@ -71,7 +71,7 @@ These are the fonts added:
     1998 Webdings
 
 %prep
-%setup
+%setup -n msttcore-fonts-installer-2.6
 
 %install
 find . | cpio -pdm $RPM_BUILD_ROOT
