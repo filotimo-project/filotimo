@@ -5,8 +5,3 @@ mkdir -p /var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/$(arch)/sta
 rm -f /var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/$(arch)/stable/defaults/pref/*filotimo*.js
 /usr/bin/cp -rf /usr/share/firefox-config/* /var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/$(arch)/stable/defaults/pref/
 systemctl disable --now firefox-flatpak-configuration.path
-
-# Install ublock origin and plasma integration by default
-mkdir -p /var/lib/flatpak/app/org.mozilla.firefox/current/active/files/lib/firefox/distribution/extensions
-curl -o /var/lib/flatpak/app/org.mozilla.firefox/current/active/files/lib/firefox/distribution/extensions/ublock_origin-1.61.2.xpi https://addons.mozilla.org/firefox/downloads/file/4391011/ublock_origin-1.61.2.xpi
-curl -o /var/lib/flatpak/app/org.mozilla.firefox/current/active/files/lib/firefox/distribution/extensions/plasma_integration-1.9.1.xpi https://addons.mozilla.org/firefox/downloads/file/4298512/plasma_integration-1.9.1.xpi
