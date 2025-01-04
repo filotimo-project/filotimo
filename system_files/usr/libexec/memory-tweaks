@@ -132,6 +132,6 @@ if [ "$mem" -lt 16384000 ]; then
     echo "zstd" > /sys/block/zram0/comp_algorithm
     printf "zram compression algorithm set to zstd"
 else
-    printf "physical memory >= 16GB, no changes made"
+    printf "physical memory >= 16GB, zram compression algorithm not changed to zstd"
 fi
 
