@@ -1,0 +1,2 @@
+# From Gidro-OS https://github.com/fiftydinar/gidro-os/blob/main/files/0-system/usr/lib/udev/rules.d/zz1-usb-dirty-pages-udev-gidro.rules
+ACTION=="add|change", KERNEL=="sd[a-z]", ENV{ID_USB_TYPE}=="disk", RUN+="/usr/libexec/usb-dirty-pages-udev '%k' '%E{ID_USB_VENDOR_ID}' '%E{ID_USB_MODEL_ID}'"

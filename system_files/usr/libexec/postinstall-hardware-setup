@@ -1,0 +1,127 @@
+#!/usr/bin/bash
+
+# thanks bazzite :)
+
+SYS_ID="$(cat /sys/devices/virtual/dmi/id/product_name)"
+VEN_ID="$(cat /sys/devices/virtual/dmi/id/chassis_vendor)"
+CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
+CPU_MODEL=$(grep "model name" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
+KARGS=$(rpm-ostree kargs)
+NEEDED_KARGS=()
+
+if [[ ! $KARGS =~ "preempt" ]]; then
+  echo "Adding needed kargs for full preemption"
+  NEEDED_KARGS+=("--append-if-missing=preempt=full")
+fi
+
+
+# Fstab adjustments
+if [[ ! -e /etc/ublue-os/.fstab_adjusted.flag && $(grep "compress=zstd" /etc/fstab) ]]; then
+  plymouth display-message --text="Configuring hardware..." || true
+    echo "Applying fstab param adjustments"
+    for subvol in root home var; do
+      sed -i "/subvol=$subvol/s/compress=zstd:1/noatime,lazytime,commit=120,discard=async,compress=zstd:1,space_cache=v2/" /etc/fstab
+    done
+    touch /etc/ublue-os/.fstab_adjusted.flag
+else
+    echo "No fstab param adjustments needed"
+fi
+
+# Framework AMD fixes
+if [[ ":Framework:" =~ ":$VEN_ID:" ]]; then
+  plymouth display-message --text="Configuring hardware..." || true
+  if [[ "AuthenticAMD" == "$CPU_VENDOR" ]]; then
+    # Load Ryzen SMU on AMD Framework Laptops
+    if ! [[ -f "/etc/modules-load.d/ryzen_smu.conf" ]]; then
+      mkdir -p "/etc/modules-load.d"
+      printf "# Load ryzen_smu driver upon startup\nryzen_smu\n" >> "/etc/modules-load.d/ryzen_smu.conf"
+    fi
+    # Framework 13 AMD fixes
+    if [[ $SYS_ID == "Laptop ("* ]]; then
+      if [[ ! -f /etc/modprobe.d/alsa.conf ]]; then
+        echo 'Fixing 3.5mm jack'
+        echo "options snd-hda-intel index=1,0 model=auto,dell-headset-multi" > /etc/modprobe.d/alsa.conf
+        echo 0 > /sys/module/snd_hda_intel/parameters/power_save
+      fi
+      if [[ ! -f /etc/udev/rules.d/20-suspend-fixes.rules ]]; then
+        echo 'Fixing suspend issue'
+        echo "ACTION==\"add\", SUBSYSTEM==\"serio\", DRIVERS==\"atkbd\", ATTR{power/wakeup}=\"disabled\"" > /etc/udev/rules.d/20-suspend-fixes.rules
+      fi
+    fi
+  fi
+fi
+
+# Other Framework fixes
+if [[ ":Framework:" =~ ":$VEN_ID:" ]]; then
+  plymouth display-message --text="Configuring hardware..." || true
+  if [[ "AuthenticAMD" == "$CPU_VENDOR" ]]; then
+    if [[ ! $KARGS =~ "iomem" ]]; then
+      echo "AMD Framework Laptop detected, adding needed kargs for ryzenadj"
+      NEEDED_KARGS+=("--append-if-missing=iomem=relaxed")
+    fi
+  elif [[ "GenuineIntel" == "$CPU_VENDOR" ]]; then
+    if [[ ! $KARGS =~ "hid_sensor_hub" ]]; then
+      echo "Intel Framework Laptop detected, applying needed keyboard fix"
+      NEEDED_KARGS+=("--append-if-missing=module_blacklist=hid_sensor_hub");
+    fi
+  fi
+fi
+
+# Surface fixes
+if [[ ":Microsoft:" =~ ":$VEN_ID:" ]]; then
+  plymouth display-message --text="Configuring hardware..." || true
+  if ! [[ -f "/etc/modules-load.d/surface.conf" ]]; then
+    sed 's/^ *//' > "/etc/modules-load.d/surface.conf" << EOF
+      # Add modules necessary for Disk Encryption via keyboard
+      surface_aggregator
+      surface_aggregator_registry
+      surface_aggregator_hub
+      surface_hid_core
+      8250_dw
+
+      # Surface Laptop 3/Surface Book 3 and later
+      surface_hid
+      surface_kbd
+
+EOF
+    if [[ "AuthenticAMD" == "$CPU_VENDOR" ]]; then
+      printf "# Support GPIO pins on AMD Surfaces\npinctrl_amd\n" >> "/etc/modules-load.d/surface.conf"
+    elif [[ "GenuineIntel" == "$CPU_VENDOR" ]]; then
+      sed 's/^ *//' >> "/etc/modules-load.d/surface.conf" << EOF
+        # Support LPSS on Intel Surfaces
+        intel_lpss
+        intel_lpss_pci
+
+        # Support GPIO pins on Intel Surfaces
+        # Surface Book 2
+        pinctrl_sunrisepoint
+
+        # For Surface Laptop 3/Surface Book 3
+        pinctrl_icelake
+
+        # For Surface Laptop 4/Surface Laptop Studio
+        pinctrl_tigerlake
+
+        # For Surface Pro 9/Surface Laptop 5
+        pinctrl_alderlake
+
+        # For Surface Pro 10/Surface Laptop 6
+        pinctrl_meteorlake
+EOF
+    fi
+  fi
+fi
+
+# NVIDIA sometimes doesn't like sleep
+if nvidia-smi &>/dev/null; then
+   NEEDED_KARGS+=("--append-if-missing=mem_sleep_default=s2idle");
+fi
+
+if [[ -n "$NEEDED_KARGS" ]]; then
+  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
+  echo "Found needed karg changes, applying the following: ${NEEDED_KARGS[*]}"
+  rpm-ostree kargs ${NEEDED_KARGS[*]} --reboot || exit 1
+else
+  echo "No karg changes needed"
+fi
+

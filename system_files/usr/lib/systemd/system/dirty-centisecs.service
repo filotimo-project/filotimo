@@ -1,0 +1,11 @@
+[Unit]
+Description=Dynamic dirty centisecs disk tuning for Filotimo
+Before=systemd-user-sessions.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/libexec/dirty-centisecs
+
+[Install]
+WantedBy=multi-user.target

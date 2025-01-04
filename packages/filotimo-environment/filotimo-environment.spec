@@ -12,8 +12,8 @@ Source3:        filotimo-obs-studio.sh
 Source4:        filotimo-ime.sh
 Source5:        open.sh
 # /usr/lib/sysctl.d
-Source11:       99-filotimo.conf
-Source12:       80-inotify.conf
+Source11:       zz1-filotimo.conf
+Source12:       zz1-inotify.conf
 # fonts/conf.d
 Source21:       00-filotimo-default-font.conf
 # /etc/sudoers.d
@@ -451,8 +451,8 @@ fi
 %config(noreplace) %{_sysconfdir}/profile.d/open.sh
 %config(noreplace) %{_sysconfdir}/sudoers.d/filotimo-sudoers
 %{_prefix}/lib/systemd/zram-generator.conf
-%{_prefix}/lib/sysctl.d/99-filotimo.conf
-%{_prefix}/lib/sysctl.d/80-inotify.conf
+%{_prefix}/lib/sysctl.d/zz1-filotimo.conf
+%{_prefix}/lib/sysctl.d/zz1-inotify.conf
 
 %files fonts
 %config(noreplace) %{_sysconfdir}/fonts/conf.d/00-filotimo-default-font.conf

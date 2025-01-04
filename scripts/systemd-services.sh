@@ -18,3 +18,10 @@ systemctl enable usr-share-sddm-themes.mount
 
 # Configure the firefox flatpak
 systemctl enable firefox-flatpak-configuration.path
+
+# Other tweaks
+systemctl enable adbusers-append.service
+systemctl enable dirty-centisecs.service
+systemctl enable memory-tweaks.service
+systemctl enable plugdev-append.service
+systemctl enable postinstall-hardware-setup.service
