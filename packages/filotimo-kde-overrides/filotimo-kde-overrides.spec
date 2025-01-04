@@ -22,6 +22,7 @@ Source13:       PlasmaDiscoverUpdates
 Source14:       12-filotimo-kde-policy.rules
 Source15:       kde-mimeapps.list
 Source16:       kicker-extra-favoritesrc
+Source17:       dolphinrc
 # SDDM config files
 Source21:       10-filotimo-kde-overrides.conf
 # look-and-feel
@@ -99,7 +100,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/sddm.conf.d/
 mkdir -p %{buildroot}%{_datadir}/polkit-1/rules.d
 mkdir -p %{buildroot}%{_datadir}/konsole/
 
-install -t %{buildroot}%{_sysconfdir}/xdg/ %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} %{SOURCE10} %{SOURCE11} %{SOURCE12} %{SOURCE13} %{SOURCE15} %{SOURCE16}
+install -t %{buildroot}%{_sysconfdir}/xdg/ %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} %{SOURCE10} %{SOURCE11} %{SOURCE12} %{SOURCE13} %{SOURCE15} %{SOURCE16} %{SOURCE17}
 install -t %{buildroot}%{_sysconfdir}/xdg/klassy/ %{SOURCE61}
 install -t %{buildroot}%{_sysconfdir}/sddm.conf.d/ %{SOURCE21}
 install -t %{buildroot}%{_datadir}/polkit-1/rules.d/ %{SOURCE14}
@@ -201,6 +202,7 @@ done
 %config(noreplace) %{_sysconfdir}/xdg/PlasmaDiscoverUpdates
 %config(noreplace) %{_sysconfdir}/xdg/kde-mimeapps.list
 %config(noreplace) %{_sysconfdir}/xdg/kicker-extra-favoritesrc
+%config(noreplace) %{_sysconfdir}/xdg/dolphinrc
 %{_datadir}/polkit-1/rules.d/12-filotimo-kde-policy.rules
 
 %files -n filotimo-kde-theme

@@ -1,0 +1,5 @@
+[General]
+GlobalViewProps=false
+
+[VersionControl]
+enabledPlugins=Git
