@@ -1,0 +1,28 @@
+[0bcd3eb3-c64e-46c1-bc9b-ad21613397b7]
+Description=Application settings for discord
+clientmachine=localhost
+decocolor=FilotimoDark
+decocolorrule=2
+wmclass=discord
+wmclassmatch=1
+
+[2e915364-e6d3-41ac-83c6-0b4378f62965]
+Description=Application settings for vesktop
+clientmachine=localhost
+decocolor=FilotimoDark
+decocolorrule=2
+wmclass=vesktop
+wmclassmatch=1
+
+[General]
+count=3
+rules=2e915364-e6d3-41ac-83c6-0b4378f62965,0bcd3eb3-c64e-46c1-bc9b-ad21613397b7,d6fedd9b-fd4d-452c-a801-7aca1c8de6c3
+
+[d6fedd9b-fd4d-452c-a801-7aca1c8de6c3]
+Description=Application settings for Spotify
+clientmachine=localhost
+decocolor=FilotimoDark
+decocolorrule=2
+wmclass=spotify Spotify
+wmclasscomplete=true
+wmclassmatch=1

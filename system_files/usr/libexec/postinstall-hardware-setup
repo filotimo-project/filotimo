@@ -8,6 +8,7 @@ CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }'
 CPU_MODEL=$(grep "model name" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
 KARGS=$(rpm-ostree kargs)
 NEEDED_KARGS=()
+NEEDS_REBOOT=0
 
 if [[ ! $KARGS =~ "preempt" ]]; then
   plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
@@ -15,18 +16,18 @@ if [[ ! $KARGS =~ "preempt" ]]; then
   NEEDED_KARGS+=("--append-if-missing=preempt=full")
 fi
 
-
 # Fstab adjustments
 if [[ ! -e /etc/ublue-os/.fstab_adjusted.flag && $(grep "compress=zstd" /etc/fstab) ]]; then
-  plymouth display-message --text="Configuring hardware..." || true
+  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
   echo "Applying fstab param adjustments"
   for subvol in root home var; do
     sed -i "/subvol=$subvol/s/compress=zstd:1/noatime,lazytime,commit=120,discard=async,compress=zstd:1,space_cache=v2/" /etc/fstab
   done
   mkdir -p /etc/ublue-os/
   touch /etc/ublue-os/.fstab_adjusted.flag
+  NEEDS_REBOOT=1
 else
-    echo "No fstab param adjustments needed"
+  echo "No fstab param adjustments needed"
 fi
 
 # Framework AMD fixes
@@ -125,9 +126,14 @@ fi
 
 if [[ -n "$NEEDED_KARGS" ]]; then
   echo "Found needed karg changes, applying the following: ${NEEDED_KARGS[*]}"
-  rpm-ostree kargs ${NEEDED_KARGS[*]} --reboot || exit 1
+  rpm-ostree kargs ${NEEDED_KARGS[*]} || exit 1
+  NEEDS_REBOOT=1
 else
   echo "No karg changes needed"
+fi
+
+if [[ $NEEDS_REBOOT -eq 1 ]]; then
+  systemctl reboot
 fi
 
 plymouth hide-message --text="Configuring hardware..." || true
