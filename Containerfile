@@ -187,7 +187,8 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         podman docker \
         fish zsh tldr \
         libreoffice \
-        kde-kup && \
+        kde-kup \
+        steam-devices && \
     dnf5 -y copr disable rodoma92/kde-cdemu-manager && \
     dnf5 -y copr disable rok/cdemu && \
     dnf5 -y copr disable zawertun/kde-kup && \
