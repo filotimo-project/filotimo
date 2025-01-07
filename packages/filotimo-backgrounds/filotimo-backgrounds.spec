@@ -7,20 +7,16 @@ URL:            https://github.com/filotimo-project/
 
 Source0:        LICENSE
 
-Source1:        CadinidiMisurina.jpg
-Source2:        ColdDunes.jpg
-Source3:        Dunes.jpg
-Source4:        HillsandMountains.jpg
-Source5:        InClouds.jpg
-Source6:        Kiss.jpg
-Source7:        Obelisk.jpg
-Source8:        Sand.jpg
-Source9:        Wind.jpg
-Source10:       Disks.jpg
-Source11:       Waves.jpg
-Source12:       Globs.jpg
-Source13:       Colorism.jpg
-Source14:       amber-d.jxl
+Source1:        Amber.jxl
+Source2:        Chroma.jpg
+Source3:        Crepusculum.jpg
+Source4:        Dayiri.jpg
+Source5:        Disks.jpg
+Source6:        Elysium.jpg
+Source7:        Globs.jpg
+Source8:        Magniloquent.jpg
+Source9:        Naima.jpg
+Source10:       Phaethon.jpg
 
 Source22:       COPYING
 Source23:       metadata.json
@@ -55,7 +51,7 @@ for file in *.jpg *.jxl; do
 
     mkdir -p %{buildroot}%{_datadir}/wallpapers/$id/contents/images
     cp "$file" %{buildroot}%{_datadir}/wallpapers/$id/contents/screenshot.$ext
-    cp $file %{buildroot}%{_datadir}/wallpapers/$id/contents/images/$(identify -format "%wx%h\n" $file).jpg
+    cp $file %{buildroot}%{_datadir}/wallpapers/$id/contents/images/$(identify -format "%wx%h\n" $file)."${file##*.}"
     cp metadata.json %{buildroot}%{_datadir}/wallpapers/$id/
     cp %{SOURCE22} %{buildroot}%{_datadir}/wallpapers/$id/
 
@@ -65,50 +61,45 @@ for file in *.jpg *.jxl; do
     author_name=""
     author_email=""
     case "$id" in
-        "ColdDunes")
-        name="Cold Dunes"
-        author_name="Marek Piwnicki"
-        author_email="marpiwnicki@gmail.com"
-        ;;
-        "HillsandMountains")
-        name="Hills and Mountains"
-        author_name="Marek Piwnicki"
-        author_email="marpiwnicki@gmail.com"
-        ;;
-        "InClouds")
-        author_name="Marek Piwnicki"
-        name="In Clouds"
-        author_email="marpiwnicki@gmail.com"
-        ;;
-        "CadinidiMisurina")
-        name="Cadini di Misurina"
-        author_name="Eberhard Grossgasteiger"
-        author_email="info@narrateography.art"
-        ;;
         "Disks")
         name="Disks"
         author_name="Milad Fakurian"
         ;;
-        "Colorism")
-        name="Colorism"
+        "Chroma")
+        name="Chroma"
         author_name="Milad Fakurian"
         ;;
-        "Waves")
-        name="Waves"
-        author_name="Paweł Czerwiński"
-        ;;
-        "Globs")
-        name="Globs"
+        "Blobs")
+        name="Blobs"
         author_name="Richard Horvath"
         ;;
-        "amber-d")
+        "Amber")
         name="Amber"
         author_name="David Lapshin"
         ;;
-        *)
-        name=$id
-        author_name="Marek Piwnicki"
-        author_email="marpiwnicki@gmail.com"
+        "Naima")
+        name="Naima"
+        author_name="Nat Watson"
+        ;;
+        "Dayiri")
+        name="Dayiri"
+        author_name="Martin Martz"
+        ;;
+        "Magniloquent")
+        name="Magniloquent"
+        author_name="Pawel Czerwinski"
+        ;;
+        "Crepusculum")
+        name="Crepusculum"
+        author_name="Dim Gunger"
+        ;;
+        "Elysium")
+        name="Elysium"
+        author_name="Sean Sinclair"
+        ;;
+        "Phaethon")
+        name="Phaethon"
+        author_name="Li Zhang"
         ;;
     esac
     sed -i 's/"@name@"/\"'"$name"'\"/' %{buildroot}%{_datadir}/wallpapers/$id/metadata.json
@@ -118,7 +109,7 @@ done
 
 mkdir -p %{buildroot}%{_datadir}/backgrounds/images
 mkdir -p %{buildroot}%{_datadir}/sddm/themes/01-breeze-fedora/
-cp Globs.jpg %{buildroot}%{_datadir}/backgrounds/default.jpg
+cp Phaethon.jpg %{buildroot}%{_datadir}/backgrounds/default.jpg
 convert %{buildroot}%{_datadir}/backgrounds/default.jpg %{buildroot}%{_datadir}/backgrounds/default.png
 rm -f %{buildroot}%{_datadir}/backgrounds/default.jpg
 ln -sf %{_datadir}/backgrounds/default.png %{buildroot}%{_datadir}/backgrounds/default-dark.png

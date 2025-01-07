@@ -36,3 +36,7 @@ dconf update
 
 # Stop tuned touching swappiness
 grep -rIl 'vm.swappiness=' /usr/lib/tuned/profiles | xargs sed -i '/^vm.swappiness=[0-9]\+/s/^/# /'
+
+# Remove Klassy themes, they add clutter and don't really serve a purpose
+rm -rf /usr/share/plasma/look-and-feel/org.kde.klassy*
+rm -rf /usr/share/color-schemes/Klassy*
