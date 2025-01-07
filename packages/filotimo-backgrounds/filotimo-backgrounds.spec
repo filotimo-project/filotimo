@@ -34,6 +34,8 @@ Provides:       f41-backgrounds-kde
 Obsoletes:      f41-backgrounds-kde
 Provides:       fedora-workstation-backgrounds
 Obsoletes:      fedora-workstation-backgrounds
+Provides:       plasma-workspace-wallpapers
+Obsoletes:      plasma-workspace-wallpapers
 
 %description
 Wallpapers for Filotimo.
@@ -75,8 +77,8 @@ for file in *.jpg *.jxl; do
         name="Chroma"
         author_name="Milad Fakurian"
         ;;
-        "Blobs")
-        name="Blobs"
+        "Globs")
+        name="Globs"
         author_name="Richard Horvath"
         ;;
         "Amber")
