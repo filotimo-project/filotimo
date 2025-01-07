@@ -28,6 +28,12 @@ Requires:       sddm-breeze
 
 Provides:       desktop-backgrounds-compat
 Obsoletes:      desktop-backgrounds-compat
+Provides:       f41-backgrounds-base
+Obsoletes:      f41-backgrounds-base
+Provides:       f41-backgrounds-kde
+Obsoletes:      f41-backgrounds-kde
+Provides:       fedora-workstation-backgrounds
+Obsoletes:      fedora-workstation-backgrounds
 
 %description
 Wallpapers for Filotimo.
