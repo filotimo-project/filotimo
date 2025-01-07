@@ -89,6 +89,9 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         /tmp/akmods-extra-rpms/kmods/*vhba*.rpm \
         /tmp/akmods-extra-rpms/kmods/*zenergy*.rpm && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo && \
+    dnf5 -y remove \
+        rpmfusion-free-release \
+        rpmfusion-nonfree-release && \
     ostree container commit
 
 # Some mediatek firmware that I don't really know about
@@ -184,9 +187,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y copr disable rok/cdemu && \
     dnf5 -y copr disable zawertun/kde-kup && \
     dnf5 -y copr disable mulderje/facetimehd-kmod && \
-    dnf5 -y remove \
-        rpmfusion-free-release \
-        rpmfusion-nonfree-release && \
     ostree container commit
 
 # Consolidate and install justfiles
