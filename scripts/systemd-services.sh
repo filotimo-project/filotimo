@@ -9,10 +9,6 @@ systemctl mask hibernate.target
 
 # See system_files/usr/lib/systemd/system/
 
-# Install OpenH264 on first boot
-sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
-systemctl enable postinstall-install-openh264.service
-
 # Workaround immutable SDDM theme directory
 systemctl enable usr-share-sddm-themes.mount
 

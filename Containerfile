@@ -89,9 +89,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         /tmp/akmods-extra-rpms/kmods/*vhba*.rpm \
         /tmp/akmods-extra-rpms/kmods/*zenergy*.rpm && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo && \
-    dnf5 -y remove \
-        rpmfusion-free-release \
-        rpmfusion-nonfree-release && \
     ostree container commit
 
 # Some mediatek firmware that I don't really know about
@@ -148,14 +145,13 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         ublue-os-update-services \
         toolbox \
         firefox && \
-    dnf5 -y install \
+    dnf5 -y install --allowerasing \
         plasma-discover-rpm-ostree \
         distrobox \
         git gh glab \
         nodejs-bash-language-server \
         kdenetwork-filesharing \
         ark \
-        kio-admin \
         kleopatra \
         firewall-config \
         openssl openssl-libs \
@@ -163,25 +159,20 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         i2c-tools \
         p7zip \
         unzip \
-        unrar \
-        gstreamer1-plugins-good gstreamer1-plugin-vaapi gstreamer1-plugin-libav \
+        gstreamer1-plugins-good-freeworld gstreamer1-plugin-vaapi gstreamer1-plugin-libav \
         x265 \
-        ffmpeg \
         kde-cdemu-manager-kf6 \
         v4l2loopback pipewire-v4l2 libcamera-v4l2 \
-        samba samba-usershares samba-dcerpc samba-ldb-ldap-modules samba-winbind-clients samba-winbind-modules \
+        samba samba-usershares \
         rclone \
-        mesa-libGLU \
-        usbmuxd \
-        stress-ng \
+        android-tools \
+        usbmuxd libimobiledevice \
         epson-inkjet-printer-escpr \
         epson-inkjet-printer-escpr2 \
         foomatic \
         foomatic-db-ppds \
         gutenprint \
         hplip \
-        libimobiledevice \
-        android-tools \
         htop \
         virt-manager \
         podman docker \
@@ -193,6 +184,9 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y copr disable rok/cdemu && \
     dnf5 -y copr disable zawertun/kde-kup && \
     dnf5 -y copr disable mulderje/facetimehd-kmod && \
+    dnf5 -y remove \
+        rpmfusion-free-release \
+        rpmfusion-nonfree-release && \
     ostree container commit
 
 # Consolidate and install justfiles
@@ -241,9 +235,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=bind,from=nvidia-akmods,src=/rpms,dst=/tmp/akmods-rpms \
     dnf5 -y copr enable jhyub/supergfxctl-plasmoid && \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
-    dnf5 -y install \
-        mesa-vdpau-drivers.x86_64 \
-        mesa-vdpau-drivers.i686 && \
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
     chmod +x /tmp/nvidia-install.sh && \
     IMAGE_NAME="kinoite" /tmp/nvidia-install.sh && \
