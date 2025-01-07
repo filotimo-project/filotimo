@@ -162,7 +162,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         i2c-tools \
         p7zip \
         unzip \
-        gstreamer1-plugins-good-freeworld gstreamer1-plugin-vaapi gstreamer1-plugin-libav \
+        gstreamer1-plugins-good gstreamer1-plugin-vaapi gstreamer1-plugin-libav \
         x265 \
         kde-cdemu-manager-kf6 \
         v4l2loopback pipewire-v4l2 libcamera-v4l2 \
