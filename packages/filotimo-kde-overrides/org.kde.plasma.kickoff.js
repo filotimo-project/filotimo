@@ -31,3 +31,4 @@ if ( applet.readConfig("icon", "start-here-kde") == "start-here-kde" || applet.r
 applet.currentConfigGroup = ["General"]
 applet.writeConfig("favoritesDisplay", 1);
 applet.writeConfig("showActionButtonCaptions", false);
+applet.writeConfig("switchCategoryOnHover", true);
