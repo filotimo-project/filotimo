@@ -40,3 +40,9 @@ grep -rIl 'vm.swappiness=' /usr/lib/tuned/profiles | xargs sed -i '/^vm.swappine
 # Remove Klassy themes, they add clutter and don't really serve a purpose
 rm -rf /usr/share/plasma/look-and-feel/org.kde.klassy*
 rm -rf /usr/share/color-schemes/Klassy*
+
+# Install custom Discover icon
+rm -rf /usr/share/icons/breeze/apps/48/muondiscover.svg
+rm -rf /usr/share/icons/breeze-dark/apps/48/muondiscover.svg
+cp ./discover-icons/muondiscover.svg /usr/share/icons/breeze/apps/48/muondiscover.svg
+cp ./discover-icons/muondiscover.svg /usr/share/icons/breeze-dark/apps/48/muondiscover.svg
