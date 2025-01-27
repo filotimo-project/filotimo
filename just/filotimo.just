@@ -31,6 +31,7 @@ setup-kde-development-environment:
 # Installs the session file to run a KDE development environment from SDDM. Requires setup-kde-development-environment
 install-kde-development-session:
     #!/usr/bin/bash
+    podman container start kde-development-environment
     if ! podman container exec kde-development-environment test -f /usr/local/share/wayland-sessions/plasmawayland-dev6.desktop; then
         printf "The file '/usr/local/share/wayland-sessions/plasmawayland-dev6.desktop' does not exist in the KDE development container distrobox.\nYou will need to run ujust setup-kde-development-environment first.\n"
         exit 1
