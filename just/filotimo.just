@@ -52,5 +52,5 @@ reinstall-system-flatpaks:
     flatpak remote-delete --system fedora || true
     flatpak remote-delete --system fedora-testing || true
     flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || true
-    FLATPAK_LIST="$(curl https://raw.githubusercontent.com/filotimo-project/filotimo/refs/heads/main/flatpaks/flatpaks | sed "s/x86_64/$(arch)/g" | tr '\n' ' ')"
+    FLATPAK_LIST="$(curl https://raw.githubusercontent.com/filotimo-project/filotimo/refs/heads/main/flatpaks/flatpaks | sed 's/x86_64/$(arch)/g' | tr '\n' ' ')"
     flatpak --system -y install --or-update ${FLATPAK_LIST}
