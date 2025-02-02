@@ -1,5 +1,23 @@
 ### See https://copr.fedorainfracloud.org/coprs/tduck973564/filotimo-packages/ for our packages
 ## [Download an ISO here](https://nightly.link/filotimo-project/filotimo/workflows/make_iso/main/filotimo-latest-41.iso)
+
+## Rebasing from Kinoite/other Fedora atomic distros
+```
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/filotimo-project/filotimo-nvidia:latest
+```
+Then reboot into the OS, rebase to a signed copy
+```
+rpm-ostree rebase ostree-image-signed:docker://ghcr.io/filotimo-project/filotimo-nvidia:latest
+```
+Then reboot, and install the base set of Flatpaks
+```
+ujust reinstall-system-flatpaks
+```
+Then, if necessary, re-enroll Secure Boot keys (password is `universalblue`)
+```
+ujust enroll-secure-boot-key
+```
+
 TODO: Branch for versions
 Make stable version of image, which follows the creation of a new versioned branch, like bazzite. this version should be reflected in the system.
 Reset rechunker on each feature addition number change, or major upstream version change
