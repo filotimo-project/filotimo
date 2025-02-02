@@ -198,6 +198,11 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y copr disable rok/cdemu && \
     dnf5 -y copr disable zawertun/kde-kup && \
     dnf5 -y copr disable mulderje/facetimehd-kmod && \
+    sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
+    dnf5 -y upgrade \
+        --repo=fedora-multimedia \
+        mesa* || true && \
+    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     ostree container commit
 
 # Consolidate and install justfiles
@@ -241,18 +246,18 @@ ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 # it's confusing visual noise outside of that context
 # https://github.com/ublue-os/hwe/
 # https://github.com/ublue-os/bazzite/blob/main/Containerfile#L1059
+#
+# TODO CHANGE BACK HWE SCRIPT TO MAIN ONCE !314 IS MERGED, THIS IS TEMPORARY
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=nvidia-akmods,src=/rpms,dst=/tmp/akmods-rpms \
     dnf5 -y copr enable jhyub/supergfxctl-plasmoid && \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
-    dnf5 -y install \
-        mesa-vdpau-drivers.x86_64 \
-        mesa-vdpau-drivers.i686 \
-        nvidia-vaapi-driver && \
+    dnf5 -y install libva-nvidia-driver && \
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/fix-nvidia-install/nvidia-install.sh && \
     chmod +x /tmp/nvidia-install.sh && \
     IMAGE_NAME="kinoite" /tmp/nvidia-install.sh && \
+    dnf5 -y remove xorg-x11-nvidia && \
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json && \
     ln -s libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so && \
     systemctl enable supergfxd && \
