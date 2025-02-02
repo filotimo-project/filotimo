@@ -250,7 +250,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         mesa-vdpau-drivers.x86_64 \
         mesa-vdpau-drivers.i686 \
         nvidia-vaapi-driver && \
-    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
+    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/fix-nvidia-install/nvidia-install.sh && \
     chmod +x /tmp/nvidia-install.sh && \
     IMAGE_NAME="kinoite" /tmp/nvidia-install.sh && \
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json && \
