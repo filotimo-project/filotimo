@@ -42,7 +42,6 @@ Obsoletes:      zram-generator-defaults
 
 %description
 Environment variables, sysctl and fontconfig configuration for Filotimo.
-Also includes a fonts package that ensures there will never be tofu.
 
 %define debug_package %{nil}
 
@@ -56,8 +55,6 @@ Requires: adobe-source-han-code-jp-fonts
 Requires: google-noto-color-emoji-fonts
 Requires: google-noto-emoji-fonts
 Requires: google-noto-fonts-all
-Requires: google-noto-fonts-all-static
-Requires: google-noto-fonts-all-vf
 
 %description fonts
 The extra font set that comes with Filotimo.
@@ -68,25 +65,20 @@ Summary: IME setup for Filotimo
 # This pulls in a glorious 117MiB yikes
 Requires:  fcitx5
 Requires:  kcm-fcitx5
-Requires:  fcitx5-m17n
 
+Requires:  fcitx5-m17n
 Requires:  fcitx5-chinese-addons
+Requires:  fcitx5-lua
 Requires:  fcitx5-hangul
-Requires:  fcitx5-kkc
-Requires:  fcitx5-libthai
-Requires:  fcitx5-rime
-Requires:  fcitx5-sayura
+Requires:  fcitx5-mozc
 Requires:  fcitx5-unikey
-Requires:  fcitx5-zhuyin
-Requires:  fcitx5-table-extra
-Requires:  fcitx5-table-other
 
 Provides:  im-chooser
 Obsoletes: im-chooser
 
 %description ime
 IME setup for Filotimo
-pinyin, zhuyin etc - uses fcitx5
+pinyin, japanese, hangul, etc - uses fcitx5
 
 %prep
 
