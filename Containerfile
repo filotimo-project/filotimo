@@ -248,6 +248,7 @@ ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 # https://github.com/ublue-os/bazzite/blob/main/Containerfile#L1059
 #
 # TODO CHANGE BACK HWE SCRIPT TO MAIN ONCE !314 IS MERGED, THIS IS TEMPORARY
+# https://github.com/ublue-os/hwe/pull/314/
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=nvidia-akmods,src=/rpms,dst=/tmp/akmods-rpms \
