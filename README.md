@@ -17,6 +17,7 @@ Then, if necessary, re-enroll Secure Boot keys (password is `universalblue`)
 ```
 ujust enroll-secure-boot-key
 ```
+It's recommended that you make a new user account after doing this. Some tweaks and configs are only re-applied to a new user.
 
 TODO: Branch for versions
 Make stable version of image, which follows the creation of a new versioned branch, like bazzite. this version should be reflected in the system.
