@@ -17,8 +17,9 @@ Then, if necessary, re-enroll Secure Boot keys (password is `universalblue`)
 ```
 ujust enroll-secure-boot-key
 ```
-It's recommended that you make a new user account after doing this. Some tweaks and configs are only re-applied to a new user.
+It's recommended that you make a new user account after rebasing. Some tweaks and configs are only re-applied to a new user.
 
+## TODO
 TODO: Branch for versions
 Make stable version of image, which follows the creation of a new versioned branch, like bazzite. this version should be reflected in the system.
 Reset rechunker on each feature addition number change, or major upstream version change
@@ -27,7 +28,7 @@ something like 40.feature addition number.minor bugfix number
 TODO: Build separate isos for all image variants
 
 
-#### Container Signing
+## Container Signing
 
 Container signing is important for end-user security and is enabled on all Universal Blue images. It is recommended you set this up, and by default the image builds *will fail* if you don't.
 
