@@ -1,9 +1,13 @@
 #!/usr/bin/bash
+set -eo pipefail
 
-# thanks bazzite :)
+# thanks bazzite and bluefin:)
 
-SYS_ID="$(cat /sys/devices/virtual/dmi/id/product_name)"
-VEN_ID="$(cat /sys/devices/virtual/dmi/id/chassis_vendor)"
+# Make sure to update this when new stuff is added/removed
+SCRIPT_VER=1
+
+SYS_ID="$(cat '/sys/devices/virtual/dmi/id/product_name')"
+VEN_ID="$(cat '/sys/devices/virtual/dmi/id/chassis_vendor')"
 CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
 CPU_MODEL=$(grep "model name" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
 DEVICE_ID="$SYS_ID $VEN_ID $CPU_MODEL $CPU_VENDOR"
@@ -13,6 +17,15 @@ NEEDS_REBOOT=0
 NEEDS_MODULE_RELOAD=0
 NEEDS_UDEV_RELOAD=0
 
+# Check if there's a new version of the script
+if [[ -f "/etc/ublue-os/.hardware-setup-script-version" ]]; then
+  if [[ "$(cat '/etc/ublue-os/.hardware-setup-script-version')" == "$SCRIPT_VER" ]]; then
+    echo "Script has not been updated. Exiting..."
+    exit 0
+  fi
+fi
+
+# Ensure full preempt is enabled
 if [[ ! $KARGS =~ "preempt" ]]; then
   plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
   echo "Adding needed kargs for full preemption"
@@ -169,15 +182,24 @@ if ! [[ ":Microsoft:" =~ ":$VEN_ID:" ]]; then
 fi
 
 # NVIDIA sometimes doesn't like sleep
-if nvidia-smi &>/dev/null && [[ ! $KARGS =~ "mem_sleep_default" ]]; then
+if nvidia-smi &>/dev/null && [[ ! "$KARGS" =~ "mem_sleep_default" ]]; then
   plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-  NEEDED_KARGS+=("--append-if-missing=mem_sleep_default=s2idle");
+  NEEDED_KARGS+=("--append-if-missing=mem_sleep_default=s2idle")
 fi
-if ! nvidia-smi &>/dev/null && [[ $KARGS =~ "mem_sleep_default" ]]; then
+if ! nvidia-smi &>/dev/null && [[ "$KARGS" =~ "mem_sleep_default" ]]; then
   plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-  NEEDED_KARGS+=("--delete-if-present=mem_sleep_default=s2idle");
+  NEEDED_KARGS+=("--delete-if-present=mem_sleep_default=s2idle")
 fi
 
+# Fix from Bluefin
+if nvidia-smi &>/dev/null && [[ ! "$KARGS" =~ "initcall_blacklist=simpledrm_platform_driver_init" ]]; then
+  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
+  NEEDED_KARGS+=("--append-if-missing=initcall_blacklist=simpledrm_platform_driver_init")
+fi
+if ! nvidia-smi &>/dev/null && [[ "$KARGS" =~ "initcall_blacklist=simpledrm_platform_driver_init" ]]; then
+  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
+  NEEDED_KARGS+=("--delete-if-present=initcall_blacklist=simpledrm_platform_driver_init")
+fi
 
 # Apply karg changes
 if [[ -n "$NEEDED_KARGS" ]]; then
@@ -188,18 +210,19 @@ else
   echo "No karg changes needed"
 fi
 
-# Regenerate device ID
-echo $SYS_ID $VEN_ID $CPU_MODEL $CPU_VENDOR > /etc/ublue-os/.device_id
+# Regenerate device ID, set script ver
+echo "$DEVICE_ID" > "/etc/ublue-os/.device_id"
+echo "$SCRIPT_VER" > "/etc/ublue-os/.hardware-setup-script-version"
 
-if [[ $NEEDS_REBOOT -eq 1 ]]; then
+if [[ "$NEEDS_REBOOT" -eq 1 ]]; then
   systemctl reboot
 fi
 
-if [[ $NEEDS_MODULE_RELOAD -eq 1 ]]; then
+if [[ "$NEEDS_MODULE_RELOAD" -eq 1 ]]; then
   systemctl restart systemd-modules-load.service
 fi
 
-if [[ $NEEDS_UDEV_RELOAD -eq 1 ]]; then
+if [[ "$NEEDS_UDEV_RELOAD" -eq 1 ]]; then
   systemctl restart systemd-udevd.service
 fi
 
