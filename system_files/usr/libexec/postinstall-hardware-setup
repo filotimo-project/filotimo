@@ -73,7 +73,7 @@ if [[ ":Framework:" =~ ":$VEN_ID:" ]]; then
       printf "# Load ryzen_smu driver upon startup\nryzen_smu\n" >> "/etc/modules-load.d/ryzen_smu.conf"
     fi
     # Framework 13 AMD fixes
-    if [[ $SYS_ID == "Laptop ("* ]]; then
+    if [[ "$SYS_ID" == "Laptop ("* ]]; then
       if [[ ! -f /etc/modprobe.d/alsa.conf ]]; then
         NEEDS_MODULE_RELOAD=1
         plymouth display-message --text="Configuring hardware..." || true
@@ -102,9 +102,13 @@ if [[ ! ":Framework:" =~ ":$VEN_ID:" ]]; then
     plymouth display-message --text="Configuring hardware..." || true
     rm -rf "/etc/udev/rules.d/20-suspend-fixes.rules"
   fi
-  NEEDS_MODULE_RELOAD=1
-  plymouth display-message --text="Configuring hardware..." || true
-  sed -i '/^options snd-hda-intel index=1,0 model=auto,dell-headset-multi$/d' /etc/modprobe.d/alsa.conf
+  if [[ -f "/etc/modprobe.d/alsa.conf" ]]; then
+    if grep -q '^options snd-hda-intel index=1,0 model=auto,dell-headset-multi$' /etc/modprobe.d/alsa.conf; then
+      NEEDS_MODULE_RELOAD=1
+      plymouth display-message --text="Configuring hardware..." || true
+      sed -i '/^options snd-hda-intel index=1,0 model=auto,dell-headset-multi$/d' /etc/modprobe.d/alsa.conf
+    fi
+  fi
 fi
 
 
