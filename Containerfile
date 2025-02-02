@@ -31,6 +31,9 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     dnf5 -y upgrade \
         --repo=updates \
+        glib2 || true && \
+    dnf5 -y upgrade \
+        --repo=updates \
         qt6-qtbase \
         qt6-qtbase-common \
         qt6-qtbase-mysql \
@@ -41,7 +44,15 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         elfutils-libs || true && \
     dnf5 -y upgrade \
         --repo=updates \
-        glibc || true && \
+        libX11 \
+        libX11-common \
+        libX11-xcb || true && \
+    dnf5 -y upgrade \
+        --repo=updates \
+        glibc \
+        glibc-common \
+        glibc-all-langpacks \
+        glibc-gconv-extra || true && \
     ostree container commit
 
 # Install kernel
@@ -58,7 +69,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     ostree container commit
 
 # Install akmod rpms for various firmware and features
-# https://github.com/ublue-os/bazzite/blob/main/Containerfile#L309
+# https://github.com/ublue-os/bazzite/blob/main/Containerfile#L343
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=akmods,src=/rpms,dst=/tmp/akmods-rpms \
@@ -95,7 +106,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     ostree container commit
 
 # Some mediatek firmware that I don't really know about
-# https://github.com/ublue-os/bluefin/blob/main/build_files/firmware.sh
+# https://github.com/ublue-os/bluefin/blob/main/build_files/base/08-firmware.sh
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     mkdir -p /tmp/mediatek-firmware && \
     curl -Lo /tmp/mediatek-firmware/WIFI_MT7922_patch_mcu_1_1_hdr.bin "https://gitlab.com/kernel-firmware/linux-firmware/-/raw/8f08053b2a7474e210b03dbc2b4ba59afbe98802/mediatek/WIFI_MT7922_patch_mcu_1_1_hdr.bin?inline=false" && \
@@ -229,16 +240,21 @@ ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 # TODO only install supergfxctl on hybrid systems or find some way to only show it on hybrid systems
 # it's confusing visual noise outside of that context
 # https://github.com/ublue-os/hwe/
-# https://github.com/ublue-os/bazzite/blob/main/Containerfile#L950
+# https://github.com/ublue-os/bazzite/blob/main/Containerfile#L1059
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=nvidia-akmods,src=/rpms,dst=/tmp/akmods-rpms \
     dnf5 -y copr enable jhyub/supergfxctl-plasmoid && \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
+    dnf5 -y install \
+        mesa-vdpau-drivers.x86_64 \
+        mesa-vdpau-drivers.i686 \
+        nvidia-vaapi-driver && \
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
     chmod +x /tmp/nvidia-install.sh && \
     IMAGE_NAME="kinoite" /tmp/nvidia-install.sh && \
-    dnf5 -y install nvidia-vaapi-driver && \
+    rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json && \
+    ln -s libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so && \
     systemctl enable supergfxd && \
     dnf5 -y copr disable jhyub/supergfxctl-plasmoid && \
     ostree container commit
