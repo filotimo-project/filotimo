@@ -4,7 +4,7 @@ set -eo pipefail
 # thanks bazzite and bluefin:)
 
 # Make sure to update this when new stuff is added/removed
-SCRIPT_VER=1
+SCRIPT_VER=2
 
 SYS_ID="$(cat '/sys/devices/virtual/dmi/id/product_name')"
 VEN_ID="$(cat '/sys/devices/virtual/dmi/id/chassis_vendor')"
@@ -17,13 +17,29 @@ NEEDS_REBOOT=0
 NEEDS_MODULE_RELOAD=0
 NEEDS_UDEV_RELOAD=0
 
-# Check if there's a new version of the script
+SCRIPT_UPDATED=1
+HARDWARE_CHANGED=1
+
+# Check if this is a new version of the script
 if [[ -f "/etc/ublue-os/.hardware-setup-script-version" ]]; then
   if [[ "$(cat '/etc/ublue-os/.hardware-setup-script-version')" == "$SCRIPT_VER" ]]; then
-    echo "Script has not been updated. Exiting..."
-    exit 0
+    echo "Script has not been updated."
+    SCRIPT_UPDATED=0
   fi
 fi
+# Check if hardware has actually changed
+if [[ -f "/etc/ublue-os/.device_id" ]]; then
+  if [[ "$(cat '/etc/ublue-os/.device_id')" == "$DEVICE_ID" ]]; then
+    echo "Hardware has not changed."
+    HARDWARE_CHANGED=0
+  fi
+fi
+
+if [[ "$SCRIPT_UPDATED" -eq 0 ]] && [[ "$HARDWARE_CHANGED" -eq 0 ]]; then
+  echo "Exiting..."
+  exit 0
+fi
+
 
 # Ensure full preempt is enabled
 if [[ ! $KARGS =~ "preempt" ]]; then
@@ -44,14 +60,6 @@ if [[ ! -e /etc/ublue-os/.fstab_adjusted.flag && $(grep "compress=zstd" /etc/fst
   NEEDS_REBOOT=1
 else
   echo "No fstab param adjustments needed"
-fi
-
-# Check if hardware has actually changed
-if [[ -f "/etc/ublue-os/.device_id" ]]; then
-  if [[ "$(cat '/etc/ublue-os/.device_id')" == "$DEVICE_ID" ]]; then
-    echo "Hardware has not changed. Exiting..."
-    exit 0
-  fi
 fi
 
 # Framework AMD fixes
