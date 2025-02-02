@@ -99,10 +99,10 @@ jobs:
         id: kernel
         shell: bash
         run: |
-          set -xeu pipefail
+          set -eo pipefail
 
-          kernel_version=$(curl -fsSL \
-            https://raw.githubusercontent.com/ublue-os/bazzite/refs/heads/main/.github/workflows/build.yml | \
+          kernel_version=$((curl -fsSL \
+            https://raw.githubusercontent.com/ublue-os/bazzite/refs/heads/main/.github/workflows/build.yml || true) | \
             grep -m1 'kernel_version:' | \
             awk '{gsub(/#.*/,""); print $2}' | \
             xargs)
