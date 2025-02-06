@@ -246,16 +246,13 @@ ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 # it's confusing visual noise outside of that context
 # https://github.com/ublue-os/hwe/
 # https://github.com/ublue-os/bazzite/blob/main/Containerfile#L1059
-#
-# TODO CHANGE BACK HWE SCRIPT TO MAIN ONCE !314 IS MERGED, THIS IS TEMPORARY
-# https://github.com/ublue-os/hwe/pull/314/
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=nvidia-akmods,src=/rpms,dst=/tmp/akmods-rpms \
     dnf5 -y copr enable jhyub/supergfxctl-plasmoid && \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     dnf5 -y install libva-nvidia-driver && \
-    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/fix-nvidia-install/nvidia-install.sh && \
+    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
     chmod +x /tmp/nvidia-install.sh && \
     IMAGE_NAME="kinoite" /tmp/nvidia-install.sh && \
     dnf5 -y remove xorg-x11-nvidia && \
