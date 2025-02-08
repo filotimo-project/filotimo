@@ -42,7 +42,7 @@ rm -rf /usr/share/plasma/look-and-feel/org.kde.klassy*
 rm -rf /usr/share/color-schemes/Klassy*
 
 # "default" icon theme inherits from Breeze
-sudo sed -i '/^Inherits=/s/Adwaita/Breeze/' /usr/share/icons/default/index.theme
+sed -i '/^Inherits=/s/Adwaita/Breeze/' /usr/share/icons/default/index.theme
 
 # Install custom Discover icon
 rm -rf /usr/share/icons/breeze/apps/48/muondiscover.svg
