@@ -1,7 +1,14 @@
 #!/bin/bash
 
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 <target>
+where target is one of:
+  filotimo
+  filotimo-nvidia"
+    exit 1
+fi
+
 TARGET="$1"
-FEDORA_MAJOR_VERSION="$2"
 
 set -xeu pipefail
 

@@ -1,4 +1,3 @@
-# TODO flatpaks still don't work
 name: Build Filotimo ISO
 on:
   schedule:
@@ -30,21 +29,28 @@ jobs:
         id: build
         shell: bash
         run: |
-          set -ex
+          set -eo pipefail
           cd "${{ github.workspace }}"
-          ./make-iso
-          echo "iso_name=filotimo-latest-41.iso" >> $GITHUB_OUTPUT
-          echo "iso_path=$(readlink -f ./filotimo-latest-41.iso)" >> $GITHUB_OUTPUT
 
-        # This example is for uploading your ISO as a GitHub artifact. You can do something similar using any cloud storage, so long as you copy the output
+          ./build-iso filotimo
+
+          iso_name=filotimo-latest-41
+          echo "iso_name=filotimo-latest-41" >> $GITHUB_OUTPUT
+
+          mkdir -p ISO
+          mv "$iso_name".iso ISO/
+          mv "$iso_name".iso-CHECKSUM ISO/
+
+          echo "iso_path=$(readlink -f ./ISO/$iso_name.iso)" >> $GITHUB_OUTPUT
+
       - name: Upload ISO as artifact
         id: upload
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.build.outputs.iso_name }}
           path: |
-              ${{ steps.build.outputs.iso_path }}
-              ${{ steps.build.outputs.iso_path }}-CHECKSUM
+            ${{ steps.build.outputs.iso_path }}
+            ${{ steps.build.outputs.iso_path }}-CHECKSUM
           if-no-files-found: error
           retention-days: 0
           compression-level: 0
