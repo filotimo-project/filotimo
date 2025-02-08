@@ -1,7 +1,15 @@
 name: Build Filotimo ISO
 on:
+  pull_request:
+    branches:
+      - main
   schedule:
     - cron: '00 12 * * 2'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/README.md'
   workflow_dispatch:
   workflow_call:
 
