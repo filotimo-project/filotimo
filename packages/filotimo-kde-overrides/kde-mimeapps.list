@@ -1,5 +1,5 @@
 [Default Applications]
-application/pdf=org.kde.okular.desktop
+application/pdf=org.kde.okular.desktop;
 text/markdown=org.kde.kwrite.desktop;org.kde.kate.desktop;
 text/plain=org.kde.kwrite.desktop;org.kde.kate.desktop;
 x-scheme-handler/geo=google-maps-geo-handler.desktop;

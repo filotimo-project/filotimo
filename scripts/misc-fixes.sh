@@ -41,8 +41,27 @@ grep -rIl 'vm.swappiness=' /usr/lib/tuned/profiles | xargs sed -i '/^vm.swappine
 rm -rf /usr/share/plasma/look-and-feel/org.kde.klassy*
 rm -rf /usr/share/color-schemes/Klassy*
 
+# "default" icon theme inherits from Breeze
+sudo sed -i '/^Inherits=/s/Adwaita/Breeze/' /usr/share/icons/default/index.theme
+
 # Install custom Discover icon
 rm -rf /usr/share/icons/breeze/apps/48/muondiscover.svg
 rm -rf /usr/share/icons/breeze-dark/apps/48/muondiscover.svg
+rm -rf /usr/share/icons/hicolor/scalable/apps/plasmadiscover.svg
 cp ./discover-icons/muondiscover.svg /usr/share/icons/breeze/apps/48/muondiscover.svg
 cp ./discover-icons/muondiscover.svg /usr/share/icons/breeze-dark/apps/48/muondiscover.svg
+cp ./discover-icons/muondiscover.svg /usr/share/icons/hicolor/scalable/apps/plasmadiscover.svg
+sizes=("128x128" "16x16" "22x22" "32x32" "48x48")
+for size in "${sizes[@]}"; do
+    dir="/usr/share/icons/hicolor/${size}/apps"
+    width="${size%%x*}"
+    png_file="$dir/plasmadiscover.png"
+
+    # Remove the original PNG file if it exists
+    if [ -f "$png_file" ]; then
+        rm "$png_file"
+    fi
+
+    convert -background none -density "$width" "./discover-icons/muondiscover.svg" -resize "${width}x${width}" "$png_file"
+done
+

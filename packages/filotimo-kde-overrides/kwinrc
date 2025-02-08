@@ -6,7 +6,6 @@ windowviewEnabled=false
 
 [Xwayland]
 XwaylandEavesdrops=Combinations
-XwaylandEavesdropsMouse=true
 
 [Wayland]
 InputMethod[$e]=/usr/share/applications/fcitx5-wayland-launcher.desktop
@@ -15,3 +14,6 @@ VirtualKeyboardEnabled=true
 [Desktops]
 Number=2
 Rows=1
+
+[Windows]
+FocusStealingPreventionLevel=2
