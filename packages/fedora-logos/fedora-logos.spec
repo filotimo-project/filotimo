@@ -9,7 +9,7 @@ Provides:   redhat-logos <= %{version}-%{release}
 Provides:   gnome-logos <= %{version}-%{release}
 Provides:   system-logos <= %{version}-%{release}
 
-Provides:   fedora-logos = 1:%{version}-%{release}
+Provides:   fedora-logos >= 1:%{version}-%{release}
 Conflicts:  fedora-logos < 1:%{version}-%{release}
 Obsoletes:  fedora-logos < 1:%{version}-%{release}
 
