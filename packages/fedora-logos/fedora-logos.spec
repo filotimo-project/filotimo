@@ -7,5 +7,8 @@ URL:        https://github.com/filotimo-project/filotimo
 Provides:   redhat-logos = %{version}-%{release}
 Provides:   gnome-logos = %{version}-%{release}
 Provides:   system-logos = %{version}-%{release}
-BuildArch:  noarch
 Requires:   filotimo-branding >= 1.5-3
+BuildArch:  noarch
+
+%description
+Stub to satisfy dependency
