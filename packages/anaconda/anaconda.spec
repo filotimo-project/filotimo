@@ -305,7 +305,7 @@ Requires: NetworkManager-wifi
 Requires: blivet-gui-runtime >= %{blivetguiver}
 %endif
 # Filotimo --------------------------
-Requires: system-logos >= 38.1.0-100%{?dist}.filotimo
+Requires: fedora-logos >= 38.1.0-100%{?dist}.filotimo
 Requires: rsms-inter-fonts
 Requires: breeze-gtk-gtk3
 # -----------------------------------
