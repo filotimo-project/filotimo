@@ -306,7 +306,7 @@ Requires: blivet-gui-runtime >= %{blivetguiver}
 %endif
 # Filotimo --------------------------
 #Requires: system-logos
-Requires: filotimo-branding
+Requires: filotimo-branding >= 1.5-2
 Requires: rsms-inter-fonts
 Requires: breeze-gtk-gtk3
 # -----------------------------------
