@@ -12,7 +12,7 @@ Provides:   system-logos <= %{version}-%{release}
 Provides:   fedora-logos <= %{version}-%{release}
 Conflicts:  fedora-logos < %{version}-%{release}
 Obsoletes:  fedora-logos < %{version}-%{release}
-Requires:   filotimo-branding >= 1.5-4
+Requires:   filotimo-branding >= 1.5-5
 
 BuildArch:  noarch
 
