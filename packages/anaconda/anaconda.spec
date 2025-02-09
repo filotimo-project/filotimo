@@ -305,8 +305,7 @@ Requires: NetworkManager-wifi
 Requires: blivet-gui-runtime >= %{blivetguiver}
 %endif
 # Filotimo --------------------------
-#Requires: system-logos
-Requires: filotimo-branding >= 1.5-2
+Requires: system-logos >= 38.1.0-100.filotimo
 Requires: rsms-inter-fonts
 Requires: breeze-gtk-gtk3
 # -----------------------------------
