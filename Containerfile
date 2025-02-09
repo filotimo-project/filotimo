@@ -135,7 +135,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y install --allowerasing /tmp/packages/*.rpm && \
     dnf5 -y install --allowerasing \
         onedriver \
-        filotimo-branding \
+        fedora-logos \
         filotimo-atychia \
         filotimo-plymouth-theme \
         filotimo-environment \
