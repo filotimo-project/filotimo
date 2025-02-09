@@ -1,6 +1,5 @@
 Summary: Graphical system installer
 Name:    anaconda
-Epoch:   1
 Version: 41.35
 Release: 100%{?dist}.filotimo
 License: GPL-2.0-or-later
