@@ -1,7 +1,7 @@
 Summary: Graphical system installer
 Name:    anaconda
 Version: 41.35
-Release: {{{ git_dir_version }}}.%{?dist}
+Release: filotimo-{{{ git_dir_version }}}
 License: GPL-2.0-or-later
 URL:     http://fedoraproject.org/wiki/Anaconda
 
