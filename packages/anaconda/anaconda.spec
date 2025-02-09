@@ -1,7 +1,7 @@
 Summary: Graphical system installer
 Name:    anaconda
 Version: 41.35
-Release: 100.filotimo
+Release: 100%{?dist}.filotimo
 License: GPL-2.0-or-later
 URL:     http://fedoraproject.org/wiki/Anaconda
 
@@ -305,7 +305,7 @@ Requires: NetworkManager-wifi
 Requires: blivet-gui-runtime >= %{blivetguiver}
 %endif
 # Filotimo --------------------------
-Requires: system-logos >= 38.1.0-100.filotimo
+Requires: system-logos >= 38.1.0-100%{?dist}.filotimo
 Requires: rsms-inter-fonts
 Requires: breeze-gtk-gtk3
 # -----------------------------------
