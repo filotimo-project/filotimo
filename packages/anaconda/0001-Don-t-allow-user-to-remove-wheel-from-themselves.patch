@@ -1,0 +1,25 @@
+From e0b3cddc73ce4884ed73e6029ca000dd4f99ae1a Mon Sep 17 00:00:00 2001
+From: Thomas Duckworth <tduck973564@gmail.com>
+Date: Sun, 9 Feb 2025 12:41:28 +1100
+Subject: [PATCH 1/2] Don't allow user to remove wheel from themselves
+
+---
+ pyanaconda/ui/gui/spokes/user.glade | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyanaconda/ui/gui/spokes/user.glade b/pyanaconda/ui/gui/spokes/user.glade
+index 0dc9413355..6da316b99b 100644
+--- a/pyanaconda/ui/gui/spokes/user.glade
++++ b/pyanaconda/ui/gui/spokes/user.glade
+@@ -264,7 +264,7 @@
+                     <child>
+                       <object class="GtkCheckButton" id="admin_checkbox">
+                         <property name="label" translatable="yes" context="GUI|User">Add ad_ministrative privileges to this user account (wheel group membership)</property>
+-                        <property name="visible">True</property>
++                        <property name="visible">False</property>
+                         <property name="can-focus">True</property>
+                         <property name="receives-default">False</property>
+                         <property name="active">True</property>
+-- 
+2.48.1
+

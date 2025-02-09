@@ -1,0 +1,723 @@
+From e2896b5f1fe10f4adf43baa0379d9f7ae340027f Mon Sep 17 00:00:00 2001
+From: Thomas Duckworth <tduck973564@gmail.com>
+Date: Sun, 9 Feb 2025 12:57:08 +1100
+Subject: [PATCH 2/2] Use Inter and Breeze
+
+---
+ pyanaconda/ui/gui/__init__.py                 | 54 ++++++++++---------
+ pyanaconda/ui/gui/hubs/summary.glade          |  2 +-
+ pyanaconda/ui/gui/spokes/custom_storage.glade | 22 ++++----
+ .../ui/gui/spokes/installation_source.glade   |  4 +-
+ pyanaconda/ui/gui/spokes/keyboard.glade       | 16 +++---
+ .../ui/gui/spokes/language_support.glade      |  8 +--
+ .../gui/spokes/lib/beta_warning_dialog.glade  |  4 +-
+ .../spokes/lib/custom_storage_helpers.glade   |  8 +--
+ pyanaconda/ui/gui/spokes/lib/dasdfmt.glade    |  4 +-
+ .../ui/gui/spokes/lib/storage_dialogs.glade   | 24 ++++-----
+ pyanaconda/ui/gui/spokes/network.glade        |  2 +-
+ .../ui/gui/spokes/software_selection.glade    |  6 +--
+ pyanaconda/ui/gui/spokes/storage.glade        | 16 +++---
+ pyanaconda/ui/gui/spokes/welcome.glade        | 10 ++--
+ 14 files changed, 93 insertions(+), 87 deletions(-)
+
+diff --git a/pyanaconda/ui/gui/__init__.py b/pyanaconda/ui/gui/__init__.py
+index 1b8124aec7..e0d763c670 100644
+--- a/pyanaconda/ui/gui/__init__.py
++++ b/pyanaconda/ui/gui/__init__.py
+@@ -717,18 +717,23 @@ class GraphicalUserInterface(UserInterface):
+ 
+             # Set some program-wide settings.
+             settings = Gtk.Settings.get_default()
+-            settings.set_property("gtk-font-name", "Cantarell")
+-            settings.set_property("gtk-icon-theme-name", "Adwaita")
++            settings.set_property("gtk-font-name", "Inter")
++            settings.set_property("gtk-icon-theme-name", "Breeze")
++            # Filotimo ----------------------------------------------------------------------
++            settings.set_property("gtk-theme-name", "Breeze")
++            # -------------------------------------------------------------------------------
+ 
+             # Get the path to the application data
+             data_path = os.environ.get("ANACONDA_DATA", "/usr/share/anaconda")
+ 
+             # Apply the application stylesheet
+-            css_path = os.path.join(data_path, "anaconda-gtk.css")
+-            provider = Gtk.CssProvider()
+-            provider.load_from_path(css_path)
+-            Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
+-                    Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
++            # Filotimo ----------------------------------------------------------------------
++            #css_path = os.path.join(data_path, "anaconda-gtk.css")
++            #provider = Gtk.CssProvider()
++            #provider.load_from_path(css_path)
++            #Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
++            #        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
++            # -------------------------------------------------------------------------------
+ 
+             # Add the application icons to the theme
+             icon_path = os.path.join(data_path, "pixmaps")
+@@ -736,25 +741,26 @@ class GraphicalUserInterface(UserInterface):
+             icon_theme.append_search_path(icon_path)
+ 
+             # Apply the custom stylesheet
+-            if conf.ui.custom_stylesheet:
+-                try:
+-                    provider = Gtk.CssProvider()
+-                    provider.load_from_path(conf.ui.custom_stylesheet)
+-                    Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
+-                            STYLE_PROVIDER_PRIORITY_CUSTOM)
+-                except GError as e:
+-                    log.error("Custom stylesheet %s failed to load:\n%s",
+-                              conf.ui.custom_stylesheet, e)
++            # Filotimo ----------------------------------------------------------------------
++            # if conf.ui.custom_stylesheet:
++            #    try:
++            #        provider = Gtk.CssProvider()
++            #        provider.load_from_path(conf.ui.custom_stylesheet)
++            #        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
++            #                STYLE_PROVIDER_PRIORITY_CUSTOM)
++            #    except GError as e:
++            #        log.error("Custom stylesheet %s failed to load:\n%s",
++            #                  conf.ui.custom_stylesheet, e)
+ 
+             # Look for updates to the stylesheet and apply them at a higher priority
+-            for updates_dir in ("updates", "product"):
+-                updates_css = "/run/install/%s/anaconda-gtk.css" % updates_dir
+-                if os.path.exists(updates_css):
+-                    provider = Gtk.CssProvider()
+-                    provider.load_from_path(updates_css)
+-                    Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
+-                            STYLE_PROVIDER_PRIORITY_UPDATES)
+-
++            #for updates_dir in ("updates", "product"):
++            #    updates_css = "/run/install/%s/anaconda-gtk.css" % updates_dir
++            #    if os.path.exists(updates_css):
++            #        provider = Gtk.CssProvider()
++            #        provider.load_from_path(updates_css)
++            #        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
++            #                STYLE_PROVIDER_PRIORITY_UPDATES)
++            # -------------------------------------------------------------------------------
+             self.mainWindow.setCurrentAction(self._currentAction)
+             # the window corresponding to the ection should now be visible to the user
+             self._currentAction.entered.emit(self._currentAction)
+diff --git a/pyanaconda/ui/gui/hubs/summary.glade b/pyanaconda/ui/gui/hubs/summary.glade
+index 447d4eec55..8da0e60e55 100644
+--- a/pyanaconda/ui/gui/hubs/summary.glade
++++ b/pyanaconda/ui/gui/hubs/summary.glade
+@@ -128,7 +128,7 @@
+             <property name="label" translatable="yes">We won't touch your disks until you click 'Begin Installation'.</property>
+             <property name="xalign">1</property>
+             <attributes>
+-              <attribute name="font-desc" value="Cantarell Italic"/>
++              <attribute name="font-desc" value="Inter Italic"/>
+               <attribute name="foreground" value="#808080808080"/>
+             </attributes>
+           </object>
+diff --git a/pyanaconda/ui/gui/spokes/custom_storage.glade b/pyanaconda/ui/gui/spokes/custom_storage.glade
+index 7bf41ee14d..8fc414c7ea 100644
+--- a/pyanaconda/ui/gui/spokes/custom_storage.glade
++++ b/pyanaconda/ui/gui/spokes/custom_storage.glade
+@@ -965,7 +965,7 @@
+                                             <property name="width_chars">39</property>
+                                             <property name="max_width_chars">39</property>
+                                             <attributes>
+-                                              <attribute name="font-desc" value="Cantarell Italic 10"/>
++                                              <attribute name="font-desc" value="Inter Italic 10"/>
+                                             </attributes>
+                                           </object>
+                                           <packing>
+@@ -1006,7 +1006,7 @@
+                                             <property name="can_focus">False</property>
+                                             <property name="label" translatable="yes">Selected Device</property>
+                                             <attributes>
+-                                              <attribute name="font-desc" value="Cantarell Bold 10"/>
++                                              <attribute name="font-desc" value="Inter Bold 10"/>
+                                               <attribute name="weight" value="bold"/>
+                                               <attribute name="scale" value="1.2"/>
+                                             </attributes>
+@@ -1024,7 +1024,7 @@
+                                             <property name="halign">end</property>
+                                             <property name="label" translatable="yes">Device description</property>
+                                             <attributes>
+-                                              <attribute name="font-desc" value="Cantarell Italic 10"/>
++                                              <attribute name="font-desc" value="Inter Italic 10"/>
+                                               <attribute name="style" value="italic"/>
+                                             </attributes>
+                                           </object>
+@@ -1059,7 +1059,7 @@
+                                         <property name="label" translatable="yes">This device is encrypted and cannot be read without a valid passphrase. You may unlock it below.</property>
+                                         <property name="wrap">True</property>
+                                         <attributes>
+-                                          <attribute name="font-desc" value="Cantarell 11"/>
++                                          <attribute name="font-desc" value="Inter 11"/>
+                                         </attributes>
+                                       </object>
+                                       <packing>
+@@ -1081,7 +1081,7 @@
+                                             <property name="use_underline">True</property>
+                                             <property name="mnemonic_widget">passphraseEntry</property>
+                                             <attributes>
+-                                              <attribute name="font-desc" value="Cantarell 11"/>
++                                              <attribute name="font-desc" value="Inter 11"/>
+                                             </attributes>
+                                           </object>
+                                           <packing>
+@@ -1153,7 +1153,7 @@
+                                             <property name="can_focus">False</property>
+                                             <property name="label" translatable="yes">Selected Device</property>
+                                             <attributes>
+-                                              <attribute name="font-desc" value="Cantarell Bold 10"/>
++                                              <attribute name="font-desc" value="Inter Bold 10"/>
+                                               <attribute name="weight" value="bold"/>
+                                               <attribute name="scale" value="1.2"/>
+                                             </attributes>
+@@ -1171,7 +1171,7 @@
+                                             <property name="halign">end</property>
+                                             <property name="label" translatable="yes">Device description</property>
+                                             <attributes>
+-                                              <attribute name="font-desc" value="Cantarell Italic 10"/>
++                                              <attribute name="font-desc" value="Inter Italic 10"/>
+                                               <attribute name="style" value="italic"/>
+                                             </attributes>
+                                           </object>
+@@ -1206,7 +1206,7 @@
+                                         <property name="label" translatable="yes">This device cannot be edited directly. You can remove it or select a different device.</property>
+                                         <property name="wrap">True</property>
+                                         <attributes>
+-                                          <attribute name="font-desc" value="Cantarell 11"/>
++                                          <attribute name="font-desc" value="Inter 11"/>
+                                         </attributes>
+                                       </object>
+                                       <packing>
+@@ -1240,7 +1240,7 @@
+                                             <property name="can_focus">False</property>
+                                             <property name="label" translatable="yes">Selected Device</property>
+                                             <attributes>
+-                                              <attribute name="font-desc" value="Cantarell Bold 10"/>
++                                              <attribute name="font-desc" value="Inter Bold 10"/>
+                                               <attribute name="weight" value="bold"/>
+                                               <attribute name="scale" value="1.2"/>
+                                             </attributes>
+@@ -1258,7 +1258,7 @@
+                                             <property name="halign">end</property>
+                                             <property name="label" translatable="yes">Device description</property>
+                                             <attributes>
+-                                              <attribute name="font-desc" value="Cantarell Italic 10"/>
++                                              <attribute name="font-desc" value="Inter Italic 10"/>
+                                               <attribute name="style" value="italic"/>
+                                             </attributes>
+                                           </object>
+@@ -1293,7 +1293,7 @@
+                                         <property name="yalign">0.43000000715255737</property>
+                                         <property name="wrap">True</property>
+                                         <attributes>
+-                                          <attribute name="font-desc" value="Cantarell 11"/>
++                                          <attribute name="font-desc" value="Inter 11"/>
+                                         </attributes>
+                                       </object>
+                                       <packing>
+diff --git a/pyanaconda/ui/gui/spokes/installation_source.glade b/pyanaconda/ui/gui/spokes/installation_source.glade
+index a72bfc72e8..d34f358df8 100644
+--- a/pyanaconda/ui/gui/spokes/installation_source.glade
++++ b/pyanaconda/ui/gui/spokes/installation_source.glade
+@@ -73,7 +73,7 @@
+                                 <property name="halign">start</property>
+                                 <property name="label" translatable="yes">Which installation source would you like to use?</property>
+                                 <attributes>
+-                                  <attribute name="font-desc" value="Cantarell 10"/>
++                                  <attribute name="font-desc" value="Inter 10"/>
+                                   <attribute name="weight" value="bold"/>
+                                 </attributes>
+                               </object>
+@@ -487,7 +487,7 @@
+                                     <property name="margin-top">12</property>
+                                     <property name="label" translatable="yes">Updates</property>
+                                     <attributes>
+-                                      <attribute name="font-desc" value="Cantarell 10"/>
++                                      <attribute name="font-desc" value="Inter 10"/>
+                                       <attribute name="weight" value="bold"/>
+                                     </attributes>
+                                   </object>
+diff --git a/pyanaconda/ui/gui/spokes/keyboard.glade b/pyanaconda/ui/gui/spokes/keyboard.glade
+index 5b6dce75e2..c3e5bbdbcd 100644
+--- a/pyanaconda/ui/gui/spokes/keyboard.glade
++++ b/pyanaconda/ui/gui/spokes/keyboard.glade
+@@ -57,7 +57,7 @@
+                     <property name="wrap">True</property>
+                     <property name="xalign">0</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell 12"/>
++                      <attribute name="font-desc" value="Inter 12"/>
+                       <attribute name="weight" value="normal"/>
+                       <attribute name="scale" value="1"/>
+                     </attributes>
+@@ -96,7 +96,7 @@
+                         <property name="label" translatable="yes">Changes here will only apply to the installed system. Use the desktop's tool to configure the keyboard for the installation process.</property>
+                         <property name="wrap">True</property>
+                         <attributes>
+-                          <attribute name="font-desc" value="Cantarell 12"/>
++                          <attribute name="font-desc" value="Inter 12"/>
+                           <attribute name="weight" value="normal"/>
+                           <attribute name="scale" value="1"/>
+                         </attributes>
+@@ -292,7 +292,7 @@
+                             <property name="use_underline">True</property>
+                             <property name="mnemonic_widget">layoutTextView</property>
+                             <attributes>
+-                              <attribute name="font-desc" value="Cantarell 10"/>
++                              <attribute name="font-desc" value="Inter 10"/>
+                             </attributes>
+                           </object>
+                           <packing>
+@@ -331,7 +331,7 @@
+                             <property name="label" translatable="yes">Alt + Shift to switch layouts.</property>
+                             <property name="wrap">True</property>
+                             <attributes>
+-                              <attribute name="font-desc" value="Cantarell Italic 10"/>
++                              <attribute name="font-desc" value="Inter Italic 10"/>
+                               <attribute name="style" value="italic"/>
+                             </attributes>
+                           </object>
+@@ -468,7 +468,7 @@
+                 <property name="halign">start</property>
+                 <property name="label" translatable="yes">ADD A KEYBOARD LAYOUT</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell Bold 10"/>
++                  <attribute name="font-desc" value="Inter Bold 10"/>
+                   <attribute name="weight" value="bold"/>
+                 </attributes>
+               </object>
+@@ -485,7 +485,7 @@
+                 <property name="label" translatable="yes">You may add a keyboard layout by selecting it below:</property>
+                 <property name="xalign">0</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell 12"/>
++                  <attribute name="font-desc" value="Inter 12"/>
+                 </attributes>
+               </object>
+               <packing>
+@@ -658,7 +658,7 @@
+                 <property name="valign">start</property>
+                 <property name="label" translatable="yes">LAYOUT SWITCHING OPTIONS</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell Bold 10"/>
++                  <attribute name="font-desc" value="Inter Bold 10"/>
+                   <attribute name="weight" value="bold"/>
+                 </attributes>
+               </object>
+@@ -676,7 +676,7 @@
+                 <property name="label" translatable="yes">Which combination(s) would you prefer for switching between keyboard layouts?</property>
+                 <property name="wrap">True</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell 12"/>
++                  <attribute name="font-desc" value="Inter 12"/>
+                 </attributes>
+               </object>
+               <packing>
+diff --git a/pyanaconda/ui/gui/spokes/language_support.glade b/pyanaconda/ui/gui/spokes/language_support.glade
+index 5bbb0a1953..9d61d492ea 100644
+--- a/pyanaconda/ui/gui/spokes/language_support.glade
++++ b/pyanaconda/ui/gui/spokes/language_support.glade
+@@ -78,7 +78,7 @@
+                     <property name="label" translatable="yes">Select additional language support to be installed:</property>
+                     <property name="xalign">0</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell 14"/>
++                      <attribute name="font-desc" value="Inter 14"/>
+                       <attribute name="weight" value="normal"/>
+                       <attribute name="scale" value="1"/>
+                     </attributes>
+@@ -142,7 +142,7 @@
+                                 <child>
+                                   <object class="GtkCellRendererText" id="nativeNameRenderer">
+                                     <property name="xalign">0.10000000149011612</property>
+-                                    <property name="font">Cantarell 12</property>
++                                    <property name="font">Inter 12</property>
+                                   </object>
+                                   <attributes>
+                                     <attribute name="markup">0</attribute>
+@@ -152,7 +152,7 @@
+                                   <object class="GtkCellRendererText" id="englishNameRenderer">
+                                     <property name="xalign">0.89999997615814209</property>
+                                     <property name="ellipsize">end</property>
+-                                    <property name="font">Cantarell Italic 14</property>
++                                    <property name="font">Inter Italic 14</property>
+                                     <property name="foreground">gray</property>
+                                   </object>
+                                   <attributes>
+@@ -237,7 +237,7 @@
+                                 <property name="sort_column_id">0</property>
+                                 <child>
+                                   <object class="GtkCellRendererText" id="localeNativeNameRenderer">
+-                                    <property name="font">Cantarell 12</property>
++                                    <property name="font">Inter 12</property>
+                                   </object>
+                                   <attributes>
+                                     <attribute name="markup">0</attribute>
+diff --git a/pyanaconda/ui/gui/spokes/lib/beta_warning_dialog.glade b/pyanaconda/ui/gui/spokes/lib/beta_warning_dialog.glade
+index 86871f70ad..79993a65b0 100644
+--- a/pyanaconda/ui/gui/spokes/lib/beta_warning_dialog.glade
++++ b/pyanaconda/ui/gui/spokes/lib/beta_warning_dialog.glade
+@@ -70,7 +70,7 @@
+                 <property name="halign">start</property>
+                 <property name="label" translatable="yes">This is unstable, pre-release software.</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell Bold 12"/>
++                  <attribute name="font-desc" value="Inter Bold 12"/>
+                   <attribute name="weight" value="bold"/>
+                 </attributes>
+               </object>
+@@ -104,7 +104,7 @@ By clicking "I want to proceed", you understand and accept the risks associated
+ If you do not understand or accept the risks, then please exit this program by selecting "I want to exit" which will reboot your system.</property>
+                 <property name="wrap">True</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell 12"/>
++                  <attribute name="font-desc" value="Inter 12"/>
+                 </attributes>
+               </object>
+               <packing>
+diff --git a/pyanaconda/ui/gui/spokes/lib/custom_storage_helpers.glade b/pyanaconda/ui/gui/spokes/lib/custom_storage_helpers.glade
+index 300a12d8d4..ceba79fa41 100644
+--- a/pyanaconda/ui/gui/spokes/lib/custom_storage_helpers.glade
++++ b/pyanaconda/ui/gui/spokes/lib/custom_storage_helpers.glade
+@@ -66,7 +66,7 @@
+             <property name="xalign">0</property>
+             <property name="yalign">0</property>
+             <attributes>
+-              <attribute name="font-desc" value="Cantarell 11"/>
++              <attribute name="font-desc" value="Inter 11"/>
+             </attributes>
+           </object>
+           <packing>
+@@ -437,7 +437,7 @@
+                 <property name="label" translatable="yes">More customization options are available
+ after creating the mount point below.</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell 11"/>
++                  <attribute name="font-desc" value="Inter 11"/>
+                   <attribute name="scale" value="1"/>
+                 </attributes>
+               </object>
+@@ -472,7 +472,7 @@ after creating the mount point below.</property>
+                     <property name="label" translatable="yes">That mount point is already in
+ use.  Try something else?</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell 10"/>
++                      <attribute name="font-desc" value="Inter 10"/>
+                       <attribute name="scale" value="1"/>
+                       <attribute name="foreground" value="#ffff00000000"/>
+                     </attributes>
+@@ -946,7 +946,7 @@ use.  Try something else?</property>
+                     <property name="label" translatable="yes">Please enter a valid name.</property>
+                     <property name="wrap">True</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell 10"/>
++                      <attribute name="font-desc" value="Inter 10"/>
+                       <attribute name="scale" value="1"/>
+                       <attribute name="foreground" value="#ffff00000000"/>
+                     </attributes>
+diff --git a/pyanaconda/ui/gui/spokes/lib/dasdfmt.glade b/pyanaconda/ui/gui/spokes/lib/dasdfmt.glade
+index 955b60c9ab..651a8abc58 100644
+--- a/pyanaconda/ui/gui/spokes/lib/dasdfmt.glade
++++ b/pyanaconda/ui/gui/spokes/lib/dasdfmt.glade
+@@ -73,7 +73,7 @@
+                 <property name="label" translatable="yes">The following unformatted or LDL DASDs have been detected on your system. You can choose to format them now with dasdfmt or cancel to leave them unformatted. Unformatted DASDs cannot be used during installation.</property>
+                 <property name="wrap">True</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell 12"/>
++                  <attribute name="font-desc" value="Inter 12"/>
+                 </attributes>
+               </object>
+               <packing>
+@@ -88,7 +88,7 @@
+                 <property name="halign">start</property>
+                 <property name="label" translatable="yes">Unformatted DASDs Detected</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell Bold 12"/>
++                  <attribute name="font-desc" value="Inter Bold 12"/>
+                   <attribute name="weight" value="bold"/>
+                 </attributes>
+               </object>
+diff --git a/pyanaconda/ui/gui/spokes/lib/storage_dialogs.glade b/pyanaconda/ui/gui/spokes/lib/storage_dialogs.glade
+index aee7a4bbfe..46edcc773e 100644
+--- a/pyanaconda/ui/gui/spokes/lib/storage_dialogs.glade
++++ b/pyanaconda/ui/gui/spokes/lib/storage_dialogs.glade
+@@ -82,7 +82,7 @@
+                 <property name="label" translatable="yes">INSTALLATION OPTIONS</property>
+                 <property name="xalign">0</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell Bold 10"/>
++                  <attribute name="font-desc" value="Inter Bold 10"/>
+                   <attribute name="weight" value="bold"/>
+                 </attributes>
+               </object>
+@@ -100,7 +100,7 @@
+                 <property name="wrap">True</property>
+                 <property name="xalign">0</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell 11"/>
++                  <attribute name="font-desc" value="Inter 11"/>
+                 </attributes>
+               </object>
+               <packing>
+@@ -125,7 +125,7 @@
+                     <property name="label" translatable="yes">disk free</property>
+                     <property name="xalign">1</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell Bold 11"/>
++                      <attribute name="font-desc" value="Inter Bold 11"/>
+                       <attribute name="weight" value="bold"/>
+                     </attributes>
+                   </object>
+@@ -142,7 +142,7 @@
+                     <property name="wrap">True</property>
+                     <property name="xalign">0</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell 11"/>
++                      <attribute name="font-desc" value="Inter 11"/>
+                     </attributes>
+                   </object>
+                   <packing>
+@@ -157,7 +157,7 @@
+                     <property name="label" translatable="yes">fs free</property>
+                     <property name="xalign">1</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell Bold 11"/>
++                      <attribute name="font-desc" value="Inter Bold 11"/>
+                       <attribute name="weight" value="bold"/>
+                     </attributes>
+                   </object>
+@@ -174,7 +174,7 @@
+                     <property name="wrap">True</property>
+                     <property name="xalign">0</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell 11"/>
++                      <attribute name="font-desc" value="Inter 11"/>
+                     </attributes>
+                   </object>
+                   <packing>
+@@ -197,7 +197,7 @@
+                 <property name="wrap">True</property>
+                 <property name="xalign">0</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell 11"/>
++                  <attribute name="font-desc" value="Inter 11"/>
+                 </attributes>
+               </object>
+               <packing>
+@@ -320,7 +320,7 @@
+                 <property name="wrap">True</property>
+                 <property name="xalign">0</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell 11"/>
++                  <attribute name="font-desc" value="Inter 11"/>
+                 </attributes>
+               </object>
+               <packing>
+@@ -361,7 +361,7 @@
+                     <property name="wrap">True</property>
+                     <property name="xalign">0</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell 11"/>
++                      <attribute name="font-desc" value="Inter 11"/>
+                     </attributes>
+                   </object>
+                   <packing>
+@@ -376,7 +376,7 @@
+                     <property name="label" translatable="yes">fs free</property>
+                     <property name="xalign">1</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell 11"/>
++                      <attribute name="font-desc" value="Inter 11"/>
+                       <attribute name="weight" value="bold"/>
+                     </attributes>
+                   </object>
+@@ -393,7 +393,7 @@
+                     <property name="wrap">True</property>
+                     <property name="xalign">0</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell 11"/>
++                      <attribute name="font-desc" value="Inter 11"/>
+                     </attributes>
+                   </object>
+                   <packing>
+@@ -416,7 +416,7 @@
+                 <property name="wrap">True</property>
+                 <property name="xalign">0</property>
+                 <attributes>
+-                  <attribute name="font-desc" value="Cantarell 11"/>
++                  <attribute name="font-desc" value="Inter 11"/>
+                 </attributes>
+               </object>
+               <packing>
+diff --git a/pyanaconda/ui/gui/spokes/network.glade b/pyanaconda/ui/gui/spokes/network.glade
+index 1ed5a90495..6e50b9542a 100644
+--- a/pyanaconda/ui/gui/spokes/network.glade
++++ b/pyanaconda/ui/gui/spokes/network.glade
+@@ -420,7 +420,7 @@
+                     <property name="can_focus">False</property>
+                     <property name="label" translatable="yes">We'll need network access to fetch information about your location and to make software updates available for you.</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell 12"/>
++                      <attribute name="font-desc" value="Inter 12"/>
+                     </attributes>
+                   </object>
+                   <packing>
+diff --git a/pyanaconda/ui/gui/spokes/software_selection.glade b/pyanaconda/ui/gui/spokes/software_selection.glade
+index 518e31eacf..0925784cfd 100644
+--- a/pyanaconda/ui/gui/spokes/software_selection.glade
++++ b/pyanaconda/ui/gui/spokes/software_selection.glade
+@@ -69,7 +69,7 @@
+                         <property name="wrap">True</property>
+                         <property name="xalign">0</property>
+                         <attributes>
+-                          <attribute name="font-desc" value="Cantarell 12"/>
++                          <attribute name="font-desc" value="Inter 12"/>
+                           <attribute name="weight" value="normal"/>
+                         </attributes>
+                       </object>
+@@ -118,7 +118,7 @@
+                         <property name="wrap">True</property>
+                         <property name="xalign">0</property>
+                         <attributes>
+-                          <attribute name="font-desc" value="Cantarell 12"/>
++                          <attribute name="font-desc" value="Inter 12"/>
+                           <attribute name="weight" value="normal"/>
+                         </attributes>
+                       </object>
+@@ -180,7 +180,7 @@
+                                 <property name="wrap">True</property>
+                                 <property name="xalign">0</property>
+                                 <attributes>
+-                                  <attribute name="font-desc" value="Cantarell 12"/>
++                                  <attribute name="font-desc" value="Inter 12"/>
+                                   <attribute name="weight" value="normal"/>
+                                 </attributes>
+                               </object>
+diff --git a/pyanaconda/ui/gui/spokes/storage.glade b/pyanaconda/ui/gui/spokes/storage.glade
+index b613e39f6d..daf1d2076f 100644
+--- a/pyanaconda/ui/gui/spokes/storage.glade
++++ b/pyanaconda/ui/gui/spokes/storage.glade
+@@ -77,7 +77,7 @@
+                                 <property name="label" translatable="yes">Device Selection</property>
+                                 <property name="xalign">0</property>
+                                 <attributes>
+-                                  <attribute name="font-desc" value="Cantarell Bold 12"/>
++                                  <attribute name="font-desc" value="Inter Bold 12"/>
+                                   <attribute name="weight" value="bold"/>
+                                 </attributes>
+                               </object>
+@@ -97,7 +97,7 @@
+                                 <property name="wrap">True</property>
+                                 <property name="xalign">0</property>
+                                 <attributes>
+-                                  <attribute name="font-desc" value="Cantarell 12"/>
++                                  <attribute name="font-desc" value="Inter 12"/>
+                                 </attributes>
+                               </object>
+                               <packing>
+@@ -116,7 +116,7 @@
+                                 <property name="track-visited-links">False</property>
+                                 <property name="xalign">0</property>
+                                 <attributes>
+-                                  <attribute name="font-desc" value="Cantarell Bold 10"/>
++                                  <attribute name="font-desc" value="Inter Bold 10"/>
+                                   <attribute name="weight" value="bold"/>
+                                 </attributes>
+                               </object>
+@@ -179,7 +179,7 @@
+                                     <property name="label" translatable="yes">Disks left unselected here will not be touched.</property>
+                                     <property name="xalign">1</property>
+                                     <attributes>
+-                                      <attribute name="font-desc" value="Cantarell Italic 10"/>
++                                      <attribute name="font-desc" value="Inter Italic 10"/>
+                                     </attributes>
+                                   </object>
+                                 </child>
+@@ -199,7 +199,7 @@
+                                 <property name="track-visited-links">False</property>
+                                 <property name="xalign">0</property>
+                                 <attributes>
+-                                  <attribute name="font-desc" value="Cantarell Bold 10"/>
++                                  <attribute name="font-desc" value="Inter Bold 10"/>
+                                   <attribute name="weight" value="bold"/>
+                                 </attributes>
+                               </object>
+@@ -319,7 +319,7 @@
+                                     <property name="label" translatable="yes">Disks left unselected here will not be touched.</property>
+                                     <property name="xalign">1</property>
+                                     <attributes>
+-                                      <attribute name="font-desc" value="Cantarell Italic 10"/>
++                                      <attribute name="font-desc" value="Inter Italic 10"/>
+                                     </attributes>
+                                   </object>
+                                 </child>
+@@ -347,7 +347,7 @@
+                                     <property name="label" translatable="yes">Storage Configuration</property>
+                                     <property name="xalign">0</property>
+                                     <attributes>
+-                                      <attribute name="font-desc" value="Cantarell Bold 12"/>
++                                      <attribute name="font-desc" value="Inter Bold 12"/>
+                                       <attribute name="weight" value="bold"/>
+                                     </attributes>
+                                   </object>
+@@ -601,7 +601,7 @@
+                         <property name="hexpand">True</property>
+                         <property name="label" translatable="yes">summary</property>
+                         <attributes>
+-                          <attribute name="font-desc" value="Cantarell 10"/>
++                          <attribute name="font-desc" value="Inter 10"/>
+                         </attributes>
+                       </object>
+                       <packing>
+diff --git a/pyanaconda/ui/gui/spokes/welcome.glade b/pyanaconda/ui/gui/spokes/welcome.glade
+index e5e1f29aa9..b8a581769d 100644
+--- a/pyanaconda/ui/gui/spokes/welcome.glade
++++ b/pyanaconda/ui/gui/spokes/welcome.glade
+@@ -80,7 +80,7 @@
+                     <property name="wrap">True</property>
+                     <property name="xalign">0</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell Bold 16"/>
++                      <attribute name="font-desc" value="Inter Bold 16"/>
+                     </attributes>
+                   </object>
+                   <packing>
+@@ -101,7 +101,7 @@
+                     <property name="label" translatable="yes">What language would you like to use during the installation process?</property>
+                     <property name="xalign">0</property>
+                     <attributes>
+-                      <attribute name="font-desc" value="Cantarell 12"/>
++                      <attribute name="font-desc" value="Inter 12"/>
+                     </attributes>
+                   </object>
+                   <packing>
+@@ -154,7 +154,7 @@
+                                 <child>
+                                   <object class="GtkCellRendererText" id="nativeNameRenderer">
+                                     <property name="xalign">0.10000000149011612</property>
+-                                    <property name="font">Cantarell 12</property>
++                                    <property name="font">Inter 12</property>
+                                   </object>
+                                   <attributes>
+                                     <attribute name="markup">0</attribute>
+@@ -164,7 +164,7 @@
+                                   <object class="GtkCellRendererText" id="englishNameRenderer">
+                                     <property name="xalign">0.8999999761581421</property>
+                                     <property name="ellipsize">end</property>
+-                                    <property name="font">Cantarell Italic 14</property>
++                                    <property name="font">Inter Italic 14</property>
+                                     <property name="foreground">gray</property>
+                                   </object>
+                                   <attributes>
+@@ -245,7 +245,7 @@
+                                 <property name="sort_column_id">0</property>
+                                 <child>
+                                   <object class="GtkCellRendererText" id="nativeNameRenderer1">
+-                                    <property name="font">Cantarell 12</property>
++                                    <property name="font">Inter 12</property>
+                                   </object>
+                                   <attributes>
+                                     <attribute name="markup">0</attribute>
+-- 
+2.48.1
+
