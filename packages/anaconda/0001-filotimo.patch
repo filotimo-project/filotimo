@@ -1,101 +1,50 @@
-From e2896b5f1fe10f4adf43baa0379d9f7ae340027f Mon Sep 17 00:00:00 2001
+From d3d8f6b957894986b403a7d527a663e1b8919f1b Mon Sep 17 00:00:00 2001
 From: Thomas Duckworth <tduck973564@gmail.com>
-Date: Sun, 9 Feb 2025 12:57:08 +1100
-Subject: [PATCH 2/2] Use Inter and Breeze
+Date: Mon, 10 Feb 2025 20:47:35 +1100
+Subject: [PATCH] filotimo
 
 ---
- pyanaconda/ui/gui/__init__.py                 | 54 ++++++++++---------
+ pyanaconda/ui/gui/__init__.py                 |  8 ++++---
  pyanaconda/ui/gui/hubs/summary.glade          |  2 +-
- pyanaconda/ui/gui/spokes/custom_storage.glade | 22 ++++----
- .../ui/gui/spokes/installation_source.glade   |  4 +-
- pyanaconda/ui/gui/spokes/keyboard.glade       | 16 +++---
- .../ui/gui/spokes/language_support.glade      |  8 +--
- .../gui/spokes/lib/beta_warning_dialog.glade  |  4 +-
- .../spokes/lib/custom_storage_helpers.glade   |  8 +--
- pyanaconda/ui/gui/spokes/lib/dasdfmt.glade    |  4 +-
- .../ui/gui/spokes/lib/storage_dialogs.glade   | 24 ++++-----
+ pyanaconda/ui/gui/spokes/custom_storage.glade | 22 ++++++++---------
+ .../ui/gui/spokes/installation_source.glade   |  4 ++--
+ pyanaconda/ui/gui/spokes/keyboard.glade       | 16 ++++++-------
+ .../ui/gui/spokes/language_support.glade      |  8 +++----
+ .../gui/spokes/lib/beta_warning_dialog.glade  |  4 ++--
+ .../spokes/lib/custom_storage_helpers.glade   |  8 +++----
+ pyanaconda/ui/gui/spokes/lib/dasdfmt.glade    |  4 ++--
+ .../ui/gui/spokes/lib/storage_dialogs.glade   | 24 +++++++++----------
  pyanaconda/ui/gui/spokes/network.glade        |  2 +-
- .../ui/gui/spokes/software_selection.glade    |  6 +--
- pyanaconda/ui/gui/spokes/storage.glade        | 16 +++---
- pyanaconda/ui/gui/spokes/welcome.glade        | 10 ++--
- 14 files changed, 93 insertions(+), 87 deletions(-)
+ .../ui/gui/spokes/software_selection.glade    |  6 ++---
+ pyanaconda/ui/gui/spokes/storage.glade        | 16 ++++++-------
+ pyanaconda/ui/gui/spokes/user.glade           | 18 --------------
+ pyanaconda/ui/gui/spokes/user.py              | 13 +++++-----
+ pyanaconda/ui/gui/spokes/welcome.glade        | 10 ++++----
+ 16 files changed, 74 insertions(+), 91 deletions(-)
 
 diff --git a/pyanaconda/ui/gui/__init__.py b/pyanaconda/ui/gui/__init__.py
-index 1b8124aec7..e0d763c670 100644
+index 1b8124aec7..cb5f1368b8 100644
 --- a/pyanaconda/ui/gui/__init__.py
 +++ b/pyanaconda/ui/gui/__init__.py
-@@ -717,18 +717,23 @@ class GraphicalUserInterface(UserInterface):
+@@ -717,8 +717,11 @@ class GraphicalUserInterface(UserInterface):
  
              # Set some program-wide settings.
              settings = Gtk.Settings.get_default()
 -            settings.set_property("gtk-font-name", "Cantarell")
 -            settings.set_property("gtk-icon-theme-name", "Adwaita")
++            # Filotimo ----------------------------------------------------------------------
 +            settings.set_property("gtk-font-name", "Inter")
 +            settings.set_property("gtk-icon-theme-name", "Breeze")
-+            # Filotimo ----------------------------------------------------------------------
 +            settings.set_property("gtk-theme-name", "Breeze")
 +            # -------------------------------------------------------------------------------
  
              # Get the path to the application data
              data_path = os.environ.get("ANACONDA_DATA", "/usr/share/anaconda")
- 
-             # Apply the application stylesheet
--            css_path = os.path.join(data_path, "anaconda-gtk.css")
--            provider = Gtk.CssProvider()
--            provider.load_from_path(css_path)
--            Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
--                    Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-+            # Filotimo ----------------------------------------------------------------------
-+            #css_path = os.path.join(data_path, "anaconda-gtk.css")
-+            #provider = Gtk.CssProvider()
-+            #provider.load_from_path(css_path)
-+            #Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
-+            #        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-+            # -------------------------------------------------------------------------------
- 
-             # Add the application icons to the theme
-             icon_path = os.path.join(data_path, "pixmaps")
-@@ -736,25 +741,26 @@ class GraphicalUserInterface(UserInterface):
-             icon_theme.append_search_path(icon_path)
- 
-             # Apply the custom stylesheet
--            if conf.ui.custom_stylesheet:
--                try:
--                    provider = Gtk.CssProvider()
--                    provider.load_from_path(conf.ui.custom_stylesheet)
--                    Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
--                            STYLE_PROVIDER_PRIORITY_CUSTOM)
--                except GError as e:
--                    log.error("Custom stylesheet %s failed to load:\n%s",
--                              conf.ui.custom_stylesheet, e)
-+            # Filotimo ----------------------------------------------------------------------
-+            # if conf.ui.custom_stylesheet:
-+            #    try:
-+            #        provider = Gtk.CssProvider()
-+            #        provider.load_from_path(conf.ui.custom_stylesheet)
-+            #        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
-+            #                STYLE_PROVIDER_PRIORITY_CUSTOM)
-+            #    except GError as e:
-+            #        log.error("Custom stylesheet %s failed to load:\n%s",
-+            #                  conf.ui.custom_stylesheet, e)
- 
-             # Look for updates to the stylesheet and apply them at a higher priority
--            for updates_dir in ("updates", "product"):
--                updates_css = "/run/install/%s/anaconda-gtk.css" % updates_dir
--                if os.path.exists(updates_css):
--                    provider = Gtk.CssProvider()
--                    provider.load_from_path(updates_css)
--                    Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
--                            STYLE_PROVIDER_PRIORITY_UPDATES)
+@@ -754,7 +757,6 @@ class GraphicalUserInterface(UserInterface):
+                     provider.load_from_path(updates_css)
+                     Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
+                             STYLE_PROVIDER_PRIORITY_UPDATES)
 -
-+            #for updates_dir in ("updates", "product"):
-+            #    updates_css = "/run/install/%s/anaconda-gtk.css" % updates_dir
-+            #    if os.path.exists(updates_css):
-+            #        provider = Gtk.CssProvider()
-+            #        provider.load_from_path(updates_css)
-+            #        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider,
-+            #                STYLE_PROVIDER_PRIORITY_UPDATES)
-+            # -------------------------------------------------------------------------------
              self.mainWindow.setCurrentAction(self._currentAction)
              # the window corresponding to the ection should now be visible to the user
              self._currentAction.entered.emit(self._currentAction)
@@ -669,6 +618,87 @@ index b613e39f6d..daf1d2076f 100644
                          </attributes>
                        </object>
                        <packing>
+diff --git a/pyanaconda/ui/gui/spokes/user.glade b/pyanaconda/ui/gui/spokes/user.glade
+index 0dc9413355..3160ee68e1 100644
+--- a/pyanaconda/ui/gui/spokes/user.glade
++++ b/pyanaconda/ui/gui/spokes/user.glade
+@@ -261,24 +261,6 @@
+                         <property name="top-attach">6</property>
+                       </packing>
+                     </child>
+-                    <child>
+-                      <object class="GtkCheckButton" id="admin_checkbox">
+-                        <property name="label" translatable="yes" context="GUI|User">Add ad_ministrative privileges to this user account (wheel group membership)</property>
+-                        <property name="visible">True</property>
+-                        <property name="can-focus">True</property>
+-                        <property name="receives-default">False</property>
+-                        <property name="active">True</property>
+-                        <property name="tooltip-text" translatable="yes" context="GUI|User">Allow this user to run the 'sudo' command.</property>
+-                        <property name="use-underline">True</property>
+-                        <property name="xalign">0</property>
+-                        <property name="draw-indicator">True</property>
+-                        <signal name="toggled" handler="on_admin_toggled" swapped="no"/>
+-                      </object>
+-                      <packing>
+-                        <property name="left-attach">1</property>
+-                        <property name="top-attach">3</property>
+-                      </packing>
+-                    </child>
+                     <child>
+                       <!-- n-columns=3 n-rows=3 -->
+                       <object class="GtkGrid" id="grid2">
+diff --git a/pyanaconda/ui/gui/spokes/user.py b/pyanaconda/ui/gui/spokes/user.py
+index 104492c2cf..33a4560ac4 100644
+--- a/pyanaconda/ui/gui/spokes/user.py
++++ b/pyanaconda/ui/gui/spokes/user.py
+@@ -292,7 +292,7 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+         self._password_entry = self.builder.get_object("password_entry")
+         self._password_confirmation_entry = self.builder.get_object("password_confirmation_entry")
+         # check boxes
+-        self._admin_checkbox = self.builder.get_object("admin_checkbox")
++        #self._admin_checkbox = self.builder.get_object("admin_checkbox")
+         self._password_required_checkbox = self.builder.get_object("password_required_checkbox")
+         # advanced user configration dialog button
+         self._advanced_button = self.builder.get_object("advanced_button")
+@@ -444,7 +444,8 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+ 
+         self.username = self.user.name
+         self.fullname = self.user.gecos
+-        self._admin_checkbox.set_active(self.user.has_admin_priviledges())
++        #self._admin_checkbox.set_active(self.user.has_admin_priviledges())
++        self.user.set_admin_priviledges(True)
+ 
+         # rerun checks so that we have a correct status message, if any
+         self.checker.run_checks()
+@@ -465,6 +466,8 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+         return not self._users_module.CheckAdminUserExists()
+ 
+     def apply(self):
++        self.user.set_admin_priviledges(True)
++
+         # set the password only if the user enters anything to the text entry
+         # this should preserve the kickstart based password
+         if self.password_required:
+@@ -585,10 +588,6 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+         # rerun the checks
+         self.checker.run_checks()
+ 
+-    def on_admin_toggled(self, togglebutton, data=None):
+-        # Add or remove user admin status based on changes to the admin checkbox
+-        self.user.set_admin_priviledges(togglebutton.get_active())
+-
+     def on_advanced_clicked(self, _button, data=None):
+         """Handler for the Advanced.. button. It starts the Advanced dialog
+         for setting homedir, uid, gid and groups.
+@@ -600,7 +599,7 @@ class UserSpoke(FirstbootSpokeMixIn, NormalSpoke, GUISpokeInputCheckHandler):
+         with self.main_window.enlightbox(self._advanced_user_dialog.window):
+             self._advanced_user_dialog.run()
+ 
+-        self._admin_checkbox.set_active(self.user.has_admin_priviledges())
++        #self._admin_checkbox.set_active(self.user.has_admin_priviledges())
+ 
+     def _checks_done(self, error_message):
+         """Update the warning with the input validation error from the first
 diff --git a/pyanaconda/ui/gui/spokes/welcome.glade b/pyanaconda/ui/gui/spokes/welcome.glade
 index e5e1f29aa9..b8a581769d 100644
 --- a/pyanaconda/ui/gui/spokes/welcome.glade

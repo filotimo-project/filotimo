@@ -12,8 +12,7 @@ URL:     http://fedoraproject.org/wiki/Anaconda
 # make dist
 Source0: https://github.com/rhinstaller/%{name}/releases/download/%{name}-%{version}/%{name}-%{version}.tar.bz2
 
-Patch0:  0001-Don-t-allow-user-to-remove-wheel-from-themselves.patch
-Patch1:  0002-Use-Inter-and-Breeze.patch
+Patch0:  0001-filotimo.patch
 
 # Versions of required components (done so we make sure the buildrequires
 # match the requires versions of things).
