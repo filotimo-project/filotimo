@@ -17,5 +17,15 @@ Requires:   filotimo-branding >= 1.5-8
 
 BuildArch:  noarch
 
+Source0:    LICENSE
+
 %description
 Stub to satisfy dependency
+
+%prep
+
+%install
+install -pm 0644 %{SOURCE0} LICENSE
+
+%files
+%license LICENSE
