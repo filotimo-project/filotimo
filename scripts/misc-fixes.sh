@@ -44,24 +44,25 @@ rm -rf /usr/share/color-schemes/Klassy*
 # "default" icon theme inherits from Breeze
 sed -i '/^Inherits=/s/Adwaita/Breeze/' /usr/share/icons/default/index.theme
 
+# TODO figure out why this doesn't work for Breeze Light
 # Install custom Discover icon
-rm -rf /usr/share/icons/breeze/apps/48/muondiscover.svg
-rm -rf /usr/share/icons/breeze-dark/apps/48/muondiscover.svg
-rm -rf /usr/share/icons/hicolor/scalable/apps/plasmadiscover.svg
-cp ./discover-icons/muondiscover.svg /usr/share/icons/breeze/apps/48/muondiscover.svg
-cp ./discover-icons/muondiscover.svg /usr/share/icons/breeze-dark/apps/48/muondiscover.svg
-cp ./discover-icons/muondiscover.svg /usr/share/icons/hicolor/scalable/apps/plasmadiscover.svg
-sizes=("128x128" "16x16" "22x22" "32x32" "48x48")
-for size in "${sizes[@]}"; do
-    dir="/usr/share/icons/hicolor/${size}/apps"
-    width="${size%%x*}"
-    png_file="$dir/plasmadiscover.png"
+#rm -rf /usr/share/icons/breeze/apps/48/muondiscover.svg
+#rm -rf /usr/share/icons/breeze-dark/apps/48/muondiscover.svg
+#rm -rf /usr/share/icons/hicolor/scalable/apps/plasmadiscover.svg
+#cp ./discover-icons/muondiscover.svg /usr/share/icons/breeze/apps/48/muondiscover.svg
+#cp ./discover-icons/muondiscover.svg /usr/share/icons/breeze-dark/apps/48/muondiscover.svg
+#cp ./discover-icons/muondiscover.svg /usr/share/icons/hicolor/scalable/apps/plasmadiscover.svg
+#sizes=("128x128" "16x16" "22x22" "32x32" "48x48")
+#for size in "${sizes[@]}"; do
+#    dir="/usr/share/icons/hicolor/${size}/apps"
+#    width="${size%%x*}"
+#    png_file="$dir/plasmadiscover.png"
 
-    # Remove the original PNG file if it exists
-    if [ -f "$png_file" ]; then
-        rm "$png_file"
-    fi
+#    # Remove the original PNG file if it exists
+#    if [ -f "$png_file" ]; then
+#        rm "$png_file"
+#    fi
 
-    convert -background none -density "$width" "./discover-icons/muondiscover.svg" -resize "${width}x${width}" "$png_file"
-done
+#    convert -background none -density "$width" "./discover-icons/muondiscover.svg" -resize "${width}x${width}" "$png_file"
+#done
 
