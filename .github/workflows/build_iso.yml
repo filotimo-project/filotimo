@@ -63,15 +63,15 @@ jobs:
           retention-days: 0
           compression-level: 0
           overwrite: true
-      
+
+      - name: Set up SCP
+        run: |
+          mkdir -v -m 700 $HOME/.ssh
+          ssh-keyscan -H ${{ secrets.HOST }} > $HOME/.ssh/known_hosts
+          echo "${{ secrets.KEY }}" > $HOME/.ssh/id_rsa            
+          chmod 400 $HOME/.ssh/id_rsa
+        
       - name: Upload ISO to host
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.KEY }}
-          source: |
-            ${{ steps.build.outputs.iso_path }}
-            ${{ steps.build.outputs.iso_path }}-CHECKSUM
-          target: "/var/www/download.filotimoproject.org/"
+        run: |
+          scp -P ${{ secrets.PORT }} ${{ steps.build.outputs.iso_path }} ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/download.filotimoproject.org/
+          scp -P ${{ secrets.PORT }} ${{ steps.build.outputs.iso_path }}-CHECKSUM ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/download.filotimoproject.org/
