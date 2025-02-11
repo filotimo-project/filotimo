@@ -5,11 +5,6 @@ on:
       - main
   schedule:
     - cron: '00 12 * * 2'
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**/README.md'
   workflow_dispatch:
   workflow_call:
   workflow_run:
@@ -68,3 +63,15 @@ jobs:
           retention-days: 0
           compression-level: 0
           overwrite: true
+      
+      - name: Upload ISO to host
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.KEY }}
+          source: |
+            ${{ steps.build.outputs.iso_path }}
+            ${{ steps.build.outputs.iso_path }}-CHECKSUM
+          target: "/var/www/download.filotimoproject.org/"
