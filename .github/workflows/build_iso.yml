@@ -59,14 +59,20 @@ jobs:
           compression-level: 0
           overwrite: true
 
-      - name: Set up SCP
+      - name: Set up SSH
+        shell: bash
         run: |
+          set -eo pipefail
           mkdir -v -m 700 $HOME/.ssh
           ssh-keyscan -H ${{ secrets.HOST }} > $HOME/.ssh/known_hosts
           echo "${{ secrets.KEY }}" > $HOME/.ssh/id_rsa            
           chmod 400 $HOME/.ssh/id_rsa
         
       - name: Upload ISO to host
+        shell: bash
         run: |
-          scp -P ${{ secrets.PORT }} ${{ steps.build.outputs.iso_path }} ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/download.filotimoproject.org/
-          scp -P ${{ secrets.PORT }} ${{ steps.build.outputs.iso_path }}-CHECKSUM ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/var/www/download.filotimoproject.org/
+          set -eo pipefail
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} "mkdir -p ~/in_progress_filotimo_transfer"
+          scp -P ${{ secrets.PORT }} "${{ steps.build.outputs.iso_path }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/in_progress_filotimo_transfer || exit 1
+          scp -P ${{ secrets.PORT }} "${{ steps.build.outputs.iso_path }}-CHECKSUM" ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/in_progress_filotimo_transfer || exit 1
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} "mv -f ~/in_progress_filotimo_transfer/* /var/www/download.filotimoproject.org/ && rmdir ~/in_progress_filotimo_transfer"
