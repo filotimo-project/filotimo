@@ -193,16 +193,6 @@ if ! [[ ":Microsoft:" =~ ":$VEN_ID:" ]]; then
   fi
 fi
 
-# NVIDIA sometimes doesn't like sleep
-if nvidia-smi &>/dev/null && [[ ! "$KARGS" =~ "mem_sleep_default" ]]; then
-  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-  NEEDED_KARGS+=("--append-if-missing=mem_sleep_default=s2idle")
-fi
-if ! nvidia-smi &>/dev/null && [[ "$KARGS" =~ "mem_sleep_default" ]]; then
-  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-  NEEDED_KARGS+=("--delete-if-present=mem_sleep_default=s2idle")
-fi
-
 # Fix from Bluefin
 if nvidia-smi &>/dev/null && [[ ! "$KARGS" =~ "initcall_blacklist=simpledrm_platform_driver_init" ]]; then
   plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
