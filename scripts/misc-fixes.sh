@@ -66,3 +66,10 @@ sed -i '/^Inherits=/s/Adwaita/Breeze/' /usr/share/icons/default/index.theme
 #    convert -background none -density "$width" "./discover-icons/muondiscover.svg" -resize "${width}x${width}" "$png_file"
 #done
 
+# Fix powerdevil infinitely restarting with some monitors and causing stutters
+sed -i \
+      -e '/^\[Unit\]$/a StartLimitIntervalSec=60' \
+      -e '/^\[Unit\]$/a StartLimitBurst=5' \
+      -e '/^\[Service\]$/a RestartSec=5' \
+      /usr/lib/systemd/user/plasma-powerdevil.service
+
