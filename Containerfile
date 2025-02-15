@@ -129,6 +129,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y copr enable rodoma92/kde-cdemu-manager && \
     dnf5 -y copr enable tduck973564/filotimo-packages && \
     dnf5 -y copr enable zawertun/kde-kup && \
+    dnf5 -y copr enable bernardogn/kio-onedrive && \
     ostree container commit
 
 COPY packages /tmp/packages
@@ -137,7 +138,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     dnf5 -y install --allowerasing /tmp/packages/*.rpm && \
     dnf5 -y install --allowerasing \
-        onedriver \
+        systemdgenie \
         fedora-logos \
         filotimo-atychia \
         filotimo-plymouth-theme \
@@ -169,6 +170,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         kdenetwork-filesharing \
         ark \
         kleopatra \
+        kio-onedrive \
         firewall-config \
         openssl openssl-libs \
         python3-pip \
@@ -199,6 +201,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y copr disable rodoma92/kde-cdemu-manager && \
     dnf5 -y copr disable rok/cdemu && \
     dnf5 -y copr disable zawertun/kde-kup && \
+    dnf5 -y copr disable bernardogn/kio-onedrive && \
     dnf5 -y copr disable mulderje/facetimehd-kmod && \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     dnf5 -y upgrade \

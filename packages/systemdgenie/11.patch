@@ -1,0 +1,98 @@
+From 47d4b0443484eeda7ac4a27daf15265e85653bd5 Mon Sep 17 00:00:00 2001
+From: Thomas Duckworth <tduck973564@gmail.com>
+Date: Mon, 27 Jan 2025 04:04:31 +0000
+Subject: [PATCH] Show unloaded and inactive units by default
+
+---
+ src/mainwindow.cpp |  4 ++--
+ src/mainwindow.ui  | 28 +++++++++++++++++++++++-----
+ 2 files changed, 25 insertions(+), 7 deletions(-)
+
+diff --git a/src/mainwindow.cpp b/src/mainwindow.cpp
+index eb22fa9..d269589 100644
+--- a/src/mainwindow.cpp
++++ b/src/mainwindow.cpp
+@@ -492,7 +492,7 @@ void MainWindow::slotChkShowUnits(int state)
+         QObject::sender()->objectName() == QLatin1String("chkUnloadedUnits"))
+     {
+         // System units
+-        if (ui.chkInactiveUnits->isChecked())
++        if (!ui.chkInactiveUnits->isChecked())
+         {
+             ui.chkUnloadedUnits->setEnabled(true);
+             if (ui.chkUnloadedUnits->isChecked())
+@@ -514,7 +514,7 @@ void MainWindow::slotChkShowUnits(int state)
+         QObject::sender()->objectName() == QLatin1String("chkUnloadedUserUnits"))
+     {
+         // User units
+-        if (ui.chkInactiveUserUnits->isChecked())
++        if (!ui.chkInactiveUserUnits->isChecked())
+         {
+             ui.chkUnloadedUserUnits->setEnabled(true);
+             if (ui.chkUnloadedUserUnits->isChecked())
+diff --git a/src/mainwindow.ui b/src/mainwindow.ui
+index 5b02dec..f979628 100644
+--- a/src/mainwindow.ui
++++ b/src/mainwindow.ui
+@@ -80,10 +80,10 @@
+              <item>
+               <widget class="QCheckBox" name="chkInactiveUnits">
+                <property name="toolTip">
+-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle show inactive units.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
++                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle hiding inactive units.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+-                <string>Show inactive</string>
++                <string>Hide inactive</string>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+@@ -92,8 +92,14 @@
+              </item>
+              <item>
+               <widget class="QCheckBox" name="chkUnloadedUnits">
++               <property name="toolTip">
++                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle hiding unloaded units.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
++               </property>
+                <property name="text">
+-                <string>Show unloaded</string>
++                <string>Hide unloaded</string>
++               </property>
++               <property name="checked">
++                <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+@@ -172,15 +178,27 @@
+              </item>
+              <item>
+               <widget class="QCheckBox" name="chkInactiveUserUnits">
++               <property name="toolTip">
++                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle hiding inactive units.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
++               </property>
+                <property name="text">
+-                <string>Show inactive</string>
++                <string>Hide inactive</string>
++               </property>
++               <property name="checked">
++                <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="chkUnloadedUserUnits">
++               <property name="toolTip">
++                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle hiding unloaded units.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
++               </property>
+                <property name="text">
+-                <string>Show unloaded</string>
++                <string>Hide unloaded</string>
++               </property>
++               <property name="checked">
++                <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+-- 
+GitLab
+
