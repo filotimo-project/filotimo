@@ -4,7 +4,7 @@ set -eo pipefail
 # thanks bazzite and bluefin:)
 
 # Make sure to update this when new stuff is added/removed
-SCRIPT_VER=2
+SCRIPT_VER=3
 
 SYS_ID="$(cat '/sys/devices/virtual/dmi/id/product_name')"
 VEN_ID="$(cat '/sys/devices/virtual/dmi/id/chassis_vendor')"
@@ -191,6 +191,16 @@ if ! [[ ":Microsoft:" =~ ":$VEN_ID:" ]]; then
     rm -rf /etc/modules-load.d/surface.conf
     NEEDS_MODULE_RELOAD=1
   fi
+fi
+
+# NVIDIA sometimes doesn't like sleep
+if nvidia-smi &>/dev/null && [[ ! "$KARGS" =~ "mem_sleep_default" ]]; then
+  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
+  NEEDED_KARGS+=("--append-if-missing=mem_sleep_default=s2idle")
+fi
+if ! nvidia-smi &>/dev/null && [[ "$KARGS" =~ "mem_sleep_default" ]]; then
+  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
+  NEEDED_KARGS+=("--delete-if-present=mem_sleep_default=s2idle")
 fi
 
 # Fix from Bluefin
