@@ -13,3 +13,6 @@ LookAndFeelPackage=org.filotimoproject.filotimo.desktop
 DefaultLightLookAndFeel=org.filotimoproject.filotimo.desktop
 DefaultDarkLookAndFeel=org.filotimoproject.filotimodark.desktop
 ShowDeleteCommand=false
+
+[KDE Action Restrictions][$i]
+ghns=false
