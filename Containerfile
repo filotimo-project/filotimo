@@ -2,14 +2,13 @@ ARG IMAGE_NAME="${IMAGE_NAME:-filotimo}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-41}"
 ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-bazzite}"
 # Fetch this dynamically outside the containerfile - use the build script
-ARG KERNEL_VERSION="${KERNEL_VERSION:-6.11.4-301.bazzite.fc41.x86_64}"
+ARG KERNEL_VERSION="${KERNEL_VERSION:-6.12.12-206.bazzite.fc41.x86_64}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-kinoite-main}"
 ARG SOURCE_ORG="${SOURCE_ORG:-ublue-os}"
 ARG BASE_IMAGE="ghcr.io/${SOURCE_ORG}/${BASE_IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR:-filotimo}"
 ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 
-FROM ghcr.io/ublue-os/${KERNEL_FLAVOR}-kernel:${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION} AS kernel
 FROM ghcr.io/ublue-os/akmods:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION} AS akmods
 FROM ghcr.io/ublue-os/akmods-extra:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION} AS akmods-extra
 
@@ -19,7 +18,7 @@ ARG IMAGE_NAME="${IMAGE_NAME:-filotimo}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-41}"
 ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-bazzite}"
 # Fetch this dynamically outside the containerfile - use the build script
-ARG KERNEL_VERSION="${KERNEL_VERSION:-6.11.4-301.bazzite.fc41.x86_64}"
+ARG KERNEL_VERSION="${KERNEL_VERSION:-6.12.12-206.bazzite.fc41.x86_64}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-kinoite-main}"
 ARG SOURCE_ORG="${SOURCE_ORG:-ublue-os}"
 ARG BASE_IMAGE="ghcr.io/${SOURCE_ORG}/${BASE_IMAGE_NAME}"
@@ -56,16 +55,17 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     ostree container commit
 
 # Install kernel
-RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
-    --mount=type=bind,from=kernel,src=/tmp/rpms,dst=/tmp/fsync-rpms \
-    rpm-ostree cliwrap install-to-root / && \
-    rpm-ostree override replace \
-    --experimental \
-        /tmp/fsync-rpms/kernel-[0-9]*.rpm \
-        /tmp/fsync-rpms/kernel-core-*.rpm \
-        /tmp/fsync-rpms/kernel-modules-*.rpm \
-        /tmp/fsync-rpms/kernel-devel-*.rpm \
-        /tmp/fsync-rpms/kernel-uki-virt-*.rpm && \
+RUN --mount=type=cache,dst=/var/cache/libdnf5 \
+    --mount=type=cache,dst=/var/cache/rpm-ostree \
+    --mount=type=bind,from=akmods,src=/kernel-rpms,dst=/tmp/kernel-rpms \
+    dnf5 -y remove --no-autoremove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra && \
+    dnf5 -y install \
+        /tmp/kernel-rpms/kernel-[0-9]*.rpm \
+        /tmp/kernel-rpms/kernel-core-*.rpm \
+        /tmp/kernel-rpms/kernel-modules-*.rpm \
+        /tmp/kernel-rpms/kernel-uki-virt-*.rpm \
+        /tmp/kernel-rpms/kernel-devel-*.rpm && \
+    dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-uki-virt && \
     ostree container commit
 
 # Install akmod rpms for various firmware and features
