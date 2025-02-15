@@ -53,8 +53,6 @@ Source75:       plasmarc-dark
 Source76:       plasmarc-light
 # konsole profile
 Source81:       Filotimo.profile
-# Klassy
-Source61:       klassyrc
 
 BuildArch:      noarch
 License:        GPLv2+
@@ -82,7 +80,6 @@ KDE defaults for Filotimo
 %package -n filotimo-kde-theme
 Summary:        KDE theming provided with filotimo
 
-Requires:       klassy
 #Requires:       filotimo-backgrounds >= 0.9
 Provides:       plasma-lookandfeel-fedora
 Obsoletes:      plasma-lookandfeel-fedora
@@ -96,13 +93,11 @@ Obsoletes:      plasma-lookandfeel-fedora
 install -pm 0644 %{SOURCE0} LICENSE
 
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/
-mkdir -p %{buildroot}%{_sysconfdir}/xdg/klassy/
 mkdir -p %{buildroot}%{_sysconfdir}/sddm.conf.d/
 mkdir -p %{buildroot}%{_datadir}/polkit-1/rules.d
 mkdir -p %{buildroot}%{_datadir}/konsole/
 
 install -t %{buildroot}%{_sysconfdir}/xdg/ %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} %{SOURCE10} %{SOURCE11} %{SOURCE12} %{SOURCE13} %{SOURCE15} %{SOURCE16} %{SOURCE17} %{SOURCE18}
-install -t %{buildroot}%{_sysconfdir}/xdg/klassy/ %{SOURCE61}
 install -t %{buildroot}%{_sysconfdir}/sddm.conf.d/ %{SOURCE21}
 install -t %{buildroot}%{_datadir}/polkit-1/rules.d/ %{SOURCE14}
 install -t %{buildroot}%{_datadir}/konsole/ %{SOURCE81}
@@ -208,7 +203,6 @@ done
 %{_datadir}/polkit-1/rules.d/12-filotimo-kde-policy.rules
 
 %files -n filotimo-kde-theme
-%config(noreplace) %{_sysconfdir}/xdg/klassy/klassyrc
 %{_sysconfdir}/sddm.conf.d/10-filotimo-kde-overrides.conf
 %{_kf6_datadir}/plasma/look-and-feel/org.filotimoproject.filotimodark.desktop
 %{_kf6_datadir}/plasma/look-and-feel/org.filotimoproject.filotimolight.desktop

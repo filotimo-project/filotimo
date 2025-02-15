@@ -37,10 +37,6 @@ dconf update
 # Stop tuned touching swappiness
 grep -rIl 'vm.swappiness=' /usr/lib/tuned/profiles | xargs sed -i '/^vm.swappiness=[0-9]\+/s/^/# /'
 
-# Remove Klassy themes, they add clutter and don't really serve a purpose
-rm -rf /usr/share/plasma/look-and-feel/org.kde.klassy*
-rm -rf /usr/share/color-schemes/Klassy*
-
 # "default" icon theme inherits from Breeze
 sed -i '/^Inherits=/s/Adwaita/Breeze/' /usr/share/icons/default/index.theme
 
@@ -65,11 +61,3 @@ sed -i '/^Inherits=/s/Adwaita/Breeze/' /usr/share/icons/default/index.theme
 
 #    convert -background none -density "$width" "./discover-icons/muondiscover.svg" -resize "${width}x${width}" "$png_file"
 #done
-
-# Fix powerdevil infinitely restarting with some monitors and causing stutters
-sed -i \
-      -e '/^\[Unit\]$/a StartLimitIntervalSec=60' \
-      -e '/^\[Unit\]$/a StartLimitBurst=5' \
-      -e '/^\[Service\]$/a RestartSec=5' \
-      /usr/lib/systemd/user/plasma-powerdevil.service
-

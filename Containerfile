@@ -125,7 +125,6 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     echo "${FEDORA_MAJOR_VERSION}" && \
-    curl -Lo /etc/yum.repos.d/klassy.repo https://download.opensuse.org/repositories/home:/paul4us/Fedora_"${FEDORA_MAJOR_VERSION}"/home:paul4us.repo && \
     curl -Lo /etc/yum.repos.d/terra.repo https://terra.fyralabs.com/terra.repo && \
     dnf5 -y copr enable rodoma92/kde-cdemu-manager && \
     dnf5 -y copr enable tduck973564/filotimo-packages && \
@@ -152,7 +151,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y remove plasma-welcome-fedora && \
     rm -rf /tmp/packages && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/terra.repo && \
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/klassy.repo && \
     dnf5 -y copr disable tduck973564/filotimo-packages && \
     ostree container commit
 
