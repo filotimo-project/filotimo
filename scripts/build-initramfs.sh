@@ -3,11 +3,7 @@ set -oue pipefail
 
 KERNEL_SUFFIX=""
 
-if [ ! -f /usr/libexec/rpm-ostree/wrapped/dracut ]; then
-    rpm-ostree cliwrap install-to-root /
-fi
+QUALIFIED_KERNEL="$(dnf5 repoquery --installed --queryformat='%{evr}.%{arch}' "kernel${KERNEL_SUFFIX:+-${KERNEL_SUFFIX}}")"
+/usr/bin/dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v --add ostree -f "/usr/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
 
-QUALIFIED_KERNEL="$(rpm -qa | grep -P 'kernel-(|'"$KERNEL_SUFFIX"'-)(\d+\.\d+\.\d+)' | sed -E 's/kernel-(|'"$KERNEL_SUFFIX"'-)//')"
-/usr/libexec/rpm-ostree/wrapped/dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible --zstd -v --add ostree -f "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
-
-chmod 0600 /lib/modules/$QUALIFIED_KERNEL/initramfs.img
+chmod 0600 /usr/lib/modules/"$QUALIFIED_KERNEL"/initramfs.img

@@ -37,7 +37,7 @@ install-kde-development-session:
         exit 1
     fi
     printf "This will set up an overlayfs over /usr, making it temporarily mutable until the next reboot. This recipe will need to be run again on every reboot.\n"
-    sudo rpm-ostree usroverlay
+    sudo bootc usr-overlay
     echo 'chown -f -R $USER:$USER /tmp/.X11-unix' | sudo tee /etc/profile.d/set_tmp_x11_permissions.sh > /dev/null
     podman container cp kde-development-environment:/usr/local/share/wayland-sessions/plasmawayland-dev6.desktop ~/
     sed -i "s@^Exec=.*@Exec=$HOME/.local/bin/start-plasma-dev-session@" ~/plasmawayland-dev6.desktop

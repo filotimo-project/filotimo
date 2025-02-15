@@ -25,9 +25,13 @@ ARG BASE_IMAGE="ghcr.io/${SOURCE_ORG}/${BASE_IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR:-filotimo}"
 ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 
+COPY scripts/unwrap.sh /tmp/scripts/unwrap.sh
+
 # Fix build skew
+# also un-cliwrap - see https://github.com/ublue-os/bazzite/blob/main/build_files/unwrap
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
+    /tmp/scripts/unwrap.sh && \
     dnf5 -y upgrade \
         --repo=updates \
         glib2 || true && \
@@ -58,7 +62,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=akmods,src=/kernel-rpms,dst=/tmp/kernel-rpms \
-    rpm-ostree cliwrap install-to-root / && \
     dnf5 -y remove --no-autoremove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra && \
     dnf5 -y install \
         /tmp/kernel-rpms/kernel-[0-9]*.rpm \
