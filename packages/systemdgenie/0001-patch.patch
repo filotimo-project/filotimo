@@ -1,28 +1,34 @@
-From 649f55779599d31c2d4b86bce5bf6ea9e332de5b Mon Sep 17 00:00:00 2001
+From e1a490f19c5105bc7de073c3643fadea9626e05e Mon Sep 17 00:00:00 2001
 From: Thomas Duckworth <tduck973564@gmail.com>
-Date: Mon, 27 Jan 2025 00:53:46 +0000
-Subject: [PATCH] Use Plasma 6 style frameless design, change icon
+Date: Sat, 15 Feb 2025 06:56:57 +0000
+Subject: [PATCH] patch
 
 ---
- src/main.cpp                     |   4 +-
- src/mainwindow.cpp               |   4 +-
- src/mainwindow.ui                | 348 ++++++++++++++++++++++++-------
- src/org.kde.systemdgenie.desktop |   2 +-
- 4 files changed, 277 insertions(+), 81 deletions(-)
+ src/main.cpp                     |   8 +-
+ src/mainwindow.cpp               |   8 +-
+ src/mainwindow.ui                | 378 ++++++++++++++++++++++++-------
+ src/org.kde.systemdgenie.desktop |  14 +-
+ 4 files changed, 311 insertions(+), 97 deletions(-)
 
 diff --git a/src/main.cpp b/src/main.cpp
-index 317b8cd..c32aefb 100644
+index 317b8cd..8601c68 100644
 --- a/src/main.cpp
 +++ b/src/main.cpp
-@@ -34,6 +34,8 @@ int main(int argc, char *argv[])
+@@ -34,10 +34,12 @@ int main(int argc, char *argv[])
  
      KLocalizedString::setApplicationDomain("systemdgenie");
  
 +    QGuiApplication::setDesktopFileName(QStringLiteral("org.kde.systemdgenie"));
 +
      KAboutData aboutData(QStringLiteral("systemdgenie"),
-                          i18n("SystemdGenie"),
+-                         i18n("SystemdGenie"),
++                         i18n("Services Manager"),
                           QStringLiteral(SYSTEMDGENIE_VERSION_STRING),
+-                         i18n("Systemd management utility"),
++                         i18n("Manage systemd units, timers, sessions and config files"),
+                          KAboutLicense::GPL,
+                          i18n("(c) 2016, Ragnar Thomsen"),
+                          QString(),
 @@ -50,7 +52,7 @@ int main(int argc, char *argv[])
                          i18n("Maintainer"),
                          QStringLiteral("rthomsen6@gmail.com"));
@@ -33,7 +39,7 @@ index 317b8cd..c32aefb 100644
      QCommandLineParser parser;
      parser.setApplicationDescription(aboutData.shortDescription());
 diff --git a/src/mainwindow.cpp b/src/mainwindow.cpp
-index eb22fa9..5441547 100644
+index eb22fa9..64a9f51 100644
 --- a/src/mainwindow.cpp
 +++ b/src/mainwindow.cpp
 @@ -89,6 +89,8 @@ MainWindow::MainWindow(QWidget *parent)
@@ -45,6 +51,24 @@ index eb22fa9..5441547 100644
      setupGUI(Default, QStringLiteral("systemdgenieui.rc"));
  }
  
+@@ -492,7 +494,7 @@ void MainWindow::slotChkShowUnits(int state)
+         QObject::sender()->objectName() == QLatin1String("chkUnloadedUnits"))
+     {
+         // System units
+-        if (ui.chkInactiveUnits->isChecked())
++        if (!ui.chkInactiveUnits->isChecked())
+         {
+             ui.chkUnloadedUnits->setEnabled(true);
+             if (ui.chkUnloadedUnits->isChecked())
+@@ -514,7 +516,7 @@ void MainWindow::slotChkShowUnits(int state)
+         QObject::sender()->objectName() == QLatin1String("chkUnloadedUserUnits"))
+     {
+         // User units
+-        if (ui.chkInactiveUserUnits->isChecked())
++        if (!ui.chkInactiveUserUnits->isChecked())
+         {
+             ui.chkUnloadedUserUnits->setEnabled(true);
+             if (ui.chkUnloadedUserUnits->isChecked())
 @@ -1792,7 +1794,7 @@ void MainWindow::displayMsgWidget(KMessageWidget::MessageType type, QString msg)
      KMessageWidget *msgWidget = new KMessageWidget;
      msgWidget->setText(msg);
@@ -55,10 +79,15 @@ index eb22fa9..5441547 100644
  }
 -
 diff --git a/src/mainwindow.ui b/src/mainwindow.ui
-index 5b02dec..20e8a11 100644
+index 5b02dec..b5737c8 100644
 --- a/src/mainwindow.ui
 +++ b/src/mainwindow.ui
-@@ -15,9 +15,36 @@
+@@ -11,13 +11,40 @@
+    </rect>
+   </property>
+   <property name="windowTitle">
+-   <string>SystemdGenie</string>
++   <string>Services Manager</string>
    </property>
    <widget class="QWidget" name="centralwidget">
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -143,7 +172,7 @@ index 5b02dec..20e8a11 100644
 +               <horstretch>0</horstretch>
 +               <verstretch>0</verstretch>
 +              </sizepolicy>
-+             </property>
+              </property>
 +             <property name="mouseTracking">
 +              <bool>true</bool>
 +             </property>
@@ -155,7 +184,7 @@ index 5b02dec..20e8a11 100644
 +             </property>
 +             <property name="editTriggers">
 +              <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
-              </property>
++             </property>
 +             <property name="tabKeyNavigation">
 +              <bool>false</bool>
 +             </property>
@@ -211,7 +240,7 @@ index 5b02dec..20e8a11 100644
               <item>
                <widget class="QComboBox" name="cmbUnitTypes">
                 <property name="sizePolicy">
-@@ -73,7 +184,7 @@
+@@ -73,17 +184,17 @@
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter unit types.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="sizeAdjustPolicy">
@@ -220,7 +249,35 @@ index 5b02dec..20e8a11 100644
                 </property>
                </widget>
               </item>
-@@ -107,56 +218,33 @@
+              <item>
+               <widget class="QCheckBox" name="chkInactiveUnits">
+                <property name="toolTip">
+-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle show inactive units.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
++                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle hiding inactive units.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+-                <string>Show inactive</string>
++                <string>Hide inactive</string>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+@@ -92,8 +203,14 @@
+              </item>
+              <item>
+               <widget class="QCheckBox" name="chkUnloadedUnits">
++               <property name="toolTip">
++                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle hiding unloaded units.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
++               </property>
+                <property name="text">
+-                <string>Show unloaded</string>
++                <string>Hide unloaded</string>
++               </property>
++               <property name="checked">
++                <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+@@ -107,56 +224,33 @@
              </layout>
             </item>
             <item row="8" column="0" colspan="2">
@@ -242,6 +299,9 @@ index 5b02dec..20e8a11 100644
 -             </property>
 -             <property name="tabKeyNavigation">
 -              <bool>false</bool>
+-             </property>
+-             <property name="alternatingRowColors">
+-              <bool>true</bool>
 +            <widget class="KSeparator" name="kseparator"/>
 +           </item>
 +           <item row="11" column="0" colspan="2">
@@ -249,24 +309,21 @@ index 5b02dec..20e8a11 100644
 +             <property name="leftMargin">
 +              <number>6</number>
               </property>
--             <property name="alternatingRowColors">
--              <bool>true</bool>
-+             <property name="topMargin">
-+              <number>6</number>
-              </property>
 -             <property name="selectionMode">
 -              <enum>QAbstractItemView::SingleSelection</enum>
-+             <property name="rightMargin">
++             <property name="topMargin">
 +              <number>6</number>
               </property>
 -             <property name="selectionBehavior">
 -              <enum>QAbstractItemView::SelectRows</enum>
-+             <property name="bottomMargin">
++             <property name="rightMargin">
 +              <number>6</number>
               </property>
 -             <property name="showGrid">
 -              <bool>false</bool>
--             </property>
++             <property name="bottomMargin">
++              <number>6</number>
+              </property>
 -             <property name="sortingEnabled">
 -              <bool>true</bool>
 -             </property>
@@ -300,7 +357,7 @@ index 5b02dec..20e8a11 100644
             </item>
            </layout>
           </widget>
-@@ -165,8 +253,38 @@
+@@ -165,22 +259,64 @@
             <string>User Units</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_5">
@@ -339,7 +396,35 @@ index 5b02dec..20e8a11 100644
               <item>
                <widget class="QComboBox" name="cmbUserUnitTypes"/>
               </item>
-@@ -193,13 +311,16 @@
+              <item>
+               <widget class="QCheckBox" name="chkInactiveUserUnits">
++               <property name="toolTip">
++                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle hiding inactive units.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
++               </property>
+                <property name="text">
+-                <string>Show inactive</string>
++                <string>Hide inactive</string>
++               </property>
++               <property name="checked">
++                <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="chkUnloadedUserUnits">
++               <property name="toolTip">
++                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle hiding unloaded units.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
++               </property>
+                <property name="text">
+-                <string>Show unloaded</string>
++                <string>Hide unloaded</string>
++               </property>
++               <property name="checked">
++                <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+@@ -193,13 +329,16 @@
               </item>
              </layout>
             </item>
@@ -359,7 +444,7 @@ index 5b02dec..20e8a11 100644
               </property>
               <property name="tabKeyNavigation">
                <bool>false</bool>
-@@ -208,10 +329,10 @@
+@@ -208,10 +347,10 @@
                <bool>true</bool>
               </property>
               <property name="selectionMode">
@@ -372,7 +457,7 @@ index 5b02dec..20e8a11 100644
               </property>
               <property name="showGrid">
                <bool>false</bool>
-@@ -230,12 +351,34 @@
+@@ -230,12 +369,34 @@
               </attribute>
              </widget>
             </item>
@@ -412,7 +497,7 @@ index 5b02dec..20e8a11 100644
             </item>
            </layout>
           </widget>
-@@ -244,24 +387,36 @@
+@@ -244,24 +405,36 @@
             <string>Config Files</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_30">
@@ -453,7 +538,7 @@ index 5b02dec..20e8a11 100644
                 </property>
                 <property name="showGrid">
                  <bool>false</bool>
-@@ -289,6 +444,18 @@
+@@ -289,6 +462,18 @@
             <string>Sessions</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_2">
@@ -472,7 +557,7 @@ index 5b02dec..20e8a11 100644
             <item row="0" column="0">
              <layout class="QGridLayout" name="gridLayout">
               <item row="0" column="0">
-@@ -297,10 +464,13 @@
+@@ -297,10 +482,13 @@
                  <bool>true</bool>
                 </property>
                 <property name="contextMenuPolicy">
@@ -488,7 +573,7 @@ index 5b02dec..20e8a11 100644
                 </property>
                 <property name="tabKeyNavigation">
                  <bool>false</bool>
-@@ -309,10 +479,10 @@
+@@ -309,10 +497,10 @@
                  <bool>true</bool>
                 </property>
                 <property name="selectionMode">
@@ -501,7 +586,7 @@ index 5b02dec..20e8a11 100644
                 </property>
                 <property name="showGrid">
                  <bool>false</bool>
-@@ -326,12 +496,12 @@
+@@ -326,12 +514,12 @@
                 <attribute name="verticalHeaderVisible">
                  <bool>false</bool>
                 </attribute>
@@ -517,7 +602,7 @@ index 5b02dec..20e8a11 100644
                </widget>
               </item>
              </layout>
-@@ -343,15 +513,30 @@
+@@ -343,15 +531,30 @@
             <string>Timers</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_4">
@@ -550,7 +635,7 @@ index 5b02dec..20e8a11 100644
                 </property>
                 <property name="tabKeyNavigation">
                  <bool>false</bool>
-@@ -360,10 +545,10 @@
+@@ -360,10 +563,10 @@
                  <bool>true</bool>
                 </property>
                 <property name="selectionMode">
@@ -563,7 +648,7 @@ index 5b02dec..20e8a11 100644
                 </property>
                 <property name="showGrid">
                  <bool>false</bool>
-@@ -399,12 +584,19 @@
+@@ -399,12 +602,19 @@
       <x>0</x>
       <y>0</y>
       <width>800</width>
@@ -585,10 +670,58 @@ index 5b02dec..20e8a11 100644
    <tabstop>tabWidget</tabstop>
    <tabstop>cmbUnitTypes</tabstop>
 diff --git a/src/org.kde.systemdgenie.desktop b/src/org.kde.systemdgenie.desktop
-index 951710d..2d4eb5c 100644
+index 951710d..809cdfd 100644
 --- a/src/org.kde.systemdgenie.desktop
 +++ b/src/org.kde.systemdgenie.desktop
-@@ -124,7 +124,7 @@ Comment[x-test]=xxManage the systemd daemonxx
+@@ -1,5 +1,5 @@
+ [Desktop Entry]
+-Name=SystemdGenie
++Name=Services Manager
+ Name[ar]=جني Systemd
+ Name[ast]=SystemdGenie
+ Name[az]=Systemd
+@@ -9,7 +9,7 @@ Name[ca@valencia]=SystemdGenie
+ Name[cs]=SystemdGenie
+ Name[da]=SystemdGenie
+ Name[de]=SystemdGenie
+-Name[en_GB]=SystemdGenie
++Name[en_GB]=Services Manager
+ Name[eo]=SystemdGenie
+ Name[es]=SystemdGenie
+ Name[et]=SystemdGenie
+@@ -37,7 +37,7 @@ Name[sl]=SystemdGenie
+ Name[sv]=SystemdGenie
+ Name[tr]=SystemdGenie
+ Name[uk]=SystemdGenie
+-Name[x-test]=xxSystemdGeniexx
++Name[x-test]=xxServices Managerxx
+ Name[zh_CN]=SystemdGenie
+ Name[zh_TW]=SystemdGenie
+ GenericName=Systemd Management Tool
+@@ -81,7 +81,7 @@ GenericName[uk]=Засіб керування systemd
+ GenericName[x-test]=xxSystemd Management Toolxx
+ GenericName[zh_CN]=Systemd 管理工具
+ GenericName[zh_TW]=Systemd 管理工具
+-Comment=Manage the systemd daemon
++Comment=Manage systemd units, timers, sessions and config files
+ Comment[ar]=أدر عفريت Systemd
+ Comment[az]=Systemd xidmətini idarəetmə ayarlar
+ Comment[bg]=Настройки на демона systemd
+@@ -90,7 +90,7 @@ Comment[ca@valencia]=Gestiona el dimoni «systemd»
+ Comment[cs]=Spravujte démona systemd
+ Comment[da]=Håndtér systemd-dæmonen
+ Comment[de]=Verwaltung des Systemd-Dienstes
+-Comment[en_GB]=Manage the systemd daemon
++Comment[en_GB]=Manage systemd units, timers, sessions and config files
+ Comment[eo]=Mastrumu la systemd-demonon
+ Comment[es]=Gestión del demonio systemd
+ Comment[et]=Systemd deemoni haldamine
+@@ -120,11 +120,11 @@ Comment[sv]=Hantera systemd-demonen
+ Comment[ta]=systemd பின்னணி சேவையை நிர்வகிக்க உதவும்
+ Comment[tr]=Systemd ardalan sürecini yönetin
+ Comment[uk]=Керування фоновою службою systemd
+-Comment[x-test]=xxManage the systemd daemonxx
++Comment[x-test]=xxManage systemd units, timers, sessions and config filesxx
  Comment[zh_CN]=管理 Systemd 守护进程
  Comment[zh_TW]=設定 systemd 守護行程
  Type=Application
@@ -598,5 +731,5 @@ index 951710d..2d4eb5c 100644
  Categories=Qt;KDE;System;
  X-DBUS-StartupType=Multi
 -- 
-GitLab
+2.48.1
 

@@ -16,10 +16,7 @@ License: GPLv2+
 URL:     %{forgeurl}
 Source:  %{forgesource}
 
-Patch0:  6.patch
-Patch1:  7.patch
-Patch2:  8.patch
-Patch3:  11.patch
+Patch0:  0001-patch.patch
 
 BuildRequires: gcc-c++
 BuildRequires: cmake
