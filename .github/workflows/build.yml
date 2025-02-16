@@ -3,8 +3,8 @@ on:
   pull_request:
     branches:
       - main
-  schedule:
-    - cron: '0 0 */2 * *'
+  schedule: # timed 1 hour after ublue-os/main build
+    - cron: '0 5 */2 * *'
   push:
     branches:
       - main
