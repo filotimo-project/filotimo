@@ -164,38 +164,29 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         firefox && \
     dnf5 -y install --allowerasing \
         plasma-discover-rpm-ostree \
-        distrobox \
         git gh glab \
         nodejs-bash-language-server \
-        kdenetwork-filesharing \
-        ark \
         kleopatra \
         kio-onedrive \
-        firewall-config \
-        openssl openssl-libs \
         python3-pip \
-        i2c-tools \
         p7zip \
-        unzip \
-        gstreamer1-plugins-good gstreamer1-plugin-vaapi gstreamer1-plugin-libav \
+        gstreamer1-plugin-vaapi \
         x265 \
         kde-cdemu-manager-kf6 \
-        v4l2loopback pipewire-v4l2 libcamera-v4l2 \
-        samba samba-usershares \
+        pipewire-v4l2 libcamera-v4l2 \
         rclone \
         android-tools \
-        usbmuxd libimobiledevice \
         epson-inkjet-printer-escpr \
         epson-inkjet-printer-escpr2 \
         foomatic \
         foomatic-db-ppds \
-        gutenprint \
-        hplip \
-        htop \
         virt-manager \
-        podman docker \
+        docker \
         fish zsh tldr \
-        libreoffice \
+        libreoffice-impress \
+        libreoffice-writer \
+        libreoffice-calc \
+        libreoffice-kf6 \
         kde-kup \
         steam-devices && \
     dnf5 -y copr disable rodoma92/kde-cdemu-manager && \
@@ -203,10 +194,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y copr disable zawertun/kde-kup && \
     dnf5 -y copr disable bernardogn/kio-onedrive && \
     dnf5 -y copr disable mulderje/facetimehd-kmod && \
-    sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
-    dnf5 -y upgrade \
-        --repo=fedora-multimedia \
-        mesa* || true && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     ostree container commit
 
