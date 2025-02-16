@@ -188,7 +188,8 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         libreoffice-calc \
         libreoffice-kf6 \
         kde-kup \
-        steam-devices && \
+        steam-devices \
+        lm_sensors && \
     dnf5 -y copr disable rodoma92/kde-cdemu-manager && \
     dnf5 -y copr disable rok/cdemu && \
     dnf5 -y copr disable zawertun/kde-kup && \
@@ -203,9 +204,7 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just
 
 # Copy in added system files
-COPY system_files /tmp/system_files
-RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
-    rsync -rvK /tmp/system_files/ /
+COPY system_files /
 
 # Add modifications and finalize
 COPY scripts /tmp/scripts

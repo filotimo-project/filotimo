@@ -15,10 +15,9 @@ To create a distrobox, run ${LIGHT_BLUE}distrobox create${RESET}.
 Visit ${BOLD}https://github.com/89luca89/distrobox${RESET} to find out more.
 
 To install terminal utilities, use ${LIGHT_BLUE}brew${RESET}. To find out more about a command, type ${LIGHT_BLUE}tldr${RESET} before it.
-
 To install graphical applications, use Flatpaks or AppImages.
 Flatpaks can be easily installed in Discover and through the terminal with the ${LIGHT_BLUE}flatpak${RESET} command, and AppImageLauncher is included with the system for easy integration.
-You can install normal Fedora packages with ${LIGHT_BLUE}dnf${RESET}, but this is not recommended.
+You can install normal Fedora packages with ${LIGHT_BLUE}rpm-ostree${RESET}, but this should only be used as a last resort. Prefer installing these applications in a distrobox.
 
 Many utility scripts are included with the system.
 To view these scripts, use the ${LIGHT_BLUE}ujust${RESET} command.
