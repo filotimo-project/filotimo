@@ -6,7 +6,6 @@ URL:            https://github.com/filotimo-project
 
 Source0:        LICENSE
 # profile.d scripts
-Source1:        filotimo-kde-qml-font-fix.sh
 Source2:        filotimo-nvidia.sh
 Source3:        filotimo-obs-studio.sh
 Source4:        filotimo-ime.sh
@@ -90,7 +89,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/fonts/conf.d/
 mkdir -p %{buildroot}%{_sysconfdir}/sudoers.d/
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/fcitx5/conf/
 mkdir -p %{buildroot}%{_prefix}/lib/systemd/
-install -t %{buildroot}%{_sysconfdir}/profile.d/ %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5}
+install -t %{buildroot}%{_sysconfdir}/profile.d/ %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5}
 install -t %{buildroot}%{_prefix}/lib/sysctl.d/ %{SOURCE11} %{SOURCE12}
 install -t %{buildroot}%{_sysconfdir}/fonts/conf.d/ %{SOURCE21}
 install -t %{buildroot}%{_sysconfdir}/sudoers.d/ %{SOURCE41}
@@ -121,7 +120,6 @@ fi
 
 %files
 %license LICENSE
-%config(noreplace) %{_sysconfdir}/profile.d/filotimo-kde-qml-font-fix.sh
 %config(noreplace) %{_sysconfdir}/profile.d/filotimo-nvidia.sh
 %config(noreplace) %{_sysconfdir}/profile.d/filotimo-obs-studio.sh
 %config(noreplace) %{_sysconfdir}/profile.d/open.sh
