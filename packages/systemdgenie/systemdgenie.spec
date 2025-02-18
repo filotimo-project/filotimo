@@ -4,8 +4,8 @@ Name:    systemdgenie
 %global service_id org.kde.kcontrol.%{name}
 
 %global forgeurl https://github.com/KDE/%{name}
-%global commit 39d552e97f9e08d02cc106112265f2abc86b7f60
-%global date 20250215
+%global commit 5086ec0466a1ca623aeac0f169ab86dcebdb1b31
+%global date 20250218
 %forgemeta
 
 Summary: Systemd managment utility
@@ -16,7 +16,7 @@ License: GPLv2+
 URL:     %{forgeurl}
 Source:  %{forgesource}
 
-Patch0:  0001-patch.patch
+Patch0:  0001-Use-generic-name.patch
 
 BuildRequires: gcc-c++
 BuildRequires: cmake
@@ -66,14 +66,3 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/%{app_id}.desktop
 %{_kf6_datadir}/polkit-1/actions/%{service_id}.policy
 
 %changelog
-* Fri Nov 1 2024 Hazel Bunny <hazel_bunny@disroot.org> - 0.99.0-4.git
-- Rebuild for Qt 6.8
-
-* Thu Oct 17 2024 Hazel Bunny <hazel_bunny@disroot.org> 0.99.0-3.git
-- Fedora 41 Mass Rebuild
-
-* Thu Apr 25 2024 Hazel Bunny <hazel_bunny@disroot.org> 0.99.0-2.git
-- Rebuild for Qt 6.8
-
-* Wed Mar 6 2024 Hazel Bunny <hazel_bunny@disroot.org> 0.99.0-1.git
-- Initial packaging

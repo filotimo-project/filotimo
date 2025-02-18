@@ -1,0 +1,55 @@
+From f60548e990d05a727d3a698c905f0a03f84db4f6 Mon Sep 17 00:00:00 2001
+From: Thomas Duckworth <tduck973564@gmail.com>
+Date: Tue, 18 Feb 2025 21:17:21 +1100
+Subject: [PATCH] Use generic name
+
+---
+ src/main.cpp                     | 2 +-
+ src/org.kde.systemdgenie.desktop | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/main.cpp b/src/main.cpp
+index 2295096..6c2acca 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
+     QGuiApplication::setDesktopFileName(QStringLiteral("org.kde.systemdgenie"));
+ 
+     KAboutData aboutData(QStringLiteral("systemdgenie"),
+-                         i18n("SystemdGenie"),
++                         i18n("Services Manager"),
+                          QStringLiteral(SYSTEMDGENIE_VERSION_STRING),
+                          i18n("Manage systemd units, timers, sessions and config files"),
+                          KAboutLicense::GPL,
+diff --git a/src/org.kde.systemdgenie.desktop b/src/org.kde.systemdgenie.desktop
+index ddf621b..edb6950 100644
+--- a/src/org.kde.systemdgenie.desktop
++++ b/src/org.kde.systemdgenie.desktop
+@@ -1,5 +1,5 @@
+ [Desktop Entry]
+-Name=SystemdGenie
++Name=Services Manager
+ Name[ar]=جني Systemd
+ Name[ast]=SystemdGenie
+ Name[az]=Systemd
+@@ -9,7 +9,7 @@ Name[ca@valencia]=SystemdGenie
+ Name[cs]=SystemdGenie
+ Name[da]=SystemdGenie
+ Name[de]=SystemdGenie
+-Name[en_GB]=SystemdGenie
++Name[en_GB]=Services Manager
+ Name[eo]=SystemdGenie
+ Name[es]=SystemdGenie
+ Name[et]=SystemdGenie
+@@ -37,7 +37,7 @@ Name[sl]=SystemdGenie
+ Name[sv]=SystemdGenie
+ Name[tr]=SystemdGenie
+ Name[uk]=SystemdGenie
+-Name[x-test]=xxSystemdGeniexx
++Name[x-test]=xxServices Managerxx
+ Name[zh_CN]=SystemdGenie
+ Name[zh_TW]=SystemdGenie
+ GenericName=Systemd Management Tool
+-- 
+2.48.1
+
