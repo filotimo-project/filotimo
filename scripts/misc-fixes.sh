@@ -40,6 +40,9 @@ grep -rIl 'vm.swappiness=' /usr/lib/tuned/profiles | xargs sed -i '/^vm.swappine
 # "default" icon theme inherits from Breeze
 sed -i '/^Inherits=/s/Adwaita/Breeze/' /usr/share/icons/default/index.theme
 
+# Make RDP work
+firewall-offline-cmd --service=rdp
+
 # TODO figure out why this doesn't work for Breeze Light
 # Install custom Discover icon
 #rm -rf /usr/share/icons/breeze/apps/48/muondiscover.svg
