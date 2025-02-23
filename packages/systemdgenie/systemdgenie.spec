@@ -4,8 +4,8 @@ Name:    systemdgenie
 %global service_id org.kde.kcontrol.%{name}
 
 %global forgeurl https://github.com/KDE/%{name}
-%global commit dd17439d8583540647524780fcd1f4e8db13638d
-%global date 20250222
+%global commit a2c9435ac2ab341c6797655dca4ba557c2f2f63e
+%global date 20250223
 %forgemeta
 
 Summary: Systemd managment utility
