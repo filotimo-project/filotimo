@@ -10,7 +10,7 @@ Name:    systemdgenie
 
 Summary: Systemd managment utility
 Version: 0.100.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: GPLv2+
 URL:     %{forgeurl}
