@@ -80,7 +80,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=bind,from=akmods-extra,src=/rpms,dst=/tmp/akmods-extra-rpms \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo && \
     dnf5 -y copr enable rok/cdemu && \
-    dnf5 -y copr enable mulderje/facetimehd-kmod && \
+    dnf5 -y copr enable ssweeny/system76-hwe && \
     dnf5 -y install \
         https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
         https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
@@ -95,12 +95,10 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         /tmp/akmods-extra-rpms/kmods/*ayn-platform*.rpm \
         /tmp/akmods-extra-rpms/kmods/*bmi260*.rpm \
         /tmp/akmods-extra-rpms/kmods/*evdi*.rpm \
-        /tmp/akmods-extra-rpms/kmods/*facetimehd*.rpm \
         /tmp/akmods-extra-rpms/kmods/*gcadapter_oc*.rpm \
         /tmp/akmods-extra-rpms/kmods/*nct6687d*.rpm \
-        /tmp/akmods-extra-rpms/kmods/*rtl8814au*.rpm \
-        /tmp/akmods-extra-rpms/kmods/*rtl88xxau*.rpm \
         /tmp/akmods-extra-rpms/kmods/*ryzen-smu*.rpm \
+        /tmp/akmods-extra-rpms/kmods/*system76*.rpm \
         /tmp/akmods-extra-rpms/kmods/*vhba*.rpm \
         /tmp/akmods-extra-rpms/kmods/*zenergy*.rpm && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo && \
@@ -194,7 +192,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y copr disable rok/cdemu && \
     dnf5 -y copr disable zawertun/kde-kup && \
     dnf5 -y copr disable bernardogn/kio-onedrive && \
-    dnf5 -y copr disable mulderje/facetimehd-kmod && \
+    dnf5 -y copr disable ssweeny/system76-hwe && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     ostree container commit
 
