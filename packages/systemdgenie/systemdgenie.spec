@@ -4,13 +4,13 @@ Name:    systemdgenie
 %global service_id org.kde.kcontrol.%{name}
 
 %global forgeurl https://github.com/KDE/%{name}
-%global commit a2c9435ac2ab341c6797655dca4ba557c2f2f63e
-%global date 20250223
+%global commit dd4f2b87e35a84a974c48b0877d30343d2875638
+%global date 20250225
 %forgemeta
 
 Summary: Systemd managment utility
 Version: 0.100.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: GPLv2+
 URL:     %{forgeurl}
