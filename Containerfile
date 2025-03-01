@@ -230,15 +230,15 @@ ARG BASE_IMAGE="ghcr.io/${SOURCE_ORG}/${BASE_IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR:-filotimo}"
 ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 
-# Install NVIDIA driver, use different copr repo for kf6 supergfxctl plasmoid
+# Install NVIDIA driver
 # TODO only install supergfxctl on hybrid systems or find some way to only show it on hybrid systems
 # it's confusing visual noise outside of that context
+# TODO migrate away from HWE when upstream does
 # https://github.com/ublue-os/hwe/
 # https://github.com/ublue-os/bazzite/blob/main/Containerfile#L1059
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=nvidia-akmods,src=/rpms,dst=/tmp/akmods-rpms \
-    dnf5 -y copr enable jhyub/supergfxctl-plasmoid && \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     dnf5 -y install libva-nvidia-driver && \
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
@@ -248,7 +248,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json && \
     ln -s libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so && \
     systemctl enable supergfxd && \
-    dnf5 -y copr disable jhyub/supergfxctl-plasmoid && \
     ostree container commit
 
 COPY scripts /tmp/scripts
