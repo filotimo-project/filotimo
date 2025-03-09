@@ -257,5 +257,4 @@ RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
     cd /tmp/scripts && \
     ./build-initramfs.sh && \
     IMAGE_FLAVOR="nvidia" ./image-info.sh && \
-    ./integrate-supergfxctl-plasmoid.sh && \
     ostree container commit
