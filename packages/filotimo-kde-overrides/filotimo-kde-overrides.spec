@@ -60,8 +60,9 @@ License:        GPLv2+
 Requires:       rsms-inter-fonts
 Requires:       ibm-plex-fonts-all
 Requires:       plasma-workspace
+Requires:       filotimo-fonts
 # fcitx5 is default in kwinrc
-#Requires:       filotimo-environment-ime
+Requires:       filotimo-environment-ime
 # stupid for just one folder
 BuildRequires:  plasma-workspace
 Obsoletes:      plasma-discover-offline-updates
@@ -80,7 +81,7 @@ KDE defaults for Filotimo
 %package -n filotimo-kde-theme
 Summary:        KDE theming provided with filotimo
 
-#Requires:       filotimo-backgrounds >= 0.9
+Requires:       filotimo-backgrounds >= 0.9
 Provides:       plasma-lookandfeel-fedora
 Obsoletes:      plasma-lookandfeel-fedora
 

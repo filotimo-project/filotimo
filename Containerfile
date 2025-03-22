@@ -140,6 +140,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         fedora-logos \
         filotimo-atychia \
         filotimo-plymouth-theme \
+        filotimo-fonts \
         filotimo-environment \
         filotimo-environment-fonts \
         filotimo-environment-ime \
@@ -223,7 +224,7 @@ ARG IMAGE_NAME="${IMAGE_NAME:-filotimo}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-41}"
 ARG KERNEL_FLAVOR="${KERNEL_FLAVOR:-bazzite}"
 # Fetch this dynamically outside the containerfile - use the build script
-ARG KERNEL_VERSION="${KERNEL_VERSION:-6.11.4-301.bazzite.fc41.x86_64}"
+ARG KERNEL_VERSION="${KERNEL_VERSION:-6.12.12-206.bazzite.fc41.x86_64}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-kinoite-main}"
 ARG SOURCE_ORG="${SOURCE_ORG:-ublue-os}"
 ARG BASE_IMAGE="ghcr.io/${SOURCE_ORG}/${BASE_IMAGE_NAME}"

@@ -46,6 +46,7 @@ Environment variables, sysctl and fontconfig configuration for Filotimo.
 
 %package fonts
 Summary: The extra font set that comes with Filotimo.
+Requires: filotimo-fonts
 Requires: rsms-inter-fonts
 Requires: rsms-inter-vf-fonts
 Requires: ibm-plex-fonts-all

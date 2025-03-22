@@ -1,12 +1,12 @@
 [General]
-fixed=IBM Plex Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
-font=Inter Variable,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
-menuFont=Inter Variable,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
-smallestReadableFont=Inter Variable,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
-toolBarFont=Inter Variable,9,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+fixed=Filotimo Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+font=Filotimo Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+menuFont=Filotimo Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+smallestReadableFont=Filotimo Sans,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+toolBarFont=Filotimo Sans,9,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 
 [WM]
-activeFont=Inter Variable,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+activeFont=Filotimo Sans,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 
 [KDE]
 LookAndFeelPackage=org.filotimoproject.filotimo.desktop
