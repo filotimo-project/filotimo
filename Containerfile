@@ -240,13 +240,12 @@ ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=nvidia-akmods,src=/rpms,dst=/tmp/akmods-rpms \
-    sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
     chmod +x /tmp/nvidia-install.sh && \
     dnf5 -y copr enable tduck973564/filotimo-packages && \
     IMAGE_NAME="kinoite" /tmp/nvidia-install.sh && \
     dnf5 -y copr disable tduck973564/filotimo-packages && \
-    dnf5 -y remove xorg-x11-nvidia && \
+    dnf5 -y remove xorg-x11-nvidia akmod-nvidia && \
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json && \
     ln -s libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so && \
     systemctl enable supergfxd && \
