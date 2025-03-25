@@ -128,10 +128,11 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y copr enable tduck973564/filotimo-packages && \
     dnf5 -y copr enable zawertun/kde-kup && \
     dnf5 -y copr enable bernardogn/kio-onedrive && \
+    dnf5 -y copr enable ublue-os/packages && \
     ostree container commit
 
 COPY packages /tmp/packages
-# Install Filotimo packages
+# Install Filotimo and ublue packages
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     dnf5 -y install --allowerasing /tmp/packages/*.rpm && \
@@ -147,11 +148,16 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         filotimo-kde-overrides \
         filotimo-kde-theme \
         filotimo-backgrounds \
-        msttcore-fonts-installer && \
+        msttcore-fonts-installer \
+        ublue-brew \
+        ublue-os-luks \
+        ublue-polkit-rules \
+        ublue-recipes && \
     dnf5 -y remove plasma-welcome-fedora && \
     rm -rf /tmp/packages && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/terra.repo && \
     dnf5 -y copr disable tduck973564/filotimo-packages && \
+    dnf5 -y copr disable ublue-os/packages && \
     ostree container commit
 
 # Install other packages
@@ -237,7 +243,7 @@ ARG IMAGE_TAG="${IMAGE_TAG:-latest}"
 # TODO migrate away from HWE when upstream does
 # https://github.com/ublue-os/hwe/
 # https://github.com/ublue-os/bazzite/blob/main/Containerfile#L1059
-# This fails if nvidia-driver and kmod-nvidia don't have matching versions - line 250'
+# This fails if nvidia-driver and kmod-nvidia don't have matching versions - line 250
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=nvidia-akmods,src=/rpms,dst=/tmp/akmods-rpms \
