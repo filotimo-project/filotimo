@@ -40,11 +40,12 @@ jobs:
           iso_name=filotimo-latest-41
           echo "iso_name=filotimo-latest-41" >> $GITHUB_OUTPUT
 
-          mkdir -p ISO
-          mv "$iso_name".iso ISO/
-          mv "$iso_name".iso-CHECKSUM ISO/
+          mkdir -p iso
+          mv "$iso_name".iso iso/
+          mv "$iso_name".iso-CHECKSUM iso/
 
-          echo "iso_path=$(readlink -f ./ISO/$iso_name.iso)" >> $GITHUB_OUTPUT
+          echo "iso_folder=$(readlink -f ./iso)" >> $GITHUB_OUTPUT
+          echo "iso_path=$(readlink -f ./iso/$iso_name.iso)" >> $GITHUB_OUTPUT
 
       - name: Upload ISO as artifact
         id: upload
@@ -59,20 +60,19 @@ jobs:
           compression-level: 0
           overwrite: true
 
-      - name: Set up SSH
+      - name: Upload ISO to R2 Bucket
+        if: github.ref_name == 'main'
         shell: bash
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          SOURCE_DIR: ${{ steps.build.outputs.iso_folder }}
         run: |
           set -eo pipefail
-          mkdir -v -m 700 $HOME/.ssh
-          ssh-keyscan -H ${{ secrets.HOST }} > $HOME/.ssh/known_hosts
-          echo "${{ secrets.KEY }}" > $HOME/.ssh/id_rsa            
-          chmod 400 $HOME/.ssh/id_rsa
-        
-      - name: Upload ISO to host
-        shell: bash
-        run: |
-          set -eo pipefail
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} "mkdir -p ~/in_progress_filotimo_transfer"
-          scp -P ${{ secrets.PORT }} "${{ steps.build.outputs.iso_path }}" ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/in_progress_filotimo_transfer || exit 1
-          scp -P ${{ secrets.PORT }} "${{ steps.build.outputs.iso_path }}-CHECKSUM" ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/in_progress_filotimo_transfer || exit 1
-          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} "mv -f ~/in_progress_filotimo_transfer/* /var/www/download.filotimoproject.org/ && rmdir ~/in_progress_filotimo_transfer"
+          sudo apt-get update
+          sudo apt-get install -y rclone
+          rclone copy $SOURCE_DIR R2:filotimoproject
