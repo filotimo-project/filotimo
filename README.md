@@ -1,7 +1,6 @@
 ### See https://copr.fedorainfracloud.org/coprs/tduck973564/filotimo-packages/ for our packages
 
 ## [Download an ISO here](https://download.filotimoproject.org/filotimo-latest-41.iso), and [the checksum here](https://download.filotimoproject.org/filotimo-latest-41.iso-CHECKSUM)
-Thanks [Jan](https://github.com/JBNCK) for hosting.
 
 ## Rebasing from Kinoite/other Fedora atomic distros
 ```
