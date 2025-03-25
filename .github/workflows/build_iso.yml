@@ -37,8 +37,8 @@ jobs:
 
           ./build-iso filotimo
 
-          iso_name=filotimo-latest-41
-          echo "iso_name=filotimo-latest-41" >> $GITHUB_OUTPUT
+          iso_name=filotimo-latest
+          echo "iso_name=filotimo-latest" >> $GITHUB_OUTPUT
 
           mkdir -p iso
           mv "$iso_name".iso iso/

@@ -56,7 +56,7 @@ IMAGE_REPO="ghcr.io/filotimo-project" \
 IMAGE_TAG="latest" \
 VERSION="41" \
 VARIANT="kinoite" \
-ISO_NAME="$1-latest-41.iso" \
+ISO_NAME="$1-latest.iso" \
 SECURE_BOOT_KEY_URL="https://github.com/ublue-os/akmods/raw/main/certs/public_key.der" \
 ENROLLMENT_PASSWORD="universalblue" \
 FLATPAK_REMOTE_NAME="flathub" \
@@ -67,5 +67,5 @@ REPOS="/github/workspace/tduck973564-filotimo-packages-fedora-41.repo /etc/yum.r
 
 rm -f ./tduck973564-filotimo-packages-fedora-41.repo
 
-sudo podman cp container-installer:/build-container-installer/"$1"-latest-41.iso ./
-sudo podman cp container-installer:/build-container-installer/"$1"-latest-41.iso-CHECKSUM ./
+sudo podman cp container-installer:/build-container-installer/"$1"-latest.iso ./
+sudo podman cp container-installer:/build-container-installer/"$1"-latest.iso-CHECKSUM ./
