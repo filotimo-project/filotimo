@@ -150,7 +150,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         filotimo-backgrounds \
         msttcore-fonts-installer \
         ublue-brew \
-        ublue-os-luks \
         ublue-polkit-rules \
         ublue-recipes && \
     dnf5 -y remove plasma-welcome-fedora && \
