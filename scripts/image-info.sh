@@ -3,10 +3,10 @@ set -oue pipefail
 
 IMAGE_PRETTY_NAME="filotimo"
 IMAGE_LIKE="fedora"
-HOME_URL="https://github.com/filotimo-project"
-DOCUMENTATION_URL="https://github.com/filotimo-project"
-SUPPORT_URL="https://github.com/filotimo-project"
-BUG_SUPPORT_URL="https://github.com/filotimo-project/image/issues"
+HOME_URL="https://filotimoproject.org/"
+DOCUMENTATION_URL="https://filotimoproject.org/"
+SUPPORT_URL="https://filotimoproject.org/"
+BUG_SUPPORT_URL="https://filotimoproject.org/"
 LOGO_ICON="fedora-logo-icon"
 LOGO_COLOR="0;38;2;255;255;255"
 
@@ -48,5 +48,5 @@ sed -i "s/^EFIDIR=.*/EFIDIR=\"fedora\"/" /usr/sbin/grub2-switch-to-blscfg
 echo "[General]
 LogoPath=/usr/share/pixmaps/fedora-logo-sprite.svg
 Name=filotimo
-Website=https://github.com/filotimo-project
+Website=https://filotimoproject.org/
 Variant=KDE Plasma" > /etc/xdg/kcm-about-distrorc
