@@ -1,6 +1,9 @@
 #!/usr/bin/bash
 set -ouex pipefail
 
+# Remove plasma-lookandfeel-fedora
+rm -rf /usr/share/plasma/look-and-feel/org.fedoraproject.fedora.desktop
+
 # Fix podman complaining about some database thing
 mkdir -p /etc/skel/.local/share/containers/storage/volumes
 
@@ -17,16 +20,14 @@ DefaultProfile=Filotimo.profile" >> /etc/xdg/konsolerc
 # Updates will be done automatically by Discover
 sed -i "s/^AutomaticUpdatePolicy=.*/AutomaticUpdatePolicy=check/" /etc/rpm-ostreed.conf
 
-# Remove fcitx default icons
-rm -rf /usr/share/icons/breeze/status/22/fcitx.svg
-rm -rf /usr/share/icons/breeze/status/24/fcitx.svg
-rm -rf /usr/share/icons/breeze-dark/status/22/fcitx.svg
-rm -rf /usr/share/icons/breeze-dark/status/24/fcitx.svg
-
 # Fix misconfigured samba usershares
 mkdir -p /var/lib/samba/usershares
 chown -R root:usershares /var/lib/samba/usershares
 firewall-offline-cmd --service=samba --service=samba-client
+setsebool -P samba_enable_home_dirs=1
+setsebool -P samba_export_all_ro=1
+setsebool -P samba_export_all_rw=1
+sed -i '/^\[homes\]/,/^\[/{/^\[homes\]/d;/^\[/!d}' /etc/samba/smb.conf
 
 # Helper for virt-manager
 sed -i 's@^Exec=.*@Exec=/usr/libexec/selinux-virt-manager@' /usr/share/applications/virt-manager.desktop

@@ -142,11 +142,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         filotimo-atychia \
         filotimo-plymouth-theme \
         filotimo-fonts \
-        filotimo-environment \
-        filotimo-environment-fonts \
-        filotimo-environment-ime \
-        filotimo-kde-overrides \
-        filotimo-kde-theme \
         filotimo-backgrounds \
         msttcore-fonts-installer \
         ublue-brew \
@@ -165,7 +160,8 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     dnf5 -y remove \
         ublue-os-update-services \
         toolbox \
-        firefox && \
+        firefox \
+        zram-generator-defaults && \
     dnf5 -y install --allowerasing \
         plasma-discover-rpm-ostree \
         git gh glab \
