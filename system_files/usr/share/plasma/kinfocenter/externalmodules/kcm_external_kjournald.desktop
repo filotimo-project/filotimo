@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+[Desktop Entry]
+Type=Service
+TryExec=kjournaldbrowser
+Exec=kjournaldbrowser
+Icon=utilities-log-viewer
+X-KDE-Weight=1
+X-KDE-ServiceTypes=InfoCenterExternalApp
+X-KDE-KInfoCenter-Category=basic_information
+X-KDE-ParentApp=kinfocenter
+Name=System Journal
+Comment=View the system journal
+X-KDE-Keywords=journal,journald,log,logging,logs

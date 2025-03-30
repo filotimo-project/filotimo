@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+[Desktop Entry]
+Type=Service
+TryExec=kleopatra
+Exec=kleopatra
+Icon=kleopatra
+X-KDE-Weight=1
+X-KDE-ServiceTypes=SystemSettingsExternalApp
+X-KDE-System-Settings-Parent-Category=security-privacy
+X-KDE-ParentApp=systemsettings
+Name=Certificates and Cryptography
+Comment=Manage GPG certificates and other cryptography services
+X-KDE-Keywords=gpg,cryptography,crypto,certificates,certs,cert,certificate

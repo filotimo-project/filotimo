@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+[Desktop Entry]
+Type=Service
+TryExec=systemdgenie
+Exec=systemdgenie
+Icon=preferences-system-services
+X-KDE-Weight=1
+X-KDE-ServiceTypes=SystemSettingsExternalApp
+X-KDE-System-Settings-Parent-Category=system-administration
+X-KDE-ParentApp=systemsettings
+Name=System Services
+Comment=Manage systemd units, timers, sessions and config files
+X-KDE-Keywords=systemd,system,services,service,unit,timer
