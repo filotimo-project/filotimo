@@ -43,6 +43,10 @@ sed -i '/^Inherits=/s/Adwaita/Breeze/' /usr/share/icons/default/index.theme
 # Make RDP work
 firewall-offline-cmd --service=rdp
 
+# Make the splash screen use Filotimo's logo
+rm -rf /usr/share/plasma/look-and-feel/org.kde.breeze.desktop/contents/splash/images/plasma.svgz
+install -m 644 /usr/share/pixmaps/fedora-logo-sprite.svg /usr/share/plasma/look-and-feel/org.kde.breeze.desktop/contents/splash/images/plasma.svgz
+
 # TODO figure out why this doesn't work for Breeze Light
 # Install custom Discover icon
 #rm -rf /usr/share/icons/breeze/apps/48/muondiscover.svg
