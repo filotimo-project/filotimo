@@ -8,3 +8,4 @@ ExecStart=/usr/libexec/check-windows-dualboot
 
 [Install]
 WantedBy=default.target
+ConditionUser=!@system
