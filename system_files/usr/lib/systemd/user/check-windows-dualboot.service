@@ -1,0 +1,10 @@
+[Unit]
+Description=Check for Windows Dualboot
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/check-windows-dualboot
+
+[Install]
+WantedBy=default.target

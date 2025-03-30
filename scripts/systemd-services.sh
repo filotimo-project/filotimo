@@ -15,6 +15,9 @@ systemctl enable usr-share-sddm-themes.mount
 # Configure the firefox flatpak
 systemctl enable firefox-flatpak-configuration.path
 
+# Boot to windows shortcut
+systemctl --global enable check-windows-dualboot.service
+
 # Other tweaks
 systemctl enable adbusers-append.service
 systemctl enable dirty-centisecs.service
