@@ -28,4 +28,4 @@ grep -rIl 'vm.swappiness=' /usr/lib/tuned/profiles | xargs sed -i '/^vm.swappine
 firewall-offline-cmd --service=rdp
 
 # Make discover explicitly only use rpm-ostree and flatpak backends
-sed -i "s/^Exec=plasma-discover/& --backends flatpak-backend,rpm-ostree-backend,fwupd-backend /" /usr/share/applications/org.kde.discover.desktop
+sed -i "s/^Exec=plasma-discover/& --backends flatpak-backend,rpm-ostree-backend,fwupd-backend/" /usr/share/applications/org.kde.discover.desktop
