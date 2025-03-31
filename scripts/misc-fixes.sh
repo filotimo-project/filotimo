@@ -48,6 +48,9 @@ firewall-offline-cmd --service=rdp
 rm -rf /usr/share/plasma/look-and-feel/org.kde.breeze.desktop/contents/splash/images/plasma.svgz
 install -m 644 /usr/share/pixmaps/fedora-logo-sprite.svg /usr/share/plasma/look-and-feel/org.kde.breeze.desktop/contents/splash/images/plasma.svgz
 
+# Make discover explicitly only use rpm-ostree and flatpak backends
+sed -i "s/^Exec=plasma-discover/& --backends flatpak-backend,rpm-ostree-backend,fwupd-backend /" /usr/share/applications/org.kde.discover.desktop
+
 # TODO figure out why this doesn't work for Breeze Light
 # Install custom Discover icon
 #rm -rf /usr/share/icons/breeze/apps/48/muondiscover.svg
