@@ -1,5 +1,6 @@
 #!/usr/bin/bash
-set -oue pipefail
+set -ouex pipefail
+source /ctx/build/steps/prelude.sh
 
 KERNEL_SUFFIX=""
 

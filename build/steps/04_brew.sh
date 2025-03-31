@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 set -ouex pipefail
+source /ctx/build/steps/prelude.sh
 
 # Install prereqs
 dnf5 -y install procps-ng curl file git gcc

@@ -1,5 +1,12 @@
 #!/usr/bin/bash
-set -oue pipefail
+set -ouex pipefail
+source /ctx/build/steps/prelude.sh
+
+if [[ "$IMAGE_NAME" == *"-"* ]]; then
+  IMAGE_FLAVOR="${IMAGE_NAME#*-}"
+else
+  IMAGE_FLAVOR="main"
+fi
 
 IMAGE_PRETTY_NAME="filotimo"
 IMAGE_LIKE="fedora"
@@ -48,5 +55,5 @@ sed -i "s/^EFIDIR=.*/EFIDIR=\"fedora\"/" /usr/sbin/grub2-switch-to-blscfg
 echo "[General]
 LogoPath=/usr/share/pixmaps/fedora-logo-sprite.svg
 Name=filotimo
-Website=https://filotimoproject.org/
+Website=$HOME_URL
 Variant=KDE Plasma" > /etc/xdg/kcm-about-distrorc

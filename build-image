@@ -23,5 +23,4 @@ if [ -z "$kernel_version" ]; then
   exit 1
 fi
 
-podman build . --target "$TARGET" --build-arg KERNEL_VERSION="$kernel_version"
-
+podman build . --build-arg IMAGE_NAME="$TARGET" --build-arg KERNEL_VERSION="$kernel_version"

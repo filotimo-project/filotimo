@@ -1,7 +1,8 @@
 #!/usr/bin/bash
 set -ouex pipefail
+source /ctx/build/steps/prelude.sh
 
-# See system_files/usr/bin/fishlogin
+# Note: see root/usr/bin/fishlogin
 
 # Set fish as default shell
 sed -i 's@^SHELL=.*@SHELL=/usr/bin/fishlogin@' /etc/default/useradd
