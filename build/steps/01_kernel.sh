@@ -33,7 +33,6 @@ dnf5 -y install \
     /tmp/akmods-extra/kmods/*ayaneo-platform*.rpm \
     /tmp/akmods-extra/kmods/*ayn-platform*.rpm \
     /tmp/akmods-extra/kmods/*bmi260*.rpm \
-    /tmp/akmods-extra/kmods/*evdi*.rpm \
     /tmp/akmods-extra/kmods/*gcadapter_oc*.rpm \
     /tmp/akmods-extra/kmods/*nct6687d*.rpm \
     /tmp/akmods-extra/kmods/*ryzen-smu*.rpm \
