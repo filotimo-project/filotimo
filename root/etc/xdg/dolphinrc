@@ -1,5 +1,8 @@
 [General]
 GlobalViewProps=false
+ShowSpaceInfo=true
+ShowStatusBar=FullWidth
+ShowZoomSlider=true
 
 [VersionControl]
 enabledPlugins=Git
