@@ -21,7 +21,7 @@ env:
   IMAGE_DESC: "Filotimo Linux OCI Image"
   IMAGE_TAG: "latest"
   IMAGE_ARCH: "x86_64"
-  MAJOR_VERSION: "41"
+  MAJOR_VERSION: "42"
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"  # do not edit
   KERNEL_FLAVOR: "bazzite"
 

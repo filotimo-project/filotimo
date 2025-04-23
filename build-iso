@@ -12,8 +12,8 @@ fi
 
 cd "$(git rev-parse --show-toplevel)"
 
-curl -fSsO "https://copr.fedorainfracloud.org/coprs/tduck973564/filotimo-packages/repo/fedora-41/tduck973564-filotimo-packages-fedora-41.repo"
-sed -i '/^priority=50$/s/50/1/' tduck973564-filotimo-packages-fedora-41.repo
+curl -fSsO "https://copr.fedorainfracloud.org/coprs/tduck973564/filotimo-packages/repo/fedora-42/tduck973564-filotimo-packages-fedora-42.repo"
+sed -i '/^priority=50$/s/50/1/' tduck973564-filotimo-packages-fedora-42.repo
 
 image="ghcr.io/filotimo-project/$1:latest"
 
@@ -54,7 +54,7 @@ ENABLE_CACHE_SKOPEO="false" \
 IMAGE_NAME="$1" \
 IMAGE_REPO="ghcr.io/filotimo-project" \
 IMAGE_TAG="latest" \
-VERSION="41" \
+VERSION="42" \
 VARIANT="kinoite" \
 ISO_NAME="$1-latest.iso" \
 SECURE_BOOT_KEY_URL="https://github.com/ublue-os/akmods/raw/main/certs/public_key.der" \
@@ -63,9 +63,9 @@ FLATPAK_REMOTE_NAME="flathub" \
 FLATPAK_REMOTE_URL="https://flathub.org/repo/flathub.flatpakrepo" \
 FLATPAK_REMOTE_REFS_DIR="/github/workspace/flatpaks" \
 ENABLE_FLATPAK_DEPENDENCIES="false" \
-REPOS="/github/workspace/tduck973564-filotimo-packages-fedora-41.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo"
+REPOS="/github/workspace/tduck973564-filotimo-packages-fedora-42.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo"
 
-rm -f ./tduck973564-filotimo-packages-fedora-41.repo
+rm -f ./tduck973564-filotimo-packages-fedora-42.repo
 
 sudo podman cp container-installer:/build-container-installer/"$1"-latest.iso ./
 sudo podman cp container-installer:/build-container-installer/"$1"-latest.iso-CHECKSUM ./
