@@ -35,8 +35,6 @@ dnf5 -y install --allowerasing \
     rclone \
     android-tools \
     ifuse \
-    epson-inkjet-printer-escpr \
-    epson-inkjet-printer-escpr2 \
     printer-driver-brlaser \
     foomatic \
     foomatic-db-ppds \
