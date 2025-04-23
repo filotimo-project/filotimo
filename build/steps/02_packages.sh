@@ -2,6 +2,9 @@
 set -ouex pipefail
 source /ctx/build/steps/prelude.sh
 
+# Temporary workaround for no python3-libfuse upstream
+dnf5 -y install "https://download.copr.fedorainfracloud.org/results/zawertun/kde-kup/fedora-41-x86_64/08095873-python-libfuse/python3-libfuse-1.0.8-1.fc41.x86_64.rpm"
+
 # Install packages included with system
 dnf5 -y install --allowerasing /ctx/packages/*.rpm
 dnf5 -y install --allowerasing \
