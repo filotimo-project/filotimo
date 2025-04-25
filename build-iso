@@ -30,8 +30,7 @@ mkdir /var/tmp || true
 chmod -R 1777 /var/tmp
 flatpak config --system --set languages "*"
 flatpak remote-delete --system fedora || true
-flatpak remote-delete --system fedora-testing || true
-flatpak remote-add --system --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak remote-add --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak install --system -y ${FLATPAK_REFS_DIR_LIST}
 ostree refs --repo=\${FLATPAK_SYSTEM_DIR}/repo | grep '^deploy/' | grep -v 'org\.freedesktop\.Platform\.openh264' | sed 's/^deploy\///g' > /output/flatpaks-with-deps
 EOF
