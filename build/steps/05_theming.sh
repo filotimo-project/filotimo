@@ -24,53 +24,31 @@ sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applica
 sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/nvtop.desktop
 sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/nvidia-settings.desktop || true
 
-# Remove fcitx default icons
-rm -rf /usr/share/icons/breeze/status/22/fcitx.svg
-rm -rf /usr/share/icons/breeze/status/24/fcitx.svg
-rm -rf /usr/share/icons/breeze-dark/status/22/fcitx.svg
-rm -rf /usr/share/icons/breeze-dark/status/24/fcitx.svg
-
 # Make fcitx icon same as keyboard preferences icon
 for size in 22 24 32; do
+    mkdir -p /usr/share/icons/filotimo/preferences/$size
     ln -sf /usr/share/icons/breeze/preferences/$size/preferences-desktop-keyboard.svg \
-          /usr/share/icons/breeze/preferences/$size/fcitx.svg
+          /usr/share/icons/filotimo/preferences/$size/fcitx.svg
+    mkdir -p /usr/share/icons/filotimo-dark/preferences/$size
     ln -sf /usr/share/icons/breeze-dark/preferences/$size/preferences-desktop-keyboard.svg \
-          /usr/share/icons/breeze-dark/preferences/$size/fcitx.svg
+          /usr/share/icons/filotimo-dark/preferences/$size/fcitx.svg
 done
 
 # Change AppImageLauncher icon to appimage application icon
 for size in 16 22 24 32 48 64; do
     if [ "$size" -eq 48 ]; then
+        mkdir -p /usr/share/icons/filotimo/apps/48
         ln -sf /usr/share/icons/breeze/mimetypes/64/application-vnd.appimage.svg \
-              /usr/share/icons/breeze/apps/48/AppImageLauncher.svg
+              /usr/share/icons/filotimo/apps/48/AppImageLauncher.svg
+        mkdir -p /usr/share/icons/filotimo-dark/apps/48
         ln -sf /usr/share/icons/breeze-dark/mimetypes/64/application-vnd.appimage.svg \
-              /usr/share/icons/breeze-dark/apps/48/AppImageLauncher.svg
+              /usr/share/icons/filotimo-dark/apps/48/AppImageLauncher.svg
     else
+        mkdir -p /usr/share/icons/filotimo/apps/${size}
         ln -sf /usr/share/icons/breeze/mimetypes/${size}/application-vnd.appimage.svg \
-              /usr/share/icons/breeze/apps/${size}/AppImageLauncher.svg
+              /usr/share/icons/filotimo/apps/${size}/AppImageLauncher.svg
+        mkdir -p /usr/share/icons/filotimo-dark/apps/${size}
         ln -sf /usr/share/icons/breeze-dark/mimetypes/${size}/application-vnd.appimage.svg \
-              /usr/share/icons/breeze-dark/apps/${size}/AppImageLauncher.svg
+              /usr/share/icons/filotimo-dark/apps/${size}/AppImageLauncher.svg
     fi
 done
-
-# TODO figure out why this doesn't work for Breeze Light
-# Install custom Discover icon
-#rm -rf /usr/share/icons/breeze/apps/48/muondiscover.svg
-#rm -rf /usr/share/icons/breeze-dark/apps/48/muondiscover.svg
-#rm -rf /usr/share/icons/hicolor/scalable/apps/plasmadiscover.svg
-#cp /ctx/build/steps/discover-icons/muondiscover.svg /usr/share/icons/breeze/apps/48/muondiscover.svg
-#cp /ctx/build/steps/discover-icons/muondiscover.svg /usr/share/icons/breeze-dark/apps/48/muondiscover.svg
-#cp /ctx/build/steps/discover-icons/muondiscover.svg /usr/share/icons/hicolor/scalable/apps/plasmadiscover.svg
-#sizes=("128x128" "16x16" "22x22" "32x32" "48x48")
-#for size in "${sizes[@]}"; do
-#    dir="/usr/share/icons/hicolor/${size}/apps"
-#    width="${size%%x*}"
-#    png_file="$dir/plasmadiscover.png"
-
-#    # Remove the original PNG file if it exists
-#    if [ -f "$png_file" ]; then
-#        rm "$png_file"
-#    fi
-
-#    convert -background none -density "$width" "/ctx/build/steps/discover-icons/muondiscover.svg" -resize "${width}x${width}" "$png_file"
-#done

@@ -5,7 +5,7 @@ widgetStyle=Breeze
 ColorScheme=FilotimoDark
 
 [kdeglobals][Icons]
-Theme=breeze-dark
+Theme=filotimo-dark
 
 [plasmarc][Theme]
 name=filotimo-dark
