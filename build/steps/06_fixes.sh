@@ -32,3 +32,6 @@ sed -i "s/^Exec=plasma-discover/& --backends flatpak-backend,rpm-ostree-backend,
 
 # Remove the rpm mimetype association from discover
 sed -i 's/application\/x-rpm;//g' /usr/share/applications/org.kde.discover.desktop
+
+# Remove gnome ssh askpass environment variable
+rm -rf /etc/profile.d/gnome-ssh-askpass.csh /etc/profile.d/gnome-ssh-askpass.sh
