@@ -33,7 +33,7 @@ index 1b8124aec7..cb5f1368b8 100644
 -            settings.set_property("gtk-font-name", "Cantarell")
 -            settings.set_property("gtk-icon-theme-name", "Adwaita")
 +            # Filotimo ----------------------------------------------------------------------
-+            settings.set_property("gtk-font-name", "Filotimo")
++            settings.set_property("gtk-font-name", "Inter")
 +            settings.set_property("gtk-icon-theme-name", "Breeze")
 +            settings.set_property("gtk-theme-name", "Breeze")
 +            # -------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ index 447d4eec55..8da0e60e55 100644
              <property name="xalign">1</property>
              <attributes>
 -              <attribute name="font-desc" value="Cantarell Italic"/>
-+              <attribute name="font-desc" value="Filotimo Italic"/>
++              <attribute name="font-desc" value="Inter Italic"/>
                <attribute name="foreground" value="#808080808080"/>
              </attributes>
            </object>
@@ -70,7 +70,7 @@ index 7bf41ee14d..8fc414c7ea 100644
                                              <property name="max_width_chars">39</property>
                                              <attributes>
 -                                              <attribute name="font-desc" value="Cantarell Italic 10"/>
-+                                              <attribute name="font-desc" value="Filotimo Italic 10"/>
++                                              <attribute name="font-desc" value="Inter Italic 10"/>
                                              </attributes>
                                            </object>
                                            <packing>
@@ -79,7 +79,7 @@ index 7bf41ee14d..8fc414c7ea 100644
                                              <property name="label" translatable="yes">Selected Device</property>
                                              <attributes>
 -                                              <attribute name="font-desc" value="Cantarell Bold 10"/>
-+                                              <attribute name="font-desc" value="Filotimo Bold 10"/>
++                                              <attribute name="font-desc" value="Inter Bold 10"/>
                                                <attribute name="weight" value="bold"/>
                                                <attribute name="scale" value="1.2"/>
                                              </attributes>
@@ -88,7 +88,7 @@ index 7bf41ee14d..8fc414c7ea 100644
                                              <property name="label" translatable="yes">Device description</property>
                                              <attributes>
 -                                              <attribute name="font-desc" value="Cantarell Italic 10"/>
-+                                              <attribute name="font-desc" value="Filotimo Italic 10"/>
++                                              <attribute name="font-desc" value="Inter Italic 10"/>
                                                <attribute name="style" value="italic"/>
                                              </attributes>
                                            </object>
@@ -97,7 +97,7 @@ index 7bf41ee14d..8fc414c7ea 100644
                                          <property name="wrap">True</property>
                                          <attributes>
 -                                          <attribute name="font-desc" value="Cantarell 11"/>
-+                                          <attribute name="font-desc" value="Filotimo 11"/>
++                                          <attribute name="font-desc" value="Inter 11"/>
                                          </attributes>
                                        </object>
                                        <packing>
@@ -106,7 +106,7 @@ index 7bf41ee14d..8fc414c7ea 100644
                                              <property name="mnemonic_widget">passphraseEntry</property>
                                              <attributes>
 -                                              <attribute name="font-desc" value="Cantarell 11"/>
-+                                              <attribute name="font-desc" value="Filotimo 11"/>
++                                              <attribute name="font-desc" value="Inter 11"/>
                                              </attributes>
                                            </object>
                                            <packing>
@@ -115,7 +115,7 @@ index 7bf41ee14d..8fc414c7ea 100644
                                              <property name="label" translatable="yes">Selected Device</property>
                                              <attributes>
 -                                              <attribute name="font-desc" value="Cantarell Bold 10"/>
-+                                              <attribute name="font-desc" value="Filotimo Bold 10"/>
++                                              <attribute name="font-desc" value="Inter Bold 10"/>
                                                <attribute name="weight" value="bold"/>
                                                <attribute name="scale" value="1.2"/>
                                              </attributes>
@@ -124,7 +124,7 @@ index 7bf41ee14d..8fc414c7ea 100644
                                              <property name="label" translatable="yes">Device description</property>
                                              <attributes>
 -                                              <attribute name="font-desc" value="Cantarell Italic 10"/>
-+                                              <attribute name="font-desc" value="Filotimo Italic 10"/>
++                                              <attribute name="font-desc" value="Inter Italic 10"/>
                                                <attribute name="style" value="italic"/>
                                              </attributes>
                                            </object>
@@ -133,7 +133,7 @@ index 7bf41ee14d..8fc414c7ea 100644
                                          <property name="wrap">True</property>
                                          <attributes>
 -                                          <attribute name="font-desc" value="Cantarell 11"/>
-+                                          <attribute name="font-desc" value="Filotimo 11"/>
++                                          <attribute name="font-desc" value="Inter 11"/>
                                          </attributes>
                                        </object>
                                        <packing>
@@ -142,7 +142,7 @@ index 7bf41ee14d..8fc414c7ea 100644
                                              <property name="label" translatable="yes">Selected Device</property>
                                              <attributes>
 -                                              <attribute name="font-desc" value="Cantarell Bold 10"/>
-+                                              <attribute name="font-desc" value="Filotimo Bold 10"/>
++                                              <attribute name="font-desc" value="Inter Bold 10"/>
                                                <attribute name="weight" value="bold"/>
                                                <attribute name="scale" value="1.2"/>
                                              </attributes>
@@ -151,7 +151,7 @@ index 7bf41ee14d..8fc414c7ea 100644
                                              <property name="label" translatable="yes">Device description</property>
                                              <attributes>
 -                                              <attribute name="font-desc" value="Cantarell Italic 10"/>
-+                                              <attribute name="font-desc" value="Filotimo Italic 10"/>
++                                              <attribute name="font-desc" value="Inter Italic 10"/>
                                                <attribute name="style" value="italic"/>
                                              </attributes>
                                            </object>
@@ -160,7 +160,7 @@ index 7bf41ee14d..8fc414c7ea 100644
                                          <property name="wrap">True</property>
                                          <attributes>
 -                                          <attribute name="font-desc" value="Cantarell 11"/>
-+                                          <attribute name="font-desc" value="Filotimo 11"/>
++                                          <attribute name="font-desc" value="Inter 11"/>
                                          </attributes>
                                        </object>
                                        <packing>
@@ -173,7 +173,7 @@ index a72bfc72e8..d34f358df8 100644
                                  <property name="label" translatable="yes">Which installation source would you like to use?</property>
                                  <attributes>
 -                                  <attribute name="font-desc" value="Cantarell 10"/>
-+                                  <attribute name="font-desc" value="Filotimo 10"/>
++                                  <attribute name="font-desc" value="Inter 10"/>
                                    <attribute name="weight" value="bold"/>
                                  </attributes>
                                </object>
@@ -182,7 +182,7 @@ index a72bfc72e8..d34f358df8 100644
                                      <property name="label" translatable="yes">Updates</property>
                                      <attributes>
 -                                      <attribute name="font-desc" value="Cantarell 10"/>
-+                                      <attribute name="font-desc" value="Filotimo 10"/>
++                                      <attribute name="font-desc" value="Inter 10"/>
                                        <attribute name="weight" value="bold"/>
                                      </attributes>
                                    </object>
@@ -195,7 +195,7 @@ index 5b6dce75e2..c3e5bbdbcd 100644
                      <property name="xalign">0</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell 12"/>
-+                      <attribute name="font-desc" value="Filotimo 12"/>
++                      <attribute name="font-desc" value="Inter 12"/>
                        <attribute name="weight" value="normal"/>
                        <attribute name="scale" value="1"/>
                      </attributes>
@@ -204,7 +204,7 @@ index 5b6dce75e2..c3e5bbdbcd 100644
                          <property name="wrap">True</property>
                          <attributes>
 -                          <attribute name="font-desc" value="Cantarell 12"/>
-+                          <attribute name="font-desc" value="Filotimo 12"/>
++                          <attribute name="font-desc" value="Inter 12"/>
                            <attribute name="weight" value="normal"/>
                            <attribute name="scale" value="1"/>
                          </attributes>
@@ -213,7 +213,7 @@ index 5b6dce75e2..c3e5bbdbcd 100644
                              <property name="mnemonic_widget">layoutTextView</property>
                              <attributes>
 -                              <attribute name="font-desc" value="Cantarell 10"/>
-+                              <attribute name="font-desc" value="Filotimo 10"/>
++                              <attribute name="font-desc" value="Inter 10"/>
                              </attributes>
                            </object>
                            <packing>
@@ -222,7 +222,7 @@ index 5b6dce75e2..c3e5bbdbcd 100644
                              <property name="wrap">True</property>
                              <attributes>
 -                              <attribute name="font-desc" value="Cantarell Italic 10"/>
-+                              <attribute name="font-desc" value="Filotimo Italic 10"/>
++                              <attribute name="font-desc" value="Inter Italic 10"/>
                                <attribute name="style" value="italic"/>
                              </attributes>
                            </object>
@@ -231,7 +231,7 @@ index 5b6dce75e2..c3e5bbdbcd 100644
                  <property name="label" translatable="yes">ADD A KEYBOARD LAYOUT</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell Bold 10"/>
-+                  <attribute name="font-desc" value="Filotimo Bold 10"/>
++                  <attribute name="font-desc" value="Inter Bold 10"/>
                    <attribute name="weight" value="bold"/>
                  </attributes>
                </object>
@@ -240,7 +240,7 @@ index 5b6dce75e2..c3e5bbdbcd 100644
                  <property name="xalign">0</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell 12"/>
-+                  <attribute name="font-desc" value="Filotimo 12"/>
++                  <attribute name="font-desc" value="Inter 12"/>
                  </attributes>
                </object>
                <packing>
@@ -249,7 +249,7 @@ index 5b6dce75e2..c3e5bbdbcd 100644
                  <property name="label" translatable="yes">LAYOUT SWITCHING OPTIONS</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell Bold 10"/>
-+                  <attribute name="font-desc" value="Filotimo Bold 10"/>
++                  <attribute name="font-desc" value="Inter Bold 10"/>
                    <attribute name="weight" value="bold"/>
                  </attributes>
                </object>
@@ -258,7 +258,7 @@ index 5b6dce75e2..c3e5bbdbcd 100644
                  <property name="wrap">True</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell 12"/>
-+                  <attribute name="font-desc" value="Filotimo 12"/>
++                  <attribute name="font-desc" value="Inter 12"/>
                  </attributes>
                </object>
                <packing>
@@ -271,7 +271,7 @@ index 5bbb0a1953..9d61d492ea 100644
                      <property name="xalign">0</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell 14"/>
-+                      <attribute name="font-desc" value="Filotimo 14"/>
++                      <attribute name="font-desc" value="Inter 14"/>
                        <attribute name="weight" value="normal"/>
                        <attribute name="scale" value="1"/>
                      </attributes>
@@ -280,7 +280,7 @@ index 5bbb0a1953..9d61d492ea 100644
                                    <object class="GtkCellRendererText" id="nativeNameRenderer">
                                      <property name="xalign">0.10000000149011612</property>
 -                                    <property name="font">Cantarell 12</property>
-+                                    <property name="font">Filotimo 12</property>
++                                    <property name="font">Inter 12</property>
                                    </object>
                                    <attributes>
                                      <attribute name="markup">0</attribute>
@@ -289,7 +289,7 @@ index 5bbb0a1953..9d61d492ea 100644
                                      <property name="xalign">0.89999997615814209</property>
                                      <property name="ellipsize">end</property>
 -                                    <property name="font">Cantarell Italic 14</property>
-+                                    <property name="font">Filotimo Italic 14</property>
++                                    <property name="font">Inter Italic 14</property>
                                      <property name="foreground">gray</property>
                                    </object>
                                    <attributes>
@@ -298,7 +298,7 @@ index 5bbb0a1953..9d61d492ea 100644
                                  <child>
                                    <object class="GtkCellRendererText" id="localeNativeNameRenderer">
 -                                    <property name="font">Cantarell 12</property>
-+                                    <property name="font">Filotimo 12</property>
++                                    <property name="font">Inter 12</property>
                                    </object>
                                    <attributes>
                                      <attribute name="markup">0</attribute>
@@ -311,7 +311,7 @@ index 86871f70ad..79993a65b0 100644
                  <property name="label" translatable="yes">This is unstable, pre-release software.</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell Bold 12"/>
-+                  <attribute name="font-desc" value="Filotimo Bold 12"/>
++                  <attribute name="font-desc" value="Inter Bold 12"/>
                    <attribute name="weight" value="bold"/>
                  </attributes>
                </object>
@@ -320,7 +320,7 @@ index 86871f70ad..79993a65b0 100644
                  <property name="wrap">True</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell 12"/>
-+                  <attribute name="font-desc" value="Filotimo 12"/>
++                  <attribute name="font-desc" value="Inter 12"/>
                  </attributes>
                </object>
                <packing>
@@ -333,7 +333,7 @@ index 300a12d8d4..ceba79fa41 100644
              <property name="yalign">0</property>
              <attributes>
 -              <attribute name="font-desc" value="Cantarell 11"/>
-+              <attribute name="font-desc" value="Filotimo 11"/>
++              <attribute name="font-desc" value="Inter 11"/>
              </attributes>
            </object>
            <packing>
@@ -342,7 +342,7 @@ index 300a12d8d4..ceba79fa41 100644
  after creating the mount point below.</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell 11"/>
-+                  <attribute name="font-desc" value="Filotimo 11"/>
++                  <attribute name="font-desc" value="Inter 11"/>
                    <attribute name="scale" value="1"/>
                  </attributes>
                </object>
@@ -351,7 +351,7 @@ index 300a12d8d4..ceba79fa41 100644
  use.  Try something else?</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell 10"/>
-+                      <attribute name="font-desc" value="Filotimo 10"/>
++                      <attribute name="font-desc" value="Inter 10"/>
                        <attribute name="scale" value="1"/>
                        <attribute name="foreground" value="#ffff00000000"/>
                      </attributes>
@@ -360,7 +360,7 @@ index 300a12d8d4..ceba79fa41 100644
                      <property name="wrap">True</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell 10"/>
-+                      <attribute name="font-desc" value="Filotimo 10"/>
++                      <attribute name="font-desc" value="Inter 10"/>
                        <attribute name="scale" value="1"/>
                        <attribute name="foreground" value="#ffff00000000"/>
                      </attributes>
@@ -373,7 +373,7 @@ index 955b60c9ab..651a8abc58 100644
                  <property name="wrap">True</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell 12"/>
-+                  <attribute name="font-desc" value="Filotimo 12"/>
++                  <attribute name="font-desc" value="Inter 12"/>
                  </attributes>
                </object>
                <packing>
@@ -382,7 +382,7 @@ index 955b60c9ab..651a8abc58 100644
                  <property name="label" translatable="yes">Unformatted DASDs Detected</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell Bold 12"/>
-+                  <attribute name="font-desc" value="Filotimo Bold 12"/>
++                  <attribute name="font-desc" value="Inter Bold 12"/>
                    <attribute name="weight" value="bold"/>
                  </attributes>
                </object>
@@ -395,7 +395,7 @@ index aee7a4bbfe..46edcc773e 100644
                  <property name="xalign">0</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell Bold 10"/>
-+                  <attribute name="font-desc" value="Filotimo Bold 10"/>
++                  <attribute name="font-desc" value="Inter Bold 10"/>
                    <attribute name="weight" value="bold"/>
                  </attributes>
                </object>
@@ -404,7 +404,7 @@ index aee7a4bbfe..46edcc773e 100644
                  <property name="xalign">0</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell 11"/>
-+                  <attribute name="font-desc" value="Filotimo 11"/>
++                  <attribute name="font-desc" value="Inter 11"/>
                  </attributes>
                </object>
                <packing>
@@ -413,7 +413,7 @@ index aee7a4bbfe..46edcc773e 100644
                      <property name="xalign">1</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell Bold 11"/>
-+                      <attribute name="font-desc" value="Filotimo Bold 11"/>
++                      <attribute name="font-desc" value="Inter Bold 11"/>
                        <attribute name="weight" value="bold"/>
                      </attributes>
                    </object>
@@ -422,7 +422,7 @@ index aee7a4bbfe..46edcc773e 100644
                      <property name="xalign">0</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell 11"/>
-+                      <attribute name="font-desc" value="Filotimo 11"/>
++                      <attribute name="font-desc" value="Inter 11"/>
                      </attributes>
                    </object>
                    <packing>
@@ -431,7 +431,7 @@ index aee7a4bbfe..46edcc773e 100644
                      <property name="xalign">1</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell Bold 11"/>
-+                      <attribute name="font-desc" value="Filotimo Bold 11"/>
++                      <attribute name="font-desc" value="Inter Bold 11"/>
                        <attribute name="weight" value="bold"/>
                      </attributes>
                    </object>
@@ -440,7 +440,7 @@ index aee7a4bbfe..46edcc773e 100644
                      <property name="xalign">0</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell 11"/>
-+                      <attribute name="font-desc" value="Filotimo 11"/>
++                      <attribute name="font-desc" value="Inter 11"/>
                      </attributes>
                    </object>
                    <packing>
@@ -449,7 +449,7 @@ index aee7a4bbfe..46edcc773e 100644
                  <property name="xalign">0</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell 11"/>
-+                  <attribute name="font-desc" value="Filotimo 11"/>
++                  <attribute name="font-desc" value="Inter 11"/>
                  </attributes>
                </object>
                <packing>
@@ -458,7 +458,7 @@ index aee7a4bbfe..46edcc773e 100644
                  <property name="xalign">0</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell 11"/>
-+                  <attribute name="font-desc" value="Filotimo 11"/>
++                  <attribute name="font-desc" value="Inter 11"/>
                  </attributes>
                </object>
                <packing>
@@ -467,7 +467,7 @@ index aee7a4bbfe..46edcc773e 100644
                      <property name="xalign">0</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell 11"/>
-+                      <attribute name="font-desc" value="Filotimo 11"/>
++                      <attribute name="font-desc" value="Inter 11"/>
                      </attributes>
                    </object>
                    <packing>
@@ -476,7 +476,7 @@ index aee7a4bbfe..46edcc773e 100644
                      <property name="xalign">1</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell 11"/>
-+                      <attribute name="font-desc" value="Filotimo 11"/>
++                      <attribute name="font-desc" value="Inter 11"/>
                        <attribute name="weight" value="bold"/>
                      </attributes>
                    </object>
@@ -485,7 +485,7 @@ index aee7a4bbfe..46edcc773e 100644
                      <property name="xalign">0</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell 11"/>
-+                      <attribute name="font-desc" value="Filotimo 11"/>
++                      <attribute name="font-desc" value="Inter 11"/>
                      </attributes>
                    </object>
                    <packing>
@@ -494,7 +494,7 @@ index aee7a4bbfe..46edcc773e 100644
                  <property name="xalign">0</property>
                  <attributes>
 -                  <attribute name="font-desc" value="Cantarell 11"/>
-+                  <attribute name="font-desc" value="Filotimo 11"/>
++                  <attribute name="font-desc" value="Inter 11"/>
                  </attributes>
                </object>
                <packing>
@@ -507,7 +507,7 @@ index 1ed5a90495..6e50b9542a 100644
                      <property name="label" translatable="yes">We'll need network access to fetch information about your location and to make software updates available for you.</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell 12"/>
-+                      <attribute name="font-desc" value="Filotimo 12"/>
++                      <attribute name="font-desc" value="Inter 12"/>
                      </attributes>
                    </object>
                    <packing>
@@ -520,7 +520,7 @@ index 518e31eacf..0925784cfd 100644
                          <property name="xalign">0</property>
                          <attributes>
 -                          <attribute name="font-desc" value="Cantarell 12"/>
-+                          <attribute name="font-desc" value="Filotimo 12"/>
++                          <attribute name="font-desc" value="Inter 12"/>
                            <attribute name="weight" value="normal"/>
                          </attributes>
                        </object>
@@ -529,7 +529,7 @@ index 518e31eacf..0925784cfd 100644
                          <property name="xalign">0</property>
                          <attributes>
 -                          <attribute name="font-desc" value="Cantarell 12"/>
-+                          <attribute name="font-desc" value="Filotimo 12"/>
++                          <attribute name="font-desc" value="Inter 12"/>
                            <attribute name="weight" value="normal"/>
                          </attributes>
                        </object>
@@ -538,7 +538,7 @@ index 518e31eacf..0925784cfd 100644
                                  <property name="xalign">0</property>
                                  <attributes>
 -                                  <attribute name="font-desc" value="Cantarell 12"/>
-+                                  <attribute name="font-desc" value="Filotimo 12"/>
++                                  <attribute name="font-desc" value="Inter 12"/>
                                    <attribute name="weight" value="normal"/>
                                  </attributes>
                                </object>
@@ -551,7 +551,7 @@ index b613e39f6d..daf1d2076f 100644
                                  <property name="xalign">0</property>
                                  <attributes>
 -                                  <attribute name="font-desc" value="Cantarell Bold 12"/>
-+                                  <attribute name="font-desc" value="Filotimo Bold 12"/>
++                                  <attribute name="font-desc" value="Inter Bold 12"/>
                                    <attribute name="weight" value="bold"/>
                                  </attributes>
                                </object>
@@ -560,7 +560,7 @@ index b613e39f6d..daf1d2076f 100644
                                  <property name="xalign">0</property>
                                  <attributes>
 -                                  <attribute name="font-desc" value="Cantarell 12"/>
-+                                  <attribute name="font-desc" value="Filotimo 12"/>
++                                  <attribute name="font-desc" value="Inter 12"/>
                                  </attributes>
                                </object>
                                <packing>
@@ -569,7 +569,7 @@ index b613e39f6d..daf1d2076f 100644
                                  <property name="xalign">0</property>
                                  <attributes>
 -                                  <attribute name="font-desc" value="Cantarell Bold 10"/>
-+                                  <attribute name="font-desc" value="Filotimo Bold 10"/>
++                                  <attribute name="font-desc" value="Inter Bold 10"/>
                                    <attribute name="weight" value="bold"/>
                                  </attributes>
                                </object>
@@ -578,7 +578,7 @@ index b613e39f6d..daf1d2076f 100644
                                      <property name="xalign">1</property>
                                      <attributes>
 -                                      <attribute name="font-desc" value="Cantarell Italic 10"/>
-+                                      <attribute name="font-desc" value="Filotimo Italic 10"/>
++                                      <attribute name="font-desc" value="Inter Italic 10"/>
                                      </attributes>
                                    </object>
                                  </child>
@@ -587,7 +587,7 @@ index b613e39f6d..daf1d2076f 100644
                                  <property name="xalign">0</property>
                                  <attributes>
 -                                  <attribute name="font-desc" value="Cantarell Bold 10"/>
-+                                  <attribute name="font-desc" value="Filotimo Bold 10"/>
++                                  <attribute name="font-desc" value="Inter Bold 10"/>
                                    <attribute name="weight" value="bold"/>
                                  </attributes>
                                </object>
@@ -596,7 +596,7 @@ index b613e39f6d..daf1d2076f 100644
                                      <property name="xalign">1</property>
                                      <attributes>
 -                                      <attribute name="font-desc" value="Cantarell Italic 10"/>
-+                                      <attribute name="font-desc" value="Filotimo Italic 10"/>
++                                      <attribute name="font-desc" value="Inter Italic 10"/>
                                      </attributes>
                                    </object>
                                  </child>
@@ -605,7 +605,7 @@ index b613e39f6d..daf1d2076f 100644
                                      <property name="xalign">0</property>
                                      <attributes>
 -                                      <attribute name="font-desc" value="Cantarell Bold 12"/>
-+                                      <attribute name="font-desc" value="Filotimo Bold 12"/>
++                                      <attribute name="font-desc" value="Inter Bold 12"/>
                                        <attribute name="weight" value="bold"/>
                                      </attributes>
                                    </object>
@@ -614,7 +614,7 @@ index b613e39f6d..daf1d2076f 100644
                          <property name="label" translatable="yes">summary</property>
                          <attributes>
 -                          <attribute name="font-desc" value="Cantarell 10"/>
-+                          <attribute name="font-desc" value="Filotimo 10"/>
++                          <attribute name="font-desc" value="Inter 10"/>
                          </attributes>
                        </object>
                        <packing>
@@ -708,7 +708,7 @@ index e5e1f29aa9..b8a581769d 100644
                      <property name="xalign">0</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell Bold 16"/>
-+                      <attribute name="font-desc" value="Filotimo Bold 16"/>
++                      <attribute name="font-desc" value="Inter Bold 16"/>
                      </attributes>
                    </object>
                    <packing>
@@ -717,7 +717,7 @@ index e5e1f29aa9..b8a581769d 100644
                      <property name="xalign">0</property>
                      <attributes>
 -                      <attribute name="font-desc" value="Cantarell 12"/>
-+                      <attribute name="font-desc" value="Filotimo 12"/>
++                      <attribute name="font-desc" value="Inter 12"/>
                      </attributes>
                    </object>
                    <packing>
@@ -726,7 +726,7 @@ index e5e1f29aa9..b8a581769d 100644
                                    <object class="GtkCellRendererText" id="nativeNameRenderer">
                                      <property name="xalign">0.10000000149011612</property>
 -                                    <property name="font">Cantarell 12</property>
-+                                    <property name="font">Filotimo 12</property>
++                                    <property name="font">Inter 12</property>
                                    </object>
                                    <attributes>
                                      <attribute name="markup">0</attribute>
@@ -735,7 +735,7 @@ index e5e1f29aa9..b8a581769d 100644
                                      <property name="xalign">0.8999999761581421</property>
                                      <property name="ellipsize">end</property>
 -                                    <property name="font">Cantarell Italic 14</property>
-+                                    <property name="font">Filotimo Italic 14</property>
++                                    <property name="font">Inter Italic 14</property>
                                      <property name="foreground">gray</property>
                                    </object>
                                    <attributes>
@@ -744,7 +744,7 @@ index e5e1f29aa9..b8a581769d 100644
                                  <child>
                                    <object class="GtkCellRendererText" id="nativeNameRenderer1">
 -                                    <property name="font">Cantarell 12</property>
-+                                    <property name="font">Filotimo 12</property>
++                                    <property name="font">Inter 12</property>
                                    </object>
                                    <attributes>
                                      <attribute name="markup">0</attribute>

@@ -12,7 +12,6 @@ dnf5 -y install --allowerasing \
     fedora-logos \
     filotimo-atychia \
     filotimo-plymouth-theme \
-    filotimo-fonts \
     filotimo-backgrounds \
     msttcore-fonts-installer \
     ublue-brew \

@@ -315,7 +315,7 @@ Requires: blivet-gui-runtime >= %{blivetguiver}
 %endif
 # Filotimo --------------------------
 Requires: fedora-logos >= 1:38.1.0-100
-Requires: filotimo-fonts
+Requires: rsms-inter-fonts
 Requires: breeze-gtk-gtk3
 # -----------------------------------
 
