@@ -9,7 +9,7 @@ setup-kde-development-environment:
     podman start kde-development-environment
     sleep 20
     podman exec -it --user "$USER" kde-development-environment bash -c '
-    sudo dnf install -y --no-gpgchecks librsvg2-devel hunspell-devel clang-tools-extra clang cmake make gdb ninja git git-clang-format qt6-*-devel qt5-*-devel opencv-devel mpv-libs-devel openh264 "pkgconfig(libavcodec)" "pkgconfig(libavfilter)" "pkgconfig(libavformat)"
+    sudo dnf install -y --no-gpgchecks librsvg2-devel hunspell-devel clang-tools-extra clang cmake make gdb ninja git git-clang-format qt6-*-devel qt5-*-devel opencv-devel mpv-libs-devel openh264 "pkgconfig(libavcodec)" "pkgconfig(libavfilter)" "pkgconfig(libavformat)" rsms-inter-fonts rsms-inter-vf-fonts ibm-plex-fonts-all plasma-breeze
 
     if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
         echo "export PATH=\"\$HOME/.local/bin:\$PATH\"" >> ~/.zshrc
