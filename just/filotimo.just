@@ -21,11 +21,11 @@ setup-kde-development-environment:
     curl "https://invent.kde.org/sdk/kde-builder/-/raw/master/scripts/initial_setup.sh?ref_type=heads" > initial_setup.sh
     bash initial_setup.sh
     rm initial_setup.sh
-    kde-builder --generate-config
-    kde-builder --install-distro-packages
+    yes | kde-builder --generate-config
+    yes | kde-builder --install-distro-packages
     printf "Plasma Desktop will now be built from master. This may take a while.\n\n"
     sleep 2
-    kde-builder workspace
+    yes | kde-builder workspace
     printf "Complete! Run ujust install-kde-session outside the distrobox to install the session file to allow you to enter the Plasma development workspace.\n"'
 
 # Installs the session file to run a KDE development environment from SDDM. Requires setup-kde-development-environment
