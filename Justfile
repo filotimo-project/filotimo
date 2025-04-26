@@ -131,6 +131,7 @@ build-installer $target_image=image_name $tag=default_tag:
     sudo podman rmi ${image}
     rm -rf "$TEMP_FLATPAK_INSTALL_DIR"
 
+    # FIXME put proper version back if/when anaconda starts working again
     sudo podman run --name=container-installer --replace --privileged \
         --volume "$(pwd)":"/github/workspace/" ghcr.io/jasonn3/build-container-installer:d9934090914f1937b167dae98b16a09fe99da48b \
         ADDITIONAL_TEMPLATES="/github/workspace/lorax_templates/remove_root_password_prompt.tmpl" \
@@ -140,7 +141,7 @@ build-installer $target_image=image_name $tag=default_tag:
         IMAGE_NAME="$target_image" \
         IMAGE_REPO="ghcr.io/filotimo-project" \
         IMAGE_TAG="$tag" \
-        VERSION="$fedora_version" \
+        VERSION="41" \
         VARIANT="kinoite" \
         ISO_NAME="$target_image-$tag.iso" \
         SECURE_BOOT_KEY_URL="https://github.com/ublue-os/akmods/raw/main/certs/public_key.der" \
