@@ -10,3 +10,4 @@ output/
 _build
 *_build*
 *.repo
+*.kate-swp
