@@ -132,7 +132,7 @@ build-installer $target_image=image_name $tag=default_tag:
     rm -rf "$TEMP_FLATPAK_INSTALL_DIR"
 
     sudo podman run --name=container-installer --replace --privileged \
-        --volume "$(pwd)":"/github/workspace/" ghcr.io/jasonn3/build-container-installer:v1.2.3 \
+        --volume "$(pwd)":"/github/workspace/" ghcr.io/jasonn3/build-container-installer:d9934090914f1937b167dae98b16a09fe99da48b \
         ADDITIONAL_TEMPLATES="/github/workspace/lorax_templates/remove_root_password_prompt.tmpl" \
         ARCH="x86_64" \
         ENABLE_CACHE_DNF="false" \
