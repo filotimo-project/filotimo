@@ -1,7 +1,7 @@
 Summary: Graphical system installer
 Name:    anaconda
 Version: 42.27.12
-Release: 100%{?dist}.filotimo
+Release: 101%{?dist}.filotimo
 ExcludeArch: %{ix86}
 License: GPL-2.0-or-later
 URL:     http://fedoraproject.org/wiki/Anaconda
@@ -302,7 +302,7 @@ Requires: anaconda-core = %{version}-%{release}
 Requires: anaconda-widgets = %{version}-%{release}
 Requires: python3-meh-gui >= %{mehver}
 # Filotimo --------------------------
-#Requires: adwaita-icon-theme
+Requires: adwaita-icon-theme
 Requires: breeze-icon-theme
 # -----------------------------------
 Requires: tecla
@@ -317,6 +317,7 @@ Requires: blivet-gui-runtime >= %{blivetguiver}
 Requires: fedora-logos >= 1:38.1.0-100
 Requires: rsms-inter-fonts
 Requires: breeze-gtk-gtk3
+Requires: breeze-gtk-gtk4
 # -----------------------------------
 
 # Needed to compile the gsettings files
