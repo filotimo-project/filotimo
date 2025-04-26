@@ -98,8 +98,8 @@ build-installer $target_image=image_name $tag=default_tag:
 
     cd "$(git rev-parse --show-toplevel)"
 
-    curl -fSsO "https://copr.fedorainfracloud.org/coprs/tduck973564/filotimo-packages/repo/fedora-${fedora_version}/tduck973564-filotimo-packages-fedora-${fedora_version}.repo"
-    sed -i '/^priority=50$/s/50/1/' tduck973564-filotimo-packages-fedora-${fedora_version}.repo
+    curl -fSsO "https://copr.fedorainfracloud.org/coprs/tduck973564/filotimo-packages/repo/fedora-41/tduck973564-filotimo-packages-fedora-41.repo"
+    sed -i '/^priority=50$/s/50/1/' tduck973564-filotimo-packages-fedora-41.repo
 
     image="ghcr.io/filotimo-project/$target_image:latest"
 
@@ -150,7 +150,7 @@ build-installer $target_image=image_name $tag=default_tag:
         FLATPAK_REMOTE_URL="https://dl.flathub.org/repo/flathub.flatpakrepo" \
         FLATPAK_REMOTE_REFS_DIR="/github/workspace/flatpaks" \
         ENABLE_FLATPAK_DEPENDENCIES="false" \
-        REPOS="/github/workspace/tduck973564-filotimo-packages-fedora-$fedora_version.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo"
+        REPOS="/github/workspace/tduck973564-filotimo-packages-fedora-41.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo"
 
     rm -f ./tduck973564-filotimo-packages-fedora-$fedora_version.repo
 
