@@ -27,11 +27,11 @@ grep -rIl 'vm.swappiness=' /usr/lib/tuned/profiles | xargs sed -i '/^vm.swappine
 # Make RDP work
 firewall-offline-cmd --service=rdp
 
-# Make discover explicitly only use rpm-ostree and flatpak backends
-sed -i "s/^Exec=plasma-discover/& --backends flatpak-backend,rpm-ostree-backend,fwupd-backend/" /usr/share/applications/org.kde.discover.desktop
-
 # Remove the rpm mimetype association from discover
 sed -i 's/application\/x-rpm;//g' /usr/share/applications/org.kde.discover.desktop
 
 # Remove gnome ssh askpass environment variable
 rm -rf /etc/profile.d/gnome-ssh-askpass.csh /etc/profile.d/gnome-ssh-askpass.sh
+
+# Purge KNewStuff from Discover
+rm -rf /usr/lib64/qt6/plugins/discover/kns-backend.so
