@@ -76,8 +76,8 @@ BuildRequires: s390utils-devel
 BuildRequires: gdk-pixbuf2-devel
 BuildRequires: libxml2
 
-Requires: anaconda-gui = %{version}-%{release}
-Requires: anaconda-tui = %{version}-%{release}
+Requires: anaconda-gui = %{epoch}:%{version}-%{release}
+Requires: anaconda-tui = %{epoch}:%{version}-%{release}
 
 %description
 The anaconda package is a metapackage for the Anaconda installer.
@@ -142,7 +142,7 @@ Requires: crypto-policies
 Requires: /usr/bin/update-crypto-policies
 
 # required because of the rescue mode and VNC question
-Requires: anaconda-tui = %{version}-%{release}
+Requires: anaconda-tui = %{epoch}:%{version}-%{release}
 
 # Make sure we get the en locale one way or another
 Requires: (glibc-langpack-en or glibc-all-langpacks)
@@ -159,9 +159,9 @@ Requires: /usr/bin/date
 Conflicts: grubby < 8.40-10
 
 Obsoletes: anaconda-images <= 10
-Provides: anaconda-images = %{version}-%{release}
-Obsoletes: anaconda-runtime < %{version}-%{release}
-Provides: anaconda-runtime = %{version}-%{release}
+Provides: anaconda-images = %{epoch}:%{version}-%{release}
+Obsoletes: anaconda-runtime < %{epoch}:%{version}-%{release}
+Provides: anaconda-runtime = %{epoch}:%{version}-%{release}
 Obsoletes: booty <= 0.107-1
 
 %description core
@@ -176,7 +176,7 @@ Summary: Live installation specific files and dependencies
 BuildArchitectures: noarch
 BuildRequires: desktop-file-utils
 # live installation currently implies a graphical installation
-Requires: anaconda-gui = %{version}-%{release}
+Requires: anaconda-gui = %{epoch}:%{version}-%{release}
 Requires: zenity
 Requires: xisxwayland
 Recommends: xhost
@@ -241,7 +241,7 @@ dependencies as well.
 Summary: Installation image specific dependencies
 # This package must have no weak dependencies.
 # Pull in most stuff with the -env- metapackage
-Requires: anaconda-install-env-deps = %{version}-%{release}
+Requires: anaconda-install-env-deps = %{epoch}:%{version}-%{release}
 # Require storage things that are only recommended in -env-
 %ifarch %{ix86} x86_64
 Requires: fcoe-utils >= %{fcoeutilsver}
@@ -285,8 +285,8 @@ ensure all Anaconda capabilities are supported in the resulting image.
 
 %package gui
 Summary: Graphical user interface for the Anaconda installer
-Requires: anaconda-core = %{version}-%{release}
-Requires: anaconda-widgets = %{version}-%{release}
+Requires: anaconda-core = %{epoch}:%{version}-%{release}
+Requires: anaconda-widgets = %{epoch}:%{version}-%{release}
 Requires: python3-iso639
 Requires: python3-meh-gui >= %{mehver}
 Requires: python3-xkbregistry
@@ -318,7 +318,7 @@ This package contains graphical user interface for the Anaconda installer.
 
 %package tui
 Summary: Textual user interface for the Anaconda installer
-Requires: anaconda-core = %{version}-%{release}
+Requires: anaconda-core = %{epoch}:%{version}-%{release}
 Requires: python3-simpleline >= %{simplelinever}
 
 %description tui
@@ -337,7 +337,7 @@ Summary: Development files for anaconda-widgets
 %if %{with glade}
 Requires: glade
 %endif
-Requires: %{name}-widgets%{?_isa} = %{version}-%{release}
+Requires: %{name}-widgets%{?_isa} = %{epoch}:%{version}-%{release}
 
 %description widgets-devel
 This package contains libraries and header files needed for writing the
