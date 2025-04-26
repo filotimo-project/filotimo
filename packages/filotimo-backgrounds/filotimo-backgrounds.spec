@@ -116,21 +116,20 @@ for file in *.jpg *.jxl; do
 done
 
 mkdir -p %{buildroot}%{_datadir}/backgrounds/images
-mkdir -p %{buildroot}%{_datadir}/sddm/themes/01-breeze-fedora/
 cp Phaethon.jpg %{buildroot}%{_datadir}/backgrounds/default.jpg
 convert %{buildroot}%{_datadir}/backgrounds/default.jpg %{buildroot}%{_datadir}/backgrounds/default.png
+convert %{buildroot}%{_datadir}/backgrounds/default.jpg %{buildroot}%{_datadir}/backgrounds/default.jxl
 rm -f %{buildroot}%{_datadir}/backgrounds/default.jpg
 ln -sf %{_datadir}/backgrounds/default.png %{buildroot}%{_datadir}/backgrounds/default-dark.png
+ln -sf %{_datadir}/backgrounds/default.jxl %{buildroot}%{_datadir}/backgrounds/default-dark.jxl
 ln -sf %{_datadir}/backgrounds/default.png %{buildroot}%{_datadir}/backgrounds/images/default.png
-ln -sf %{_datadir}/backgrounds/default.png %{buildroot}%{_datadir}/sddm/themes/01-breeze-fedora/default.png
+ln -sf %{_datadir}/backgrounds/default.jxl %{buildroot}%{_datadir}/backgrounds/images/default.jxl
 
 %files
 %license LICENSE
 %{_datadir}/wallpapers/*
-%{_datadir}/backgrounds/default.png
-%{_datadir}/backgrounds/default-dark.png
+%{_datadir}/backgrounds/*
 %dir %{_datadir}/backgrounds/images/
-%{_datadir}/backgrounds/images/default*
-%{_datadir}/sddm/themes/01-breeze-fedora/default.png
+%{_datadir}/backgrounds/images/*
 
 %changelog
