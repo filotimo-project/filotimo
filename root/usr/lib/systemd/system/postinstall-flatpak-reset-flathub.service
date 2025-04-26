@@ -1,0 +1,12 @@
+[Unit]
+Description=Reset Flathub repo on fresh installs
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/libexec/postinstall-flatpak-reset-flathub
+
+[Install]
+WantedBy=default.target
