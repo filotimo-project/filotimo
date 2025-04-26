@@ -21,6 +21,4 @@ systemctl enable dirty-centisecs.service
 systemctl enable memory-tweaks.service
 systemctl enable plugdev-append.service
 systemctl enable postinstall-hardware-setup.service
-systemctl enable postinstall-flatpak-reset-flathub.service
-
 systemctl disable flatpak-add-fedora-repos.service

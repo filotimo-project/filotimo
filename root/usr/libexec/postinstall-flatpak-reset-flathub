@@ -1,4 +1,0 @@
-#!/usr/bin/bash
-flatpak remote-delete --force --system flathub
-flatpak remote-add --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-systemctl disable postinstall-flatpak-reset-flathub.service
