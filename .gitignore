@@ -3,3 +3,10 @@ flatpaks/flatpaks-with-deps
 flatpak.*
 *.iso
 *.iso-CHECKSUM
+previous.manifest.json
+changelog.md
+output.env
+output/
+_build
+*_build*
+*.repo

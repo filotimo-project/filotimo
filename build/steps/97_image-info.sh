@@ -28,7 +28,7 @@ cat > $IMAGE_INFO <<EOF
   "image-vendor": "$IMAGE_VENDOR",
   "image-ref": "$IMAGE_REF",
   "image-tag": "$IMAGE_TAG",
-  "base-image-name": "$BASE_IMAGE_NAME",
+  "base-image-name": "kinoite-main",
   "fedora-version": "$FEDORA_MAJOR_VERSION",
 }
 EOF

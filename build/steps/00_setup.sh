@@ -50,7 +50,3 @@ done
 for url in "${url_repositories[@]}"; do
     curl -Lo "/etc/yum.repos.d/$(basename "$url")" "$url"
 done
-
-# Add the Flathub Flatpak remote and remove the Fedora Flatpak remote
-flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-systemctl disable flatpak-add-fedora-repos.service

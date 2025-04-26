@@ -28,6 +28,10 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
+      - name: Install Just
+        shell: bash
+        run: bash .github/workflows/shared/install-just.sh
+
       - name: Build ISO
         id: build
         shell: bash
@@ -35,7 +39,7 @@ jobs:
           set -eo pipefail
           cd "${{ github.workspace }}"
 
-          ./build-iso filotimo
+          just --justfile=Justfile build-installer filotimo latest
 
           iso_name=filotimo-latest
           echo "iso_name=filotimo-latest" >> $GITHUB_OUTPUT
@@ -46,19 +50,6 @@ jobs:
 
           echo "iso_folder=$(readlink -f ./iso)" >> $GITHUB_OUTPUT
           echo "iso_path=$(readlink -f ./iso/$iso_name.iso)" >> $GITHUB_OUTPUT
-
-      - name: Upload ISO as artifact
-        id: upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.build.outputs.iso_name }}
-          path: |
-            ${{ steps.build.outputs.iso_path }}
-            ${{ steps.build.outputs.iso_path }}-CHECKSUM
-          if-no-files-found: error
-          retention-days: 0
-          compression-level: 0
-          overwrite: true
 
       - name: Upload ISO to R2 Bucket
         if: github.ref_name == 'main'
@@ -76,3 +67,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rclone
           rclone copy $SOURCE_DIR R2:filotimoproject
+      
+      - name: Upload ISO as artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.iso_name }}
+          path: |
+            ${{ steps.build.outputs.iso_path }}
+            ${{ steps.build.outputs.iso_path }}-CHECKSUM
+          if-no-files-found: error
+          retention-days: 0
+          compression-level: 0
+          overwrite: true
