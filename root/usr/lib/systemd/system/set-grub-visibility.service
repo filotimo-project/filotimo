@@ -1,0 +1,11 @@
+[Unit]
+Description=Sets GRUB to visible on boot and hidden on shutdown - on a force shutdown GRUB will show on next boot for system image rollback
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/grub2-editenv - unset menu_auto_hide
+ExecStop=/usr/bin/grub2-editenv - set menu_auto_hide=2
+
+[Install]
+WantedBy=multi-user.target
