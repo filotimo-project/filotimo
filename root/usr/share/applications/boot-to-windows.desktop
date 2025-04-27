@@ -1,7 +1,7 @@
 [Desktop Entry]
 Hidden=true
-Name=Reboot to Windows
-Comment=Reboot to Windows installation
+Name=Restart to Windows
+Comment=Restart to your Windows installation
 Type=Application
 Terminal=false
 Icon=folder-windows-symbolic

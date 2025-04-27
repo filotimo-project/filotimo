@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # Look up the boot number for Windows in the EFI records
-boot_number=$(echo $(efibootmgr) | grep -Po "(?<=Boot)\S{4}(?=( |\* )Windows)")
+boot_number=$(echo "$(efibootmgr)" | grep -Po "(?<=Boot)\S{4}(?=( |\* )Windows)" | xargs)
 
 # Check that Windows EFI entry was found
 if [ -z "$boot_number" ]; then
@@ -10,4 +10,4 @@ if [ -z "$boot_number" ]; then
 fi
 
 # Set next boot to be Windows and reboot the machine
-sudo efibootmgr -n "${boot_number}" && reboot
+sudo efibootmgr -n "$boot_number" && reboot

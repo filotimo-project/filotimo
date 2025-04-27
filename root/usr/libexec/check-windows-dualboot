@@ -1,16 +1,19 @@
 #!/usr/bin/bash
 
 # Copy global desktop file into user
-mkdir -p $HOME/.local/share/applications
-cp -r /usr/share/applications/boot-to-windows.desktop $HOME/.local/share/applications
+mkdir -p "$HOME/.local/share/applications"
+cp -r "/usr/share/applications/boot-to-windows.desktop" "$HOME/.local/share/applications"
 
 # Look up the boot number for Windows in the EFI records
-boot_number=$(echo $(efibootmgr) | grep -Po "(?<=Boot)\S{4}(?=( |\* )Windows)")
+if output="$(efibootmgr)"; then
+    # If efibootmgr succeeded (efivars are supported), try to find the boot number
+    boot_number=$(echo "$output" | grep -Po "(?<=Boot)\S{4}(?=( |\* )Windows)" | xargs)
+fi
 
 # Check that Windows EFI entry was found
-if [ -z "$boot_number" ]; then
-    sed -i 's/Hidden=true/Hidden=false/' $HOME/.local/share/applications/boot-to-windows.desktop
+if [[ -z "$boot_number" ]]; then
+    sed -i 's/^Hidden=.*/Hidden=true/' "$HOME/.local/share/applications/boot-to-windows.desktop"
     exit 0
 fi
 
-sed -i 's/Hidden=true/Hidden=false/' $HOME/.local/share/applications/boot-to-windows.desktop
+sed -i 's/Hidden=.*/Hidden=false/' "$HOME/.local/share/applications/boot-to-windows.desktop"
