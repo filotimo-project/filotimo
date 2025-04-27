@@ -1,7 +1,7 @@
 Name:       fedora-logos
 Summary:    Stub to satisfy dependency
 Epoch:      1
-Version:    38.1.0
+Version:    42.0.1
 Release:    100%{?dist}
 License:    GPL-2.0-or-later
 URL:        https://github.com/filotimo-project/filotimo
