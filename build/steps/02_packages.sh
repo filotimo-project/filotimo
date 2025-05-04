@@ -84,6 +84,8 @@ dnf5 -y install --allowerasing \
 # Remove irrelevant/conflicting packages
 dnf5 -y remove \
     plasma-welcome-fedora \
+    fedora-bookmarks \
+    fedora-chromium-config \
     ublue-os-update-services \
     toolbox \
     firefox \
