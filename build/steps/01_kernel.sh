@@ -29,7 +29,6 @@ dnf5 -y install \
     /tmp/akmods/kmods/*openrazer*.rpm \
     /tmp/akmods/kmods/*v4l2loopback*.rpm \
     /tmp/akmods/kmods/*xone*.rpm \
-    /tmp/akmods/kmods/*xpadneo*.rpm \
     /tmp/akmods-extra/kmods/*ayaneo-platform*.rpm \
     /tmp/akmods-extra/kmods/*ayn-platform*.rpm \
     /tmp/akmods-extra/kmods/*bmi260*.rpm \
