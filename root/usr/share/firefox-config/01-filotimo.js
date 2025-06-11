@@ -6,21 +6,6 @@ pref("widget.use-xdg-desktop-portal.file-picker", 1);
 pref("browser.low_commit_space_threshold_mb", 750);
 pref("browser.tabs.unloadOnLowMemory", true);
 pref("browser.cache.memory.enable", true);
-pref("network.ssl_tokens_cache_capacity", 32768); // more TLS token caching (fast reconnects)
-// Keep DNS lookup info longer (in seconds, default = 60 = a minute)
-pref("network.dnsCacheExpiration", 7200); // 7200 = 2 hours. "To reduce load on DNS servers and to speed up response time, Mozilla caches DNS results. This preference controls how long to cache results." / "DNS lookup staying in cache means faster lookup = faster page loads.")
-pref("network.dnsCacheExpirationGracePeriod", 3600);
-// Increase DNS cache
-pref("dnsCacheEntries", 2000);
-pref("network.buffer.cache.size", 262144); // in bytes, 262144=256KB / "the stream buffer segment size used for most network activity." (http://forums.mozillazine.org/viewtopic.php?f=7&t=2416193) / "the default setting is 32 kB, and that corresponds with the buffer size of very old TCP/IP stacks." (https://www.mail-archive.com/support-seamonkey@lists.mozilla.org/msg74561.html)
-pref("network.buffer.cache.count", 128); // https://www.mail-archive.com/support-seamonkey@lists.mozilla.org/msg74561.html
-pref("network.http.pacing.requests.burst", 12); // default=10, controls how many HTTP requests are sent at once pref("network.http.pacing.requests.min-parallelism", 8); // default=6
-pref("network.ssl_tokens_cache_capacity", 32768); // more TLS token caching (fast reconnects)
-// Max connections (can speed things up as well)
-pref("network.http.max-connections", 1800); // default=900
-pref("network.http.max-connections-per-server", 32); // might not be used anymore, there's no line for it in searchfox (last default might have been 15) https://kb.mozillazine.org/Network.http.max-connections-per-server
-pref("network.http.max-persistent-connections-per-server", 12); // default=6
-pref("network.http.max-urgent-start-excessive-connections-per-host", 6); // default=3
 
 // Codecs and DRM
 pref("gfx.webrender.all", true);
