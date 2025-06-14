@@ -1,6 +1,6 @@
 Name:    kdenetwork-filesharing
 
-%global forgeurl https://invent.kde.org/network/%{name}
+%global forgeurl https://github.com/KDE/%{name}
 %global commit e576ac25e934daee31f96c6a4d01b593dc013d04
 %global date 20250525
 %forgemeta
