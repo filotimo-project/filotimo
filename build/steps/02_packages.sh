@@ -20,6 +20,7 @@ dnf5 -y install --refresh --allowerasing \
     ublue-brew \
     ublue-polkit-rules \
     ublue-recipes \
+    ublue-setup-services \
     plasma-discover-rpm-ostree \
     git \
     gh \

@@ -1,56 +1,50 @@
 #!/usr/bin/bash
-set -eo pipefail
+set -ouex pipefail
 
-# thanks bazzite and bluefin:)
+# See https://github.com/ublue-os/packages/blob/main/packages/ublue-setup-services
+source /usr/lib/ublue/setup-services/libsetup.sh
+version-script hardware system 1 || exit 0
 
-# Make sure to update this when new stuff is added/removed
-SCRIPT_VER=3
-
-SYS_ID="$(cat '/sys/devices/virtual/dmi/id/product_name')"
-VEN_ID="$(cat '/sys/devices/virtual/dmi/id/chassis_vendor')"
-CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
-CPU_MODEL=$(grep "model name" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
-DEVICE_ID="$SYS_ID $VEN_ID $CPU_MODEL $CPU_VENDOR"
 KARGS=$(rpm-ostree kargs)
 NEEDED_KARGS=()
 NEEDS_REBOOT=0
 NEEDS_MODULE_RELOAD=0
 NEEDS_UDEV_RELOAD=0
 
-SCRIPT_UPDATED=1
-HARDWARE_CHANGED=1
+SYS_ID="$(cat '/sys/devices/virtual/dmi/id/product_name')"
+VEN_ID="$(cat '/sys/devices/virtual/dmi/id/chassis_vendor')"
+CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
+CPU_MODEL=$(grep "model name" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
 
-# Check if this is a new version of the script
-if [[ -f "/etc/ublue-os/.hardware-setup-script-version" ]]; then
-  if [[ "$(cat '/etc/ublue-os/.hardware-setup-script-version')" == "$SCRIPT_VER" ]]; then
-    echo "Script has not been updated."
-    SCRIPT_UPDATED=0
-  fi
-fi
-# Check if hardware has actually changed
-if [[ -f "/etc/ublue-os/.device_id" ]]; then
-  if [[ "$(cat '/etc/ublue-os/.device_id')" == "$DEVICE_ID" ]]; then
-    echo "Hardware has not changed."
-    HARDWARE_CHANGED=0
-  fi
-fi
+configure_karg_and_notify_reboot() {
+  local karg_operation_and_value="$1"
+  plymouth display-message --text="Configuring hardware — your system will reboot shortly…" || true
+  NEEDED_KARGS+=("$karg_operation_and_value")
+}
 
-if [[ "$SCRIPT_UPDATED" -eq 0 ]] && [[ "$HARDWARE_CHANGED" -eq 0 ]]; then
-  echo "Exiting..."
-  exit 0
-fi
+notify_module_reload_needed() {
+  plymouth display-message --text="Configuring hardware…" || true
+  NEEDS_MODULE_RELOAD=1
+}
 
+notify_udev_reload_needed() {
+  plymouth display-message --text="Configuring hardware…" || true
+  NEEDS_UDEV_RELOAD=1
+}
 
 # Ensure full preempt is enabled
 if [[ ! $KARGS =~ "preempt" ]]; then
-  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-  echo "Adding needed kargs for full preemption"
-  NEEDED_KARGS+=("--append-if-missing=preempt=full")
+  configure_karg_and_notify_reboot "--append-if-missing=preempt=full"
+fi
+
+# Ensure nomodeset is disabled
+if [[ $KARGS =~ "nomodeset" ]]; then
+	configure_karg_and_notify_reboot "--delete-if-present=nomodeset"
 fi
 
 # Fstab adjustments
 if [[ ! -e /etc/ublue-os/.fstab_adjusted.flag && $(grep "compress=zstd" /etc/fstab) ]]; then
-  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
+  plymouth display-message --text="Configuring hardware — your system will reboot shortly…" || true
   echo "Applying fstab param adjustments"
   for subvol in root home var; do
     sed -i "/subvol=$subvol/s/compress=zstd:1/noatime,lazytime,commit=120,discard=async,compress=zstd:1,space_cache=v2/" /etc/fstab
@@ -67,23 +61,20 @@ if [[ ":Framework:" =~ ":$VEN_ID:" ]]; then
   if [[ "AuthenticAMD" == "$CPU_VENDOR" ]]; then
     # Load Ryzen SMU on AMD Framework Laptops
     if ! [[ -f "/etc/modules-load.d/ryzen_smu.conf" ]]; then
-      NEEDS_MODULE_RELOAD=1
-      plymouth display-message --text="Configuring hardware..." || true
+      notify_module_reload_needed
       mkdir -p "/etc/modules-load.d"
       printf "# Load ryzen_smu driver upon startup\nryzen_smu\n" >> "/etc/modules-load.d/ryzen_smu.conf"
     fi
     # Framework 13 AMD fixes
     if [[ "$SYS_ID" == "Laptop ("* ]]; then
       if [[ ! -f /etc/modprobe.d/alsa.conf ]]; then
-        NEEDS_MODULE_RELOAD=1
-        plymouth display-message --text="Configuring hardware..." || true
+        notify_module_reload_needed
         echo 'Fixing 3.5mm jack'
         echo "options snd-hda-intel index=1,0 model=auto,dell-headset-multi" > /etc/modprobe.d/alsa.conf
         echo 0 > /sys/module/snd_hda_intel/parameters/power_save
       fi
       if [[ ! -f /etc/udev/rules.d/20-suspend-fixes.rules ]]; then
-        NEEDS_UDEV_RELOAD=1
-        plymouth display-message --text="Configuring hardware..." || true
+        notify_udev_reload_needed
         echo 'Fixing suspend issue'
         echo "ACTION==\"add\", SUBSYSTEM==\"serio\", DRIVERS==\"atkbd\", ATTR{power/wakeup}=\"disabled\"" > /etc/udev/rules.d/20-suspend-fixes.rules
       fi
@@ -93,19 +84,17 @@ fi
 if [[ ! ":Framework:" =~ ":$VEN_ID:" ]]; then
   if [[ ! "AuthenticAMD" == "$CPU_VENDOR" ]]; then
     if [[ -f "/etc/modules-load.d/ryzen_smu.conf" ]]; then
-      plymouth display-message --text="Configuring hardware..." || true
+      notify_module_reload_needed
       rm -rf "/etc/modules-load.d/ryzen_smu.conf"
     fi
   fi
   if [[ -f "/etc/udev/rules.d/20-suspend-fixes.rules" ]]; then
-    NEEDS_UDEV_RELOAD=1
-    plymouth display-message --text="Configuring hardware..." || true
+    notify_udev_reload_needed
     rm -rf "/etc/udev/rules.d/20-suspend-fixes.rules"
   fi
   if [[ -f "/etc/modprobe.d/alsa.conf" ]]; then
     if grep -q '^options snd-hda-intel index=1,0 model=auto,dell-headset-multi$' /etc/modprobe.d/alsa.conf; then
-      NEEDS_MODULE_RELOAD=1
-      plymouth display-message --text="Configuring hardware..." || true
+      notify_module_reload_needed
       sed -i '/^options snd-hda-intel index=1,0 model=auto,dell-headset-multi$/d' /etc/modprobe.d/alsa.conf
     fi
   fi
@@ -116,34 +105,27 @@ fi
 if [[ ":Framework:" =~ ":$VEN_ID:" ]]; then
   if [[ "AuthenticAMD" == "$CPU_VENDOR" ]]; then
     if [[ ! $KARGS =~ "iomem" ]]; then
-      plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-      echo "AMD Framework Laptop detected, adding needed kargs for ryzenadj"
-      NEEDED_KARGS+=("--append-if-missing=iomem=relaxed")
+      configure_karg_and_notify_reboot "--append-if-missing=iomem=relaxed"
     fi
   elif [[ "GenuineIntel" == "$CPU_VENDOR" ]]; then
     if [[ ! $KARGS =~ "hid_sensor_hub" ]]; then
-      plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-      echo "Intel Framework Laptop detected, applying needed keyboard fix"
-      NEEDED_KARGS+=("--append-if-missing=module_blacklist=hid_sensor_hub")
+      configure_karg_and_notify_reboot "--append-if-missing=module_blacklist=hid_sensor_hub"
     fi
   fi
 fi
 if [[ ! ":Framework:" =~ ":$VEN_ID:" ]]; then
   if [[ $KARGS =~ "iomem=relaxed" ]]; then
-    plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-    NEEDED_KARGS+=("--delete-if-present=iomem=relaxed")
+    configure_karg_and_notify_reboot "--delete-if-present=iomem=relaxed"
   fi
   if [[ $KARGS =~ "module_blacklist=hid_sensor_hub" ]]; then
-    plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-    NEEDED_KARGS+=("--delete-if-present=module_blacklist=hid_sensor_hub")
+    configure_karg_and_notify_reboot "--delete-if-present=module_blacklist=hid_sensor_hub"
   fi
 fi
 
 # Surface fixes
 if [[ ":Microsoft:" =~ ":$VEN_ID:" ]]; then
   if ! [[ -f "/etc/modules-load.d/surface.conf" ]]; then
-    NEEDS_MODULE_RELOAD=1
-    plymouth display-message --text="Configuring hardware..." || true
+    notify_module_reload_needed
     sed 's/^ *//' > "/etc/modules-load.d/surface.conf" << EOF
       # Add modules necessary for Disk Encryption via keyboard
       surface_aggregator
@@ -187,30 +169,25 @@ fi
 
 if ! [[ ":Microsoft:" =~ ":$VEN_ID:" ]]; then
   if [[ -f "/etc/modules-load.d/surface.conf" ]]; then
-    plymouth display-message --text="Configuring hardware..." || true
+    notify_module_reload_needed
     rm -rf /etc/modules-load.d/surface.conf
-    NEEDS_MODULE_RELOAD=1
   fi
 fi
 
 # NVIDIA sometimes doesn't like sleep
 if nvidia-smi &>/dev/null && [[ ! "$KARGS" =~ "mem_sleep_default" ]]; then
-  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-  NEEDED_KARGS+=("--append-if-missing=mem_sleep_default=s2idle")
+  configure_karg_and_notify_reboot "--append-if-missing=mem_sleep_default=s2idle"
 fi
 if ! nvidia-smi &>/dev/null && [[ "$KARGS" =~ "mem_sleep_default" ]]; then
-  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-  NEEDED_KARGS+=("--delete-if-present=mem_sleep_default=s2idle")
+  configure_karg_and_notify_reboot "--delete-if-present=mem_sleep_default=s2idle"
 fi
 
 # Fix from Bluefin
 if nvidia-smi &>/dev/null && [[ ! "$KARGS" =~ "initcall_blacklist=simpledrm_platform_driver_init" ]]; then
-  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-  NEEDED_KARGS+=("--append-if-missing=initcall_blacklist=simpledrm_platform_driver_init")
+  configure_karg_and_notify_reboot "--append-if-missing=initcall_blacklist=simpledrm_platform_driver_init"
 fi
 if ! nvidia-smi &>/dev/null && [[ "$KARGS" =~ "initcall_blacklist=simpledrm_platform_driver_init" ]]; then
-  plymouth display-message --text="Configuring hardware - your system will reboot shortly..." || true
-  NEEDED_KARGS+=("--delete-if-present=initcall_blacklist=simpledrm_platform_driver_init")
+  configure_karg_and_notify_reboot "--delete-if-present=initcall_blacklist=simpledrm_platform_driver_init"
 fi
 
 # Apply karg changes
@@ -221,10 +198,6 @@ if [[ -n "$NEEDED_KARGS" ]]; then
 else
   echo "No karg changes needed"
 fi
-
-# Regenerate device ID, set script ver
-echo "$DEVICE_ID" > "/etc/ublue-os/.device_id"
-echo "$SCRIPT_VER" > "/etc/ublue-os/.hardware-setup-script-version"
 
 if [[ "$NEEDS_REBOOT" -eq 1 ]]; then
   systemctl reboot
@@ -238,4 +211,4 @@ if [[ "$NEEDS_UDEV_RELOAD" -eq 1 ]]; then
   systemctl restart systemd-udevd.service
 fi
 
-plymouth hide-message --text="Configuring hardware..." || true
+plymouth hide-message --text="Configuring hardware…" || true
