@@ -123,6 +123,7 @@
   <Separator weakSeparator="1"/>
   <Separator weakSeparator="1"/>
   <Separator weakSeparator="1"/>
+  <Separator weakSeparator="1"/>
   <Menu alreadyVisited="1" name="tools" noMerge="1">
    <text translationDomain="kxmlgui6">&amp;Tools</text>
    <Action name="open_preferred_search_tool"/>
@@ -169,6 +170,7 @@
   <Action name="url_navigators"/>
   <Action name="split_stash"/>
   <Action name="toggle_search"/>
+  <Action name="split_view"/>
   <Separator name="separator_1"/>
   <Action name="hamburger_menu"/>
  </ToolBar>
@@ -214,9 +216,10 @@
   <Action name="edit_cut" priority="0"/>
   <Action name="edit_copy" priority="0"/>
   <Action name="edit_paste" priority="0"/>
-  <Action name="toggle_search" priority="128"/>
+  <Action name="toggle_search" priority="0"/>
   <Action name="toggle_filter" priority="0"/>
   <Action name="new_tab" priority="0"/>
   <Action name="view_redisplay" priority="0"/>
+  <Action name="split_view" priority="0"/>
  </ActionProperties>
 </gui>
