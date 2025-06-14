@@ -6,7 +6,7 @@ source /ctx/build/steps/prelude.sh
 rm -rf /usr/share/plasma/look-and-feel/org.fedoraproject.fedora.desktop
 
 # "default" icon theme inherits from Breeze
-sed -i '/^Inherits=/s/Adwaita/Breeze/' /usr/share/icons/default/index.theme
+sed -i '/^Inherits=/s/Adwaita/breeze_cursors,breeze,breeze-dark,Breeze/' /usr/share/icons/default/index.theme
 
 # Make the splash screen use Filotimo's logo
 rm -rf /usr/share/plasma/look-and-feel/org.kde.breeze.desktop/contents/splash/images/plasma.svgz
@@ -23,6 +23,9 @@ DefaultProfile=Filotimo.profile" >> /etc/xdg/konsolerc
 sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/htop.desktop
 sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/nvtop.desktop
 sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/nvidia-settings.desktop || true
+
+# Remove appimagelauncher settings
+rm -rf /usr/share/applications/appimagelaunchersettings.desktop
 
 # Make fcitx icon same as keyboard preferences icon
 for size in 22 24 32; do

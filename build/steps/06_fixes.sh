@@ -35,6 +35,3 @@ rm -rf /etc/profile.d/gnome-ssh-askpass.csh /etc/profile.d/gnome-ssh-askpass.sh
 
 # Purge KNewStuff from Discover
 rm -rf /usr/lib64/qt6/plugins/discover/kns-backend.so
-
-# Remove appimagelauncher settings -- this should just work silently
-rm -rf /usr/share/applications/appimagelaunchersettings.desktop
