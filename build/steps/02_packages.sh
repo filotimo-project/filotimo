@@ -7,7 +7,8 @@ dnf5 -y install "https://download.copr.fedorainfracloud.org/results/zawertun/kde
 
 # Install packages included with system
 dnf5 -y install --allowerasing "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher-2.2.0-travis995.0f91801.x86_64.rpm"
-dnf5 -y install --allowerasing \
+dnf5 -y remove kdenetwork-filesharing # FIXME why is this necessary?
+dnf5 -y install --refresh --allowerasing \
     systemdgenie \
     fedora-logos \
     filotimo-branding \
@@ -15,6 +16,7 @@ dnf5 -y install --allowerasing \
     filotimo-plymouth-theme \
     filotimo-backgrounds \
     msttcore-fonts-installer \
+    kdenetwork-filesharing \
     ublue-brew \
     ublue-polkit-rules \
     ublue-recipes \
@@ -79,8 +81,7 @@ dnf5 -y install --allowerasing \
     fcitx5-hangul \
     fcitx5-mozc \
     fcitx5-unikey \
-    fcitx5-libthai \
-    kdenetwork-filesharing
+    fcitx5-libthai
 
 # Remove irrelevant/conflicting packages
 dnf5 -y remove \
