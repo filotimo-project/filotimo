@@ -1,12 +1,20 @@
 Name:    kdenetwork-filesharing
+
+%global forgeurl https://invent.kde.org/network/%{name}
+%global commit e576ac25e934daee31f96c6a4d01b593dc013d04
+%global date 20250525
+%forgemeta
+
 Summary: Network filesharing
 Epoch:   1
 Version: {{{ git_dir_version }}}
 Release: 1%{?dist}
 # KDE e.V. may determine that future GPL versions are accepted
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only
-URL:     https://invent.kde.org/network/%{name}.git
-Source:  {{{ git_dir_pack }}}
+
+URL:     %{forgeurl}
+Source:  %{forgesource}
+
 Patch0:  0001-fix-ui.patch
 
 # upstream patches
@@ -35,7 +43,7 @@ Recommends: samba-usershares
 %{summary}.
 
 %prep
-{{{ git_dir_setup_macro }}}
+%forgeautosetup -p1
 
 %build
 %cmake_kf6
