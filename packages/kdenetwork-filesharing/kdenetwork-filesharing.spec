@@ -7,7 +7,7 @@ Name:    kdenetwork-filesharing
 
 Summary: Network filesharing
 Epoch:   1
-Version: {{{ git_dir_version }}}
+Version: 25.04.2
 Release: 1%{?dist}
 # KDE e.V. may determine that future GPL versions are accepted
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only
