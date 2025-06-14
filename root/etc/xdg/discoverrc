@@ -2,7 +2,7 @@
 UseOfflineUpdates=true
 
 [FlatpakSources]
-Sources=flathub,fedora,fedora-testing
+Sources=flathub
 
 [ResourcesModel]
 currentApplicationBackend=flatpak-backend
