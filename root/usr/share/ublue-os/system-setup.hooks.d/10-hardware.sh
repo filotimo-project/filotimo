@@ -3,7 +3,7 @@ set -ouex pipefail
 
 # See https://github.com/ublue-os/packages/blob/main/packages/ublue-setup-services
 source /usr/lib/ublue/setup-services/libsetup.sh
-version-script hardware system 1 || exit 0
+version-script hardware system 2 || exit 0
 
 KARGS=$(rpm-ostree kargs)
 NEEDED_KARGS=()
@@ -191,7 +191,7 @@ if ! nvidia-smi &>/dev/null && [[ "$KARGS" =~ "initcall_blacklist=simpledrm_plat
 fi
 
 # Apply karg changes
-if [[ -n "$NEEDED_KARGS" ]]; then
+if [[ ${#NEEDED_KARGS[@]} -gt 0 ]]; then
   echo "Found needed karg changes, applying the following: ${NEEDED_KARGS[*]}"
   rpm-ostree kargs ${NEEDED_KARGS[*]} || exit 1
   NEEDS_REBOOT=1
