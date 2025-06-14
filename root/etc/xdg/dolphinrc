@@ -1,11 +1,15 @@
 [General]
-GlobalViewProps=false
-ShowSpaceInfo=true
+DoubleClickViewAction=none
+GlobalViewProps=true
 ShowStatusBar=FullWidth
-ShowZoomSlider=true
+ShowZoomSlider=false
+Version=202
+
+[MainWindow]
+MenuBar=Disabled
 
 [VersionControl]
-enabledPlugins=Git
+enabledPlugins=
 
 [PreviewSettings]
-Plugins=audiothumbnail,avif,blenderthumbnail,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,fontthumbnail,heif,imagethumbnail,jpegthumbnail,jxl,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,opendocumentthumbnail,gsthumbnail,rawthumbnail,svgthumbnail,gdk-pixbuf-thumbnailer,ffmpegthumbs
+Plugins=audiothumbnail,blenderthumbnail,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,fontthumbnail,imagethumbnail,jpegthumbnail,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,mobithumbnail,opendocumentthumbnail,gsthumbnail,rawthumbnail,svgthumbnail,ffmpegthumbs
