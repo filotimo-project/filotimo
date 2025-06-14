@@ -46,7 +46,7 @@ dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
 if [[ $IMAGE_NAME =~ "nvidia" ]]; then
     fetch_akmods_rpms "ghcr.io/ublue-os/akmods-nvidia-open:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION}" /tmp/akmods-rpms
 
-    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh
+    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/nvidia-install.sh
     chmod +x /tmp/nvidia-install.sh
     IMAGE_NAME="kinoite" /tmp/nvidia-install.sh
     rpm -q --qf '%{VERSION}-%{RELEASE}\n' nvidia-driver kmod-nvidia | awk 'NR==1 {v=$0} NR>1 && $0!=v {exit 1}'
