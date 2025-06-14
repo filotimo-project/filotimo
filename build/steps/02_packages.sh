@@ -79,7 +79,8 @@ dnf5 -y install --allowerasing \
     fcitx5-hangul \
     fcitx5-mozc \
     fcitx5-unikey \
-    fcitx5-libthai
+    fcitx5-libthai \
+    kdenetwork-filesharing
 
 # Remove irrelevant/conflicting packages
 dnf5 -y remove \
