@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/systemctl --user restart xdg-desktop-portal.service
+X-KDE-StartupNotify=false
+X-KDE-autostart-phase=2
+NoDisplay=true
+Name=Restart XDG Desktop Portal (bug workaround)
