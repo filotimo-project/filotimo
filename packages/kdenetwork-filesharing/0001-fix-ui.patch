@@ -1,0 +1,1078 @@
+From 109dd19ce44f1a44ff828bdb9f3099efb389eae7 Mon Sep 17 00:00:00 2001
+From: Thomas Duckworth <tduck@filotimoproject.org>
+Date: Sun, 23 Feb 2025 03:56:19 +0000
+Subject: [PATCH 1/4] filepropertiesplugin: Refactor UI, improve UX
+
+---
+ samba/filepropertiesplugin/groupmanager.cpp   | 10 +--
+ .../org.kde.filesharing.samba.actions         |  6 +-
+ samba/filepropertiesplugin/qml/ACLPage.qml    | 74 +++++++++++++----
+ .../qml/ChangePassword.qml                    | 81 +++++++++----------
+ .../qml/ChangePermissionsPage.qml             | 17 ++--
+ samba/filepropertiesplugin/qml/GroupPage.qml  | 14 ++--
+ .../filepropertiesplugin/qml/InstallPage.qml  | 15 ++--
+ .../qml/MissingSambaPage.qml                  | 11 ++-
+ samba/filepropertiesplugin/qml/RebootPage.qml | 15 ++--
+ samba/filepropertiesplugin/qml/UserPage.qml   | 33 ++++----
+ samba/filepropertiesplugin/qml/main.qml       |  9 ++-
+ 11 files changed, 168 insertions(+), 117 deletions(-)
+
+diff --git a/samba/filepropertiesplugin/groupmanager.cpp b/samba/filepropertiesplugin/groupmanager.cpp
+index a2ba8516..0e1abfbf 100644
+--- a/samba/filepropertiesplugin/groupmanager.cpp
++++ b/samba/filepropertiesplugin/groupmanager.cpp
+@@ -48,7 +48,7 @@ GroupManager::GroupManager(QObject *parent)
+             else if (!info.exists()) {
+                 m_errorText = xi18nc("@info:status", "This folder can't be shared because <filename>%1</filename> does not exist.", path);
+                 Q_EMIT errorTextChanged();
+-                m_errorExplanation = xi18nc("@info:status", "This error is caused by your distribution not setting up Samba sharing properly. You can fix it yourself by creating that folder manually. Then close and re-open this window.");
++                m_errorExplanation = xi18nc("@info:status", "This error is caused by your distribution not setting up Samba sharing properly. You can fix it yourself by creating that folder manually, then close and re-open this window.");
+                 Q_EMIT errorExplanationChanged();
+                 // TODO: define a helpfulAction that creates the folder
+             }
+@@ -57,11 +57,11 @@ GroupManager::GroupManager(QObject *parent)
+             else if (!groups.contains(m_targetGroup)) {
+                 m_errorText = xi18nc("@info:status", "This folder can't be shared because your user account isn't a member of the <resource>%1</resource> group.", m_targetGroup);
+                 Q_EMIT errorTextChanged();
+-                m_errorExplanation = xi18nc("@info:status", "You can fix this by making your user a member of that group. Then restart the system.");
++                m_errorExplanation = xi18nc("@info:status", "You can fix this by making your user a member of that group, then restart the system.");
+                 Q_EMIT errorExplanationChanged();
+                 m_helpfulActionIcon = QStringLiteral("resource-group-new");
+                 Q_EMIT helpfulActionIconChanged();
+-                m_helpfulActionText = i18nc("action@button makes user a member of the samba share group", "Make me a Group Member");
++                m_helpfulActionText = i18nc("action@button makes user a member of the samba share group", "Make Me a Group Member");
+                 Q_EMIT helpfulActionTextChanged();
+                 m_helpfulAction = HelpfulAction::AddUserToGroup;
+                 m_hasHelpfulAction = true;
+@@ -72,7 +72,7 @@ GroupManager::GroupManager(QObject *parent)
+             else if (!info.isWritable()) {
+                 m_errorText = xi18nc("@info:status", "This folder can't be shared because your user account doesn't have permission to write into <filename>%1</filename>.", path);
+                 Q_EMIT errorTextChanged();
+-                m_errorExplanation = xi18nc("@info:status", "You can fix this by ensuring that the <resource>%1</resource> group has write permission for <filename>%2</filename>. Then close and re-open this window.",  m_targetGroup, path);
++                m_errorExplanation = xi18nc("@info:status", "You can fix this by ensuring that the <resource>%1</resource> group has write permission for <filename>%2</filename>, then close and re-open this window.",  m_targetGroup, path);
+                 Q_EMIT errorExplanationChanged();
+                 // TODO: define a helpfulAction that adds group write permission to the folder
+             }
+@@ -99,7 +99,7 @@ void GroupManager::performHelpfulAction()
+             action.addArgument(QStringLiteral("group"), group);
+             action.setDetailsV2({{KAuth::Action::AuthDetail::DetailMessage,
+                                 xi18nc("@label kauth action description %1 is a username %2 a group name",
+-                                        "Adding user <resource>%1</resource> to group <resource>%2</resource> so they may configure Samba user shares",
++                                        "Adding user <resource>%1</resource> to group <resource>%2</resource> so they can configure Samba user shares",
+                                         user,
+                                         group) }
+             });
+diff --git a/samba/filepropertiesplugin/org.kde.filesharing.samba.actions b/samba/filepropertiesplugin/org.kde.filesharing.samba.actions
+index 676715d9..d0a70d92 100644
+--- a/samba/filepropertiesplugin/org.kde.filesharing.samba.actions
++++ b/samba/filepropertiesplugin/org.kde.filesharing.samba.actions
+@@ -140,9 +140,11 @@ Description[zh_TW]=正在檢查 Samba 使用者是否存在
+ # TODO: this could be split into a sepearate action createcurrentuser which only
+ #   requires auth_self BUT it first needs kauth to grow the ability to resolve the dbus UID of the unprivileged
+ #   remote (the client)
++# samba users will have the same username as the logged in user, so it makes more sense from a UX perspective
++# to label it as setting the password for Samba rather than creating a new user
+ Policy=auth_admin
+ PolicyInactive=auth_admin
+-Name=Creating New Samba User
++Name=Setting Password For Samba User
+ Name[ar]=إنشاء مستخدم سامبا جديد
+ Name[az]=Yeni Samba istifadəçisi yaradılır
+ Name[be]=Стварэнне новага карыстальніка Samba
+@@ -185,7 +187,7 @@ Name[uk]=Створення нового користувача Samba
+ Name[x-test]=xxCreating New Samba Userxx
+ Name[zh_CN]=正在创建新的 Samba 用户
+ Name[zh_TW]=正在建立新的 Samba 使用者
+-Description=Creating new Samba user
++Description=Setting password for Samba user
+ Description[ar]=ينشئ مستخدم سامبا جديد
+ Description[az]=Yeni Samba istifadəçisi yaradılır
+ Description[be]=Стварэнне новага карыстальніка Samba
+diff --git a/samba/filepropertiesplugin/qml/ACLPage.qml b/samba/filepropertiesplugin/qml/ACLPage.qml
+index 62af4926..8f122d08 100644
+--- a/samba/filepropertiesplugin/qml/ACLPage.qml
++++ b/samba/filepropertiesplugin/qml/ACLPage.qml
+@@ -3,23 +3,51 @@
+     SPDX-FileCopyrightText: 2020 Harald Sitter <sitter@kde.org>
+     SPDX-FileCopyrightText: 2021 Slava Aseev <nullptrnine@basealt.ru>
+     SPDX-FileCopyrightText: 2023 ivan tkachenko <me@ratijas.tk>
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+ */
+ 
+-import QtQuick 2.12
+-import QtQuick.Controls 2.5 as QQC2
+-import QtQuick.Layouts 1.14
+-import org.kde.kirigami 2.4 as Kirigami
++import QtQuick
++import QtQuick.Controls as QQC2
++import QtQuick.Layouts
++import org.kde.kirigami as Kirigami
+ import org.kde.filesharing.samba 1.0 as Samba
+ 
+ // NOTE: sambaPlugin.shareContext is a singleton its properties cannot be bound and need manual syncing back.
+ 
+-Item {
+-    // NOTE: we cannot use a Kirigami.Page for this because it adds excessive padding that we can't disable
+-    //   so it'd very awkwardly space within the properties dialog reducing the available space a lot and looking
+-    //   silly. Alas, Column is also not grand because it gets collapsed by the sheet, so we use a fixed size
+-    //   Item in place of a Page that gets covered by the Sheet and then that Item is filled by a Column.
++Kirigami.Page {
+     id: page
+ 
++    padding: Kirigami.Units.smallSpacing
++
++    ChangePassword {
++        id: changePassword
++
++        name: sambaPlugin.userManager.currentUser().name
++        isPasswordChange: true
++
++        function userCreated(userCreated) {
++            enabled = true;
++            changePassword.busy = false;
++            if (userCreated) {
++                close();
++            }
++        }
++
++        onAccepted: {
++            enabled = false;
++            busy = true;
++            sambaPlugin.userManager.currentUser().addToSamba(password);
++        }
++    }
++
++    Connections {
++        target: sambaPlugin.userManager.currentUser()
++        onAddToSambaError: function (error) {
++            changePassword.errorMessage = error;
++        }
++        onInSambaChanged: changePassword.userCreated(target.inSamba)
++    }
++
+     Kirigami.OverlaySheet {
+         id: denialSheet
+         property bool shownOnce: false // maybeShow() this sheet only once per run not annoy users too much
+@@ -59,7 +87,7 @@ when the Share access rules would allow it.`)
+             showCloseButton: true
+             visible: sambaPlugin.permissionsHelper.permissionsChangeRequired
+             type: Kirigami.MessageType.Warning
+-            text: i18nc("@label", "This folder needs extra permissions for sharing to work")
++            text: i18nc("@label", "This folder needs extra permissions for sharing to work.")
+ 
+             actions: [
+                 Kirigami.Action {
+@@ -95,6 +123,10 @@ when the Share access rules would allow it.`)
+             Layout.fillHeight: true
+             enabled: shareEnabled.checked
+ 
++            Kirigami.Separator {
++                Layout.fillWidth: true
++            }
++
+             RowLayout {
+                 Layout.fillWidth: true
+                 QQC2.Label {
+@@ -147,7 +179,7 @@ when the Share access rules would allow it.`)
+             QQC2.CheckBox {
+                 id: allowGuestBox
+                 Layout.fillWidth: true
+-                text: i18nc("@option:check", "Allow guests")
++                text: i18nc("@option:check", "Allow guests to connect")
+                 enabled: sambaPlugin.shareContext.canEnableGuest
+                 checked: sambaPlugin.shareContext.guestEnabled
+                 onToggled: {
+@@ -159,7 +191,7 @@ when the Share access rules would allow it.`)
+             QQC2.Label {
+                 Layout.fillWidth: true
+                 enabled: false // looks more visually connected if both are disabled
+-                visible: !allowGuestBox.enabled
++                visible: !sambaPlugin.shareContext.canEnableGuest
+                 text: i18nc("@label", "Guest access is disabled by the system's Samba configuration.")
+                 wrapMode: Text.Wrap
+                 font: Kirigami.Theme.smallFont
+@@ -198,9 +230,9 @@ when the Share access rules would allow it.`)
+                     columnSpacing: Kirigami.Units.smallSpacing
+ 
+                     columnWidthProvider: column => {
+-                        // Give 2/3 of the width to the access column for better looks.
++                        // Give 1/2 of the width to the access column for better looks.
+                         const availableWidth = width - columnSpacing
+-                        var accessWidth = Math.round(availableWidth / 1.5)
++                        var accessWidth = Math.round(availableWidth / 2)
+                         if (column === Samba.UserPermissionModel.ColumnAccess) {
+                             return accessWidth
+                         }
+@@ -237,10 +269,17 @@ when the Share access rules would allow it.`)
+                             Layout.fillWidth: true
+                             Layout.leftMargin: view.columnSpacing
+                             visible: column !== Samba.UserPermissionModel.ColumnAccess
+-                            text: display === undefined ? "" : display
++                            text: display === undefined ? "" : model.display
+                             elide: Text.ElideMiddle
+                         }
+ 
++                        QQC2.Button {
++                            visible: model.display === sambaPlugin.userManager.currentUser().name
++                            text: i18nc("@button", "Change Password…")
++                            icon.name: "lock-symbolic"
++                            onClicked: changePassword.openAndClear()
++                        }
++
+                         QQC2.ComboBox {
+                             id: combo
+                             Layout.fillWidth: true
+@@ -249,7 +288,7 @@ when the Share access rules would allow it.`)
+                             valueRole: "value"
+                             visible: column === Samba.UserPermissionModel.ColumnAccess
+                             model: [
+-                                { value: undefined, text: "---" },
++                                { value: undefined, text: "⸺" },
+                                 { value: "F", text: i18nc("@option:radio user can read&write", "Full Control") },
+                                 { value: "R", text: i18nc("@option:radio user can read", "Read Only") },
+                                 { value: "D", text: i18nc("@option:radio user not allowed to access share", "No Access") }
+@@ -278,7 +317,8 @@ when the Share access rules would allow it.`)
+ 
+         QQC2.Button {
+             Layout.fillWidth: true
+-            text: i18nc("@button", "Show Samba status monitor")
++            text: i18nc("@button", "View Samba Status")
++            icon.name: "help-about"
+             onClicked: sambaPlugin.showSambaStatus()
+         }
+     }
+diff --git a/samba/filepropertiesplugin/qml/ChangePassword.qml b/samba/filepropertiesplugin/qml/ChangePassword.qml
+index 851861dd..67ca217a 100644
+--- a/samba/filepropertiesplugin/qml/ChangePassword.qml
++++ b/samba/filepropertiesplugin/qml/ChangePassword.qml
+@@ -1,27 +1,32 @@
+ /*
+     SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
+     SPDX-FileCopyrightText: 2020 Carson Black <uhhadd@gmail.com>
+-    SPDX-FileCopyrightText: 2020 Harld Sitter <sitter@kde.org>
++    SPDX-FileCopyrightText: 2020 Harald Sitter <sitter@kde.org>
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+ */
+ 
+-import QtQuick 2.6
+-import QtQuick.Layouts 1.3
+-import QtQuick.Controls 2.5 as QQC2
++import QtQuick
++import QtQuick.Layouts
++import QtQuick.Controls as QQC2
+ 
+-import org.kde.kirigami 2.8 as Kirigami
++import org.kde.kirigami as Kirigami
+ 
+-Kirigami.OverlaySheet {
++Kirigami.Dialog {
+     id: passwordRoot
+ 
++    padding: Kirigami.Units.largeSpacing
++
++    property string name
+     property string password
+     property bool busy: false
++    property bool isPasswordChange: false
+     property alias errorMessage: persistentError.text
+-    signal accepted()
+ 
+-    header: Kirigami.Heading {
+-        // FIXME make qml user name aware so we can be more contextually accurate and label it 'set password for foo'
+-        text: i18nc("@title", "Set password")
+-    }
++    title: isPasswordChange ? i18nc("@title", "Change password for '%1'", name) : i18nc("@title", "Set password for '%1'", name)
++
++    standardButtons: Kirigami.Dialog.NoButton
++    showCloseButton: false
++    flatFooterButtons: false
+ 
+     function openAndClear() {
+         verifyField.text = ""
+@@ -44,29 +49,13 @@ Kirigami.OverlaySheet {
+         accepted()
+     }
+ 
+-    function handleKeyEvent(event) {
+-        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+-            // 🤮 https://bugreports.qt.io/browse/QTBUG-70934
+-            event.accepted = true
+-            maybeAccept()
+-        } else if (event.key === Qt.Key_Escape) {
+-            // Handle Esc manually, within the sheet we'll want it to close the sheet rater than let the event fall
+-            // through to a higher level item (or worse yet QWidget).
+-            event.accepted = true
+-            close()
+-        }
+-    }
+-
+-    ColumnLayout {
+-        id: mainColumn
+-        spacing: Kirigami.Units.smallSpacing
+-        Layout.preferredWidth: Kirigami.Units.gridUnit * 15
+-
+-        // We don't use a FormLayout here because layouting breaks at small widths.
++    contentItem: ColumnLayout {
+         ColumnLayout {
+             id: inputLayout
++            spacing: Kirigami.Units.smallSpacing
++            Layout.fillWidth: true
+             Layout.alignment: Qt.AlignHCenter
+-            visible: !busy.running
++            visible: !passwordRoot.busy
+ 
+             Kirigami.PasswordField {
+                 id: passwordField
+@@ -76,7 +65,7 @@ Kirigami.OverlaySheet {
+ 
+                 // Reset external error on any password change
+                 onTextChanged: errorMessage = ""
+-                // Don't use onAccepted it's no bueno. See handleKeyEvent
++                onAccepted: maybeAccept()
+             }
+ 
+             Kirigami.PasswordField {
+@@ -87,14 +76,14 @@ Kirigami.OverlaySheet {
+ 
+                 // Reset external error on any password change
+                 onTextChanged: errorMessage = ""
+-                // Don't use onAccepted it's no bueno. See handleKeyEvent
++                onAccepted: maybeAccept()
+             }
+ 
+             Kirigami.InlineMessage {
+                 id: passwordWarning
+                 Layout.fillWidth: true
+                 type: Kirigami.MessageType.Error
+-                text: i18nc("@label error message", "Passwords must match")
++                text: i18nc("@label error message", "Passwords must match.")
+                 visible: passwordField.text != "" && verifyField.text != "" && passwordField.text != verifyField.text
+                 Layout.alignment: Qt.AlignLeft
+             }
+@@ -111,14 +100,6 @@ Kirigami.OverlaySheet {
+                 visible: text != ""
+             }
+ 
+-            QQC2.Button {
+-                id: passButton
+-                icon.name: "dialog-ok"
+-                text: i18nc("@action:button creates a new samba user with the user-specified password", "Set Password")
+-                enabled: isAcceptable()
+-                Layout.alignment: Qt.AlignRight
+-                onClicked: maybeAccept()
+-            }
+         }
+ 
+         QQC2.BusyIndicator {
+@@ -128,4 +109,20 @@ Kirigami.OverlaySheet {
+             running: passwordRoot.busy
+         }
+     }
++
++    customFooterActions: [
++        Kirigami.Action {
++            id: passButton
++            icon.name: "dialog-ok"
++            text: i18nc("@action:button creates a new samba user with the user-specified password", "Set Password")
++            enabled: isAcceptable()
++            onTriggered: maybeAccept()
++        },
++        Kirigami.Action {
++            id: cancelButton
++            icon.name: "dialog-cancel"
++            text: i18nc("@action:button", "Cancel")
++            onTriggered: close()
++        }
++    ]
+ }
+diff --git a/samba/filepropertiesplugin/qml/ChangePermissionsPage.qml b/samba/filepropertiesplugin/qml/ChangePermissionsPage.qml
+index d24f1444..914d6cfa 100644
+--- a/samba/filepropertiesplugin/qml/ChangePermissionsPage.qml
++++ b/samba/filepropertiesplugin/qml/ChangePermissionsPage.qml
+@@ -2,16 +2,19 @@
+     SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+     SPDX-FileCopyrightText: 2021 Slava Aseev <nullptrnine@basealt.ru>
+     SPDX-FileCopyrightText: 2022 Harald Sitter <sitter@kde.org>
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+ */
+ 
+-import QtQuick 2.12
+-import QtQuick.Controls 2.15 as QQC2
+-import QtQuick.Layouts 1.14
+-import org.kde.kirigami 2.12 as Kirigami
++import QtQuick
++import QtQuick.Controls as QQC2
++import QtQuick.Layouts
++import org.kde.kirigami as Kirigami
+ 
+-Item {
++Kirigami.Page {
+     id: page
+ 
++    padding: Kirigami.Units.smallSpacing
++
+     ColumnLayout {
+         anchors.fill: parent
+         Layout.fillWidth: true
+@@ -33,7 +36,7 @@ Item {
+                 textFormat: Text.RichText
+                 text: xi18nc("@info", `
+ <para>The folder <filename>%1</filename> needs extra permissions for sharing to work.</para>
+-<para>Do you want to add these permissions now?</para><nl/>
++<para>Add these permissions now?</para><nl/>
+ `, sambaPlugin.shareContext.path)
+             }
+ 
+@@ -74,7 +77,7 @@ Item {
+                         if (failedPaths.length > 0) {
+                             changePermissionsError.text =
+                                 i18nc("@label",
+-                                      "Could not change permissions for: %1. All permission changes have been reverted to initial state.",
++                                      "Could not change permissions for: %1. All permissions changes have been reverted.",
+                                       failedPaths.join(", "))
+                         } else {
+                             stack.pop()
+diff --git a/samba/filepropertiesplugin/qml/GroupPage.qml b/samba/filepropertiesplugin/qml/GroupPage.qml
+index c0ccd524..3aeee83b 100644
+--- a/samba/filepropertiesplugin/qml/GroupPage.qml
++++ b/samba/filepropertiesplugin/qml/GroupPage.qml
+@@ -1,15 +1,17 @@
+ /*
+     SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+     SPDX-FileCopyrightText: 2020 Harald Sitter <sitter@kde.org>
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+ */
+ 
+-import QtQuick 2.12
+-import QtQuick.Controls 2.5 as QQC2
+-import QtQuick.Layouts 1.14
+-import org.kde.kirigami 2.12 as Kirigami
+-import org.kde.filesharing.samba 1.0 as Samba
++import QtQuick
++import QtQuick.Controls as QQC2
++import QtQuick.Layouts
++import org.kde.kirigami as Kirigami
++import org.kde.filesharing.samba as Samba
+ 
+-Item {
++Kirigami.Page {
++    padding: Kirigami.Units.smallSpacing
+     // This page may be after the InstallPage and so we need to create a GroupManager when the page loads
+     // rather than relying on the global instance that runs from the get go so we can evaluate the status AFTER
+     // samba installation.
+diff --git a/samba/filepropertiesplugin/qml/InstallPage.qml b/samba/filepropertiesplugin/qml/InstallPage.qml
+index f9a7c155..a440089a 100644
+--- a/samba/filepropertiesplugin/qml/InstallPage.qml
++++ b/samba/filepropertiesplugin/qml/InstallPage.qml
+@@ -1,15 +1,18 @@
+ /*
+     SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+     SPDX-FileCopyrightText: 2020 Harald Sitter <sitter@kde.org>
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+ */
+ 
+-import QtQuick 2.12
+-import QtQuick.Controls 2.5 as QQC2
+-import QtQuick.Layouts 1.14
+-import org.kde.kirigami 2.12 as Kirigami
+-import org.kde.filesharing.samba 1.0 as Samba
++import QtQuick
++import QtQuick.Controls as QQC2
++import QtQuick.Layouts
++import org.kde.kirigami as Kirigami
++import org.kde.filesharing.samba as Samba
++
++Kirigami.Page {
++    padding: Kirigami.Units.smallSpacing
+ 
+-Item {
+     Samba.Installer {
+         id: installer
+ 
+diff --git a/samba/filepropertiesplugin/qml/MissingSambaPage.qml b/samba/filepropertiesplugin/qml/MissingSambaPage.qml
+index 4419b25f..3f63a3c2 100644
+--- a/samba/filepropertiesplugin/qml/MissingSambaPage.qml
++++ b/samba/filepropertiesplugin/qml/MissingSambaPage.qml
+@@ -1,15 +1,18 @@
+ /*
+     SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+     SPDX-FileCopyrightText: 2020 Harald Sitter <sitter@kde.org>
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+ */
+ 
+-import QtQuick 2.12
+-import QtQuick.Controls 2.5 as QQC2
+-import QtQuick.Layouts 1.14
++import QtQuick
++import QtQuick.Controls as QQC2
++import QtQuick.Layouts
+ import org.kde.kirigami as Kirigami
+ 
+ // When built without packagekit we cannot do auto-installation.
+-Item {
++Kirigami.Page {
++    padding: Kirigami.Units.smallSpacing
++    
+     Kirigami.PlaceholderMessage {
+         anchors.centerIn: parent
+         width: parent.width - (Kirigami.Units.largeSpacing * 4)
+diff --git a/samba/filepropertiesplugin/qml/RebootPage.qml b/samba/filepropertiesplugin/qml/RebootPage.qml
+index 39bb6e47..49eb1f30 100644
+--- a/samba/filepropertiesplugin/qml/RebootPage.qml
++++ b/samba/filepropertiesplugin/qml/RebootPage.qml
+@@ -1,20 +1,23 @@
+ /*
+     SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+     SPDX-FileCopyrightText: 2020 Harald Sitter <sitter@kde.org>
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+ */
+ 
+-import QtQuick 2.12
+-import QtQuick.Controls 2.5 as QQC2
+-import QtQuick.Layouts 1.14
+-import org.kde.kirigami 2.12 as Kirigami
++import QtQuick
++import QtQuick.Controls as QQC2
++import QtQuick.Layouts
++import org.kde.kirigami as Kirigami
+ import org.kde.filesharing.samba 1.0 as Samba
+ 
+-Item {
++Kirigami.Page {
++    padding: Kirigami.Units.smallSpacing
++
+     Kirigami.PlaceholderMessage {
+         anchors.centerIn: parent
+         width: parent.width
+ 
+-        text: i18nc("@label", "Restart the computer to complete the changes.")
++        text: i18nc("@label", "Restart the computer to apply changes.")
+         helpfulAction: Kirigami.Action {
+             icon.name: "system-restart"
+             text: i18nc("@button restart the system", "Restart")
+diff --git a/samba/filepropertiesplugin/qml/UserPage.qml b/samba/filepropertiesplugin/qml/UserPage.qml
+index 9ceb52de..20c8830b 100644
+--- a/samba/filepropertiesplugin/qml/UserPage.qml
++++ b/samba/filepropertiesplugin/qml/UserPage.qml
+@@ -1,32 +1,28 @@
+ /*
+     SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+     SPDX-FileCopyrightText: 2020 Harald Sitter <sitter@kde.org>
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+ */
+ 
+-import QtQuick 2.12
+-import QtQuick.Controls 2.5 as QQC2
+-import QtQuick.Layouts 1.14
+-import org.kde.kirigami 2.12 as Kirigami
++import QtQuick
++import QtQuick.Controls as QQC2
++import QtQuick.Layouts
++import org.kde.kirigami as Kirigami
+ import org.kde.filesharing.samba 1.0 as Samba
+ 
+ Kirigami.ScrollablePage {
++    padding: Kirigami.Units.largeSpacing
++
+     background: Item {} /* this page is inside a tabbox, we want its background, not a window/page background */
+ 
+     globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
+ 
+-    Keys.onPressed: {
+-        // We need to explicitly handle some keys inside the sheet. Since the sheet is no FocusScope we will catch
+-        // them here and feed them to the sheet instead.
+-        if (!changePassword.sheetOpen) {
+-            return
+-        }
+-        changePassword.handleKeyEvent(event)
+-    }
+-
+     ChangePassword {
+-        // This is an overlay sheet, it requires a scrollable page to anchor on.
+         id: changePassword
+ 
++        name: sambaPlugin.userManager.currentUser().name
++        isPasswordChange: false
++
+         function userCreated(userCreated)
+         {
+             enabled = true
+@@ -45,10 +41,11 @@ Kirigami.ScrollablePage {
+     }
+ 
+     Connections {
+-        // ChangePassword being a sheet it's being crap to use and can't even connect to nothing.
+         target: sambaPlugin.userManager.currentUser()
++        onAddToSambaError: function (error) {
++            changePassword.errorMessage = error
++        }
+         onInSambaChanged: changePassword.userCreated(target.inSamba)
+-        onAddToSambaError: changePassword.errorMessage = error
+     }
+ 
+     ColumnLayout {
+@@ -70,8 +67,8 @@ Before you can access shares with your current user account you need to set a Sa
+ 
+         QQC2.Button {
+             Layout.alignment: Qt.AlignHCenter
+-            icon.name: "lock"
+-            text: i18nc("@action:button opens dialog to create new user", "Create Samba password")
++            icon.name: "lock-symbolic"
++            text: i18nc("@action:button opens dialog to create new user", "Set Samba password")
+             onClicked: changePassword.openAndClear()
+         }
+ 
+diff --git a/samba/filepropertiesplugin/qml/main.qml b/samba/filepropertiesplugin/qml/main.qml
+index 6777c84b..c802ab9e 100644
+--- a/samba/filepropertiesplugin/qml/main.qml
++++ b/samba/filepropertiesplugin/qml/main.qml
+@@ -1,12 +1,13 @@
+ /*
+     SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+     SPDX-FileCopyrightText: 2020 Harald Sitter <sitter@kde.org>
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+ */
+ 
+-import QtQuick 2.12
+-import QtQuick.Controls 2.5 as QQC2
+-import QtQuick.Layouts 1.14
+-import org.kde.kirigami 2.4 as Kirigami
++import QtQuick
++import QtQuick.Controls as QQC2
++import QtQuick.Layouts
++import org.kde.kirigami as Kirigami
+ import org.kde.filesharing.samba 1.0 as Samba
+ 
+ QQC2.StackView {
+-- 
+GitLab
+
+
+From 8c8a46c6d263870e564e5d4850dd6831508eec97 Mon Sep 17 00:00:00 2001
+From: Thomas Duckworth <tduck@filotimoproject.org>
+Date: Sun, 23 Feb 2025 03:58:01 +0000
+Subject: [PATCH 2/4] filepropertiesplugin: List potential connection
+ addresses, handle initialising userManager better
+
+---
+ CMakeLists.txt                                |  2 +
+ samba/filepropertiesplugin/CMakeLists.txt     |  8 +-
+ .../org.freedesktop.Avahi.Server.xml          | 13 ++++
+ samba/filepropertiesplugin/qml/ACLPage.qml    | 11 +++
+ .../qml/ConnectionAddresses.qml               | 77 +++++++++++++++++++
+ samba/filepropertiesplugin/qml/qml.qrc        |  1 +
+ .../sambausershareplugin.cpp                  | 73 ++++++++++++++++--
+ .../sambausershareplugin.h                    |  8 ++
+ 8 files changed, 186 insertions(+), 7 deletions(-)
+ create mode 100644 samba/filepropertiesplugin/org.freedesktop.Avahi.Server.xml
+ create mode 100644 samba/filepropertiesplugin/qml/ConnectionAddresses.qml
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2724c54d..b1388f99 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -19,6 +19,8 @@ include(ECMDeprecationSettings)
+ find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
+     Core
+     Widgets
++    Network
++    DBus
+     Qml
+     QuickWidgets
+ )
+diff --git a/samba/filepropertiesplugin/CMakeLists.txt b/samba/filepropertiesplugin/CMakeLists.txt
+index 68e6cce7..234c13eb 100644
+--- a/samba/filepropertiesplugin/CMakeLists.txt
++++ b/samba/filepropertiesplugin/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-add_library(sambausershareplugin MODULE
++set(sambausershareplugin_SRCS
+     sambausershareplugin.cpp
+     model.cpp
+     usermanager.cpp
+@@ -7,6 +7,10 @@ add_library(sambausershareplugin MODULE
+     qml/qml.qrc
+ )
+ 
++qt_add_dbus_interface(sambausershareplugin_SRCS org.freedesktop.Avahi.Server.xml org.freedesktop.Avahi.Server)
++
++add_library(sambausershareplugin MODULE ${sambausershareplugin_SRCS})
++
+ target_link_libraries(sambausershareplugin
+     KF6::CoreAddons
+     KF6::I18n
+@@ -14,6 +18,8 @@ target_link_libraries(sambausershareplugin
+     KF6::KIOWidgets
+     Qt::Qml
+     Qt::QuickWidgets
++    Qt::Network
++    Qt::DBus
+     QCoro6::Coro
+     KF6::AuthCore
+ )
+diff --git a/samba/filepropertiesplugin/org.freedesktop.Avahi.Server.xml b/samba/filepropertiesplugin/org.freedesktop.Avahi.Server.xml
+new file mode 100644
+index 00000000..bb75d2e8
+--- /dev/null
++++ b/samba/filepropertiesplugin/org.freedesktop.Avahi.Server.xml
+@@ -0,0 +1,13 @@
++<?xml version="1.0" standalone='no'?>
++<!--
++  SPDX-License-Identifier: CC0-1.0
++  SPDX-FileCopyrightText: none
++-->
++<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
++<node>
++  <interface name="org.freedesktop.Avahi.Server">
++    <method name="GetHostNameFqdn">
++      <arg name="name" type="s" direction="out"/>
++    </method>
++  </interface>
++</node>
+diff --git a/samba/filepropertiesplugin/qml/ACLPage.qml b/samba/filepropertiesplugin/qml/ACLPage.qml
+index 8f122d08..2c6e93f5 100644
+--- a/samba/filepropertiesplugin/qml/ACLPage.qml
++++ b/samba/filepropertiesplugin/qml/ACLPage.qml
+@@ -118,6 +118,10 @@ when the Share access rules would allow it.`)
+             }
+         }
+ 
++        ConnectionAddresses {
++            id: connectionAddresses
++        }
++
+         ColumnLayout {
+             Layout.fillWidth: true
+             Layout.fillHeight: true
+@@ -155,6 +159,13 @@ when the Share access rules would allow it.`)
+                         sambaPlugin.shareContext.name = text
+                         sambaPlugin.dirty = true
+                     }
++                }          
++                QQC2.Button {
++                    Layout.alignment: Qt.AlignRight
++                    text: i18nc("@action:button network addresses", "View Addresses")
++                    enabled: shareEnabled.checked
++                    icon.name: "network-connect-symbolic"
++                    onClicked: connectionAddresses.open()
+                 }
+             }
+ 
+diff --git a/samba/filepropertiesplugin/qml/ConnectionAddresses.qml b/samba/filepropertiesplugin/qml/ConnectionAddresses.qml
+new file mode 100644
+index 00000000..2f6acf1c
+--- /dev/null
++++ b/samba/filepropertiesplugin/qml/ConnectionAddresses.qml
+@@ -0,0 +1,77 @@
++/*
++    SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
++*/
++
++import QtQuick
++import QtQuick.Layouts
++import QtQuick.Controls as QQC2
++import org.kde.kirigami as Kirigami
++import org.kde.filesharing.samba 1.0 as Samba
++
++Kirigami.Dialog {
++    id: addressesRoot
++
++    padding: Kirigami.Units.largeSpacing
++
++    title: i18nc("@title", "Connection Addresses")
++
++    standardButtons: Kirigami.Dialog.NoButton
++    showCloseButton: true
++
++    contentItem: ColumnLayout {
++        QQC2.Label {
++            text: i18nc("@info:usagetip", "Use any of the following addresses to connect to this share:")
++            Layout.fillWidth: true
++            wrapMode: Text.WordWrap
++        }
++
++        ColumnLayout {
++            Layout.fillWidth: true
++
++            Repeater {
++                id: addressesRepeater
++                model: sambaPlugin.addressList
++
++                ColumnLayout {
++                    RowLayout {
++                        spacing: Kirigami.Units.mediumSpacing
++                        Layout.fillWidth: true
++
++                        Kirigami.SelectableLabel {
++                            id: addressLabel
++                            Layout.fillWidth: true
++                            // Samba uses UNCs natively, not URLs - Windows does not support `smb://` URLs
++                            // See https://unc.us/
++                            text: "\\\\%1\\%2".arg(modelData).arg(sambaPlugin.shareContext.name)
++                            font.family: "monospace"
++                            Layout.leftMargin: Kirigami.Units.gridUnit
++                            Layout.alignment: Qt.AlignHCenter
++                            verticalAlignment: Text.AlignVCenter
++                        }
++
++                        QQC2.Button {
++                            id: copyAddressButton
++                            Layout.alignment: Qt.AlignRight
++                            icon.name: "edit-copy-symbolic"
++                            text: i18nc("@action:button", "Copy to Clipboard")
++                            display: QQC2.AbstractButton.IconOnly
++                            onClicked: {
++                                sambaPlugin.copyAddressToClipboard(addressLabel.text);
++                            }
++                            QQC2.ToolTip {
++                                text: copyAddressButton.text
++                                visible: copyAddressButton.hovered || (Kirigami.Settings.tabletMode && copyAddressButton.pressed)
++                            }
++                        }
++                    }
++
++                    Kirigami.Separator {
++                        visible: index !== addressesRepeater.count - 1
++                        Layout.fillWidth: true
++                    }
++                }
++            }
++        }
++    }
++}
+\ No newline at end of file
+diff --git a/samba/filepropertiesplugin/qml/qml.qrc b/samba/filepropertiesplugin/qml/qml.qrc
+index f1239e54..a3778ae6 100644
+--- a/samba/filepropertiesplugin/qml/qml.qrc
++++ b/samba/filepropertiesplugin/qml/qml.qrc
+@@ -14,5 +14,6 @@
+         <file>ChangePassword.qml</file>
+         <file>GroupPage.qml</file>
+         <file>ChangePermissionsPage.qml</file>
++        <file>ConnectionAddresses.qml</file>
+     </qresource>
+ </RCC>
+diff --git a/samba/filepropertiesplugin/sambausershareplugin.cpp b/samba/filepropertiesplugin/sambausershareplugin.cpp
+index 186d0ed1..1d6ddb27 100644
+--- a/samba/filepropertiesplugin/sambausershareplugin.cpp
++++ b/samba/filepropertiesplugin/sambausershareplugin.cpp
+@@ -5,6 +5,7 @@
+     SPDX-FileCopyrightText: 2015-2020 Harald Sitter <sitter@kde.org>
+     SPDX-FileCopyrightText: 2019 Nate Graham <nate@kde.org>
+     SPDX-FileCopyrightText: 2021 Slava Aseev <nullptrnine@basealt.ru>
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+ */
+ 
+ #include "sambausershareplugin.h"
+@@ -18,10 +19,14 @@
+ #include <KLocalizedString>
+ #include <QTimer>
+ #include <QQmlContext>
++#include <QClipboard>
+ #include <QPushButton>
++#include <QNetworkInterface>
+ #include <QDBusInterface>
+ #include <QDBusConnection>
+ #include <QMainWindow>
++#include <QDBusPendingCallWatcher>
++#include <QDBusPendingReply>
+ 
+ #include <KLocalizedContext>
+ #include <KMessageBox>
+@@ -30,6 +35,7 @@
+ #include <KService>
+ #include <KIO/CommandLauncherJob>
+ 
++#include "org.freedesktop.Avahi.Server.h"
+ 
+ #include "groupmanager.h"
+ 
+@@ -118,13 +124,62 @@ SambaUserSharePlugin::SambaUserSharePlugin(QObject *parent)
+         QTimer::singleShot(100, properties, &KPropertiesDialog::showFileSharingPage);
+     }
+ 
+-    QTimer::singleShot(0, this, [this] {
+-        connect(m_userManager, &UserManager::loaded, this, [this] {
+-            m_permissionsHelper->reload();
+-            setReady(true);
+-        });
+-        m_userManager->load();
++    QMetaObject::invokeMethod(this, &SambaUserSharePlugin::initUserManager, Qt::QueuedConnection);
++    QMetaObject::invokeMethod(this, &SambaUserSharePlugin::initAddressList, Qt::QueuedConnection);
++}
++
++void SambaUserSharePlugin::initUserManager()
++{
++    connect(m_userManager, &UserManager::loaded, this, [this] {
++        m_permissionsHelper->reload();
++        setReady(true);
+     });
++    m_userManager->load();
++}
++
++void SambaUserSharePlugin::initAddressList()
++{
++    QStringList addressList;
++
++    const auto interfaces = QNetworkInterface::allInterfaces();
++    for (const auto &interface : interfaces) {
++        if (!interface.flags().testAnyFlag(QNetworkInterface::IsLoopBack)) {
++            for (auto &address : interface.addressEntries()) {
++                // Show only private ip addresses
++                if (address.ip().isPrivateUse()) {
++                    addressList.append(address.ip().toString());
++                }
++            }
++        }
++    }
++
++    // Get fully qualified domain name
++    QString fqdn;
++    auto avahi = new OrgFreedesktopAvahiServerInterface(
++        QStringLiteral("org.freedesktop.Avahi"), 
++        QStringLiteral("/"), 
++        QDBusConnection::systemBus());
++        
++    auto watcher = new QDBusPendingCallWatcher(avahi->GetHostNameFqdn(), this);
++    connect(watcher, &QDBusPendingCallWatcher::finished, this, [this, avahi, watcher] {
++            watcher->deleteLater();
++            avahi->deleteLater();
++
++            QDBusPendingReply<QString> reply = *watcher;
++            QStringList addressList = m_addressList;
++            if (!reply.isError()) {
++                QString fqdn = reply.argumentAt(0).toString();
++                if (!fqdn.isEmpty()) {
++                    addressList.append(fqdn);
++                }
++            }
++            m_addressList = addressList;
++            Q_EMIT addressListChanged();
++        }
++    );
++
++    m_addressList = addressList;
++    Q_EMIT addressListChanged();
+ }
+ 
+ bool SambaUserSharePlugin::isSambaInstalled()
+@@ -140,6 +195,12 @@ void SambaUserSharePlugin::showSambaStatus()
+     job->start();
+ }
+ 
++void SambaUserSharePlugin::copyAddressToClipboard(const QString &address)
++{
++    QGuiApplication::clipboard()->setText(address.trimmed());
++}
++
++
+ void SambaUserSharePlugin::applyChanges()
+ {
+     qDebug() << "!!! applying changes !!!" << m_context->enabled() << m_context->name() << m_context->guestEnabled() << m_model->getAcl() << m_context->m_shareData.path();
+diff --git a/samba/filepropertiesplugin/sambausershareplugin.h b/samba/filepropertiesplugin/sambausershareplugin.h
+index 038aad9e..d291dcfa 100644
+--- a/samba/filepropertiesplugin/sambausershareplugin.h
++++ b/samba/filepropertiesplugin/sambausershareplugin.h
+@@ -5,6 +5,7 @@
+     SPDX-FileCopyrightText: 2019 Nate Graham <nate@kde.org>
+     SPDX-FileCopyrightText: 2020 Harald Sitter <sitter@kde.org>
+     SPDX-FileCopyrightText: 2021 Slava Aseev <nullptrnine@basealt.ru>
++    SPDX-FileCopyrightText: 2025 Thomas Duckworth <tduck@filotimoproject.org>
+ */
+ 
+ #ifndef SAMBAUSERSHAREPLUGIN_H
+@@ -146,6 +147,7 @@ class SambaUserSharePlugin : public KPropertiesDialogPlugin
+     Q_OBJECT
+     Q_PROPERTY(bool dirty READ isDirty WRITE setDirty NOTIFY changed) // So qml can mark dirty
+     Q_PROPERTY(bool ready READ isReady NOTIFY readyChanged) // intentionally not writable from qml
++    Q_PROPERTY(QStringList addressList MEMBER m_addressList NOTIFY addressListChanged)
+     // Expose instance-singleton members so QML may access them.
+     // They aren't application-wide singletons and also cannot easily be ctor'd from QML.
+     Q_PROPERTY(UserManager *userManager MEMBER m_userManager CONSTANT)
+@@ -162,6 +164,7 @@ public:
+     Q_INVOKABLE static bool isSambaInstalled();
+     Q_INVOKABLE static void reboot();
+     Q_INVOKABLE static void showSambaStatus();
++    Q_INVOKABLE static void copyAddressToClipboard(const QString &address);
+ 
+     bool isReady() const;
+ 
+@@ -169,17 +172,22 @@ public:
+ 
+ Q_SIGNALS:
+     void readyChanged();
++    void addressListChanged();
+ 
+ private:
+     void setReady(bool ready);
+     void reportAdd(KSambaShareData::UserShareError error);
+     void reportRemove(KSambaShareData::UserShareError error);
+ 
++    Q_SLOT void initUserManager();
++    Q_SLOT void initAddressList();
++
+     const QString m_url;
+     ShareContext *m_context= nullptr;
+     UserPermissionModel *m_model = nullptr;
+     UserManager *m_userManager = nullptr;
+     PermissionsHelper *m_permissionsHelper = nullptr;
++    QStringList m_addressList;
+     bool m_ready = false;
+     // Hold the qquickwidget so it gets destroyed with us. Otherwise we'd have bogus reference errors
+     // as the Plugin instance is exposed as contextProperty to qml but the widget is parented to the PropertiesDialog
+-- 
+GitLab
+
+
+From f06cf03330522165f67f59289ac47b1471581726 Mon Sep 17 00:00:00 2001
+From: Thomas Duckworth <tduck@filotimoproject.org>
+Date: Fri, 25 Apr 2025 09:32:04 +0000
+Subject: [PATCH 3/4] filepropertiesplugin: Remove scary error icons where they
+ aren't necessary
+
+---
+ samba/filepropertiesplugin/qml/GroupPage.qml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/samba/filepropertiesplugin/qml/GroupPage.qml b/samba/filepropertiesplugin/qml/GroupPage.qml
+index 3aeee83b..788338fa 100644
+--- a/samba/filepropertiesplugin/qml/GroupPage.qml
++++ b/samba/filepropertiesplugin/qml/GroupPage.qml
+@@ -49,7 +49,6 @@ Kirigami.Page {
+         }
+ 
+         Kirigami.PlaceholderMessage {
+-            icon.name: "dialog-error"
+             text: manager.errorText
+             explanation: manager.errorExplanation
+             helpfulAction: Kirigami.Action {
+-- 
+GitLab
+
+
+From cfb37d1f16e3437284b802287c25a0ca0af989d8 Mon Sep 17 00:00:00 2001
+From: Thomas Duckworth <tduck@filotimoproject.org>
+Date: Sat, 14 Jun 2025 05:36:37 +0000
+Subject: [PATCH 4/4] filepropertiesplugin: Don't show close button where it
+ can't be dismissed
+
+---
+ samba/filepropertiesplugin/qml/ACLPage.qml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/samba/filepropertiesplugin/qml/ACLPage.qml b/samba/filepropertiesplugin/qml/ACLPage.qml
+index 2c6e93f5..99cd4d55 100644
+--- a/samba/filepropertiesplugin/qml/ACLPage.qml
++++ b/samba/filepropertiesplugin/qml/ACLPage.qml
+@@ -84,7 +84,6 @@ when the Share access rules would allow it.`)
+         Kirigami.InlineMessage {
+             id: changePermissionsWarning
+             Layout.fillWidth: true
+-            showCloseButton: true
+             visible: sambaPlugin.permissionsHelper.permissionsChangeRequired
+             type: Kirigami.MessageType.Warning
+             text: i18nc("@label", "This folder needs extra permissions for sharing to work.")
+-- 
+GitLab
+
