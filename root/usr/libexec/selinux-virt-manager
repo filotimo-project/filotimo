@@ -1,8 +1,0 @@
-#!/usr/bin/bash
-set -e
-
-kdialog --warningcontinuecancel "The SELinux security module included with this operating system may cause compatibility issues with Virtual Machine Manager.\n\nContinuing will temporarily disable SELinux until virt-manager is closed." --title "Security Advisory"
-run0 setenforce 0
-virt-manager --no-fork
-kdialog --msgbox "The SELinux security module will now be re-enabled." --title "Security Advisory"
-run0 setenforce 1

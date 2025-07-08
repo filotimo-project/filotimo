@@ -18,6 +18,7 @@ systemctl enable dirty-centisecs.service
 systemctl enable memory-tweaks.service
 systemctl enable plugdev-append.service
 systemctl enable set-grub-visibility.service
+systemctl enable ublue-os-libvirt-workarounds.service
 systemctl disable flatpak-add-fedora-repos.service
 
 # Setup hook runners

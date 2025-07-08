@@ -21,6 +21,7 @@ dnf5 -y install --refresh --allowerasing \
     ublue-polkit-rules \
     ublue-recipes \
     ublue-setup-services \
+    ublue-os-libvirt-workarounds \
     plasma-discover-rpm-ostree \
     git \
     gh \

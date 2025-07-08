@@ -18,9 +18,6 @@ setsebool -P samba_export_all_ro=1
 setsebool -P samba_export_all_rw=1
 sed -i '/^\[homes\]/,/^\[/{/^\[homes\]/d;/^\[/!d}' /etc/samba/smb.conf
 
-# Helper for virt-manager
-sed -i 's@^Exec=.*@Exec=/usr/libexec/selinux-virt-manager@' /usr/share/applications/virt-manager.desktop
-
 # Stop tuned touching swappiness
 grep -rIl 'vm.swappiness=' /usr/lib/tuned/profiles | xargs sed -i '/^vm.swappiness=[0-9]\+/s/^/# /'
 
