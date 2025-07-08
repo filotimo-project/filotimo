@@ -93,4 +93,5 @@ dnf5 -y remove \
     toolbox \
     firefox \
     zram-generator-defaults \
-    im-chooser
+    im-chooser \
+    plasma-discover-kns
