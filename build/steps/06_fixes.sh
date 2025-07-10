@@ -29,7 +29,3 @@ sed -i 's/application\/x-rpm;//g' /usr/share/applications/org.kde.discover.deskt
 
 # Remove gnome ssh askpass environment variable
 rm -rf /etc/profile.d/gnome-ssh-askpass.csh /etc/profile.d/gnome-ssh-askpass.sh
-
-# Workaround for kscreenlocker regression
-# see https://bugzilla.redhat.com/show_bug.cgi?id=2375356
-dnf -y downgrade qt6-qtwayland-6.9.1-1$(rpm -E %{dist})
