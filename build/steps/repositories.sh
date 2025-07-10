@@ -7,7 +7,6 @@ export copr_repositories=(
     "ublue-os/packages"
     "tduck973564/filotimo-packages"
     "rodoma92/kde-cdemu-manager"
-    "zawertun/kde-kup"
     "bernardogn/kio-onedrive"
     "che/nerd-fonts"
     "hikariknight/looking-glass-kvmfr"

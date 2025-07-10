@@ -2,9 +2,6 @@
 set -ouex pipefail
 source /ctx/build/steps/prelude.sh
 
-# FIXME: Temporary workaround for no python3-libfuse upstream
-dnf5 -y install "https://download.copr.fedorainfracloud.org/results/zawertun/kde-kup/fedora-41-x86_64/08095873-python-libfuse/python3-libfuse-1.0.8-1.fc41.x86_64.rpm"
-
 # Install packages included with system
 dnf5 -y install --allowerasing "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher-2.2.0-travis995.0f91801.x86_64.rpm"
 dnf5 -y remove kdenetwork-filesharing # FIXME why is this necessary?
@@ -63,7 +60,6 @@ dnf5 -y install --refresh --allowerasing \
     libreoffice-writer \
     libreoffice-calc \
     libreoffice-kf6 \
-    kde-kup \
     steam-devices \
     lm_sensors \
     rsms-inter-fonts \
