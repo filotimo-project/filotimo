@@ -10,6 +10,7 @@ export copr_repositories=(
     "zawertun/kde-kup"
     "bernardogn/kio-onedrive"
     "che/nerd-fonts"
+    "hikariknight/looking-glass-kvmfr"
 )
 # URL-based repositories
 export url_repositories=(

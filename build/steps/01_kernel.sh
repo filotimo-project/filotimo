@@ -6,25 +6,27 @@ source /ctx/build/steps/prelude.sh
 fetch_akmods_rpms "ghcr.io/ublue-os/akmods:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION}" /tmp/akmods
 fetch_akmods_rpms "ghcr.io/ublue-os/akmods-extra:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION}" /tmp/akmods-extra
 
-# Install kernel
-dnf5 -y remove --no-autoremove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra
+# Install kernel -- which extracts itself into /tmp/kernel-rpms
+dnf5 -y remove --no-autoremove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-tools kernel-tools-libs kernel-uki-virt
 dnf5 -y install \
     /tmp/kernel-rpms/kernel-[0-9]*.rpm \
     /tmp/kernel-rpms/kernel-core-*.rpm \
     /tmp/kernel-rpms/kernel-modules-*.rpm \
-    /tmp/kernel-rpms/kernel-uki-virt-*.rpm \
+    /tmp/kernel-rpms/kernel-tools-[0-9]*.rpm \
+    /tmp/kernel-rpms/kernel-tools-libs-[0-9]*.rpm \
     /tmp/kernel-rpms/kernel-devel-*.rpm
-dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-uki-virt
+dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-tools kernel-tools-libs
 
 # Install kernel modules
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 
-# Some require rpmfusion, so install it first then remove it
+# Some modules require rpmfusion, so install it first then remove it later
 dnf5 -y install \
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"${FEDORA_MAJOR_VERSION}".noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"${FEDORA_MAJOR_VERSION}".noarch.rpm
 
 dnf5 -y install \
+    /tmp/akmods/kmods/*kvmfr*.rpm \
     /tmp/akmods/kmods/*framework-laptop*.rpm \
     /tmp/akmods/kmods/*openrazer*.rpm \
     /tmp/akmods/kmods/*v4l2loopback*.rpm \
@@ -33,7 +35,7 @@ dnf5 -y install \
     /tmp/akmods-extra/kmods/*ayn-platform*.rpm \
     /tmp/akmods-extra/kmods/*bmi260*.rpm \
     /tmp/akmods-extra/kmods/*gcadapter_oc*.rpm \
-    /tmp/akmods-extra/kmods/*nct6687d*.rpm \
+    /tmp/akmods-extra/kmods/*nct6687*.rpm \
     /tmp/akmods-extra/kmods/*ryzen-smu*.rpm \
     /tmp/akmods-extra/kmods/*system76*.rpm \
     /tmp/akmods-extra/kmods/*vhba*.rpm \
@@ -42,7 +44,8 @@ dnf5 -y install \
 dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
 
 # Install NVIDIA driver and kmod if it's the NVIDIA image
-# This fails if nvidia-driver and kmod-nvidia don't have matching versions
+# This (intentionally) fails if nvidia-driver and kmod-nvidia don't have matching versions
+# This prevents the image from breaking, because they're sometimes out of sync
 if [[ $IMAGE_NAME =~ "nvidia" ]]; then
     fetch_akmods_rpms "ghcr.io/ublue-os/akmods-nvidia-open:${KERNEL_FLAVOR}-${FEDORA_MAJOR_VERSION}-${KERNEL_VERSION}" /tmp/akmods-rpms
 
