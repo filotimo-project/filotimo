@@ -23,5 +23,7 @@ systemctl enable ublue-os-libvirt-workarounds.service
 systemctl disable flatpak-add-fedora-repos.service
 
 # Setup hook runners
+# FIXME: workaround for it being fucked upstream
+sed -i '/^\[Service\]$/a User=root' /usr/lib/systemd/system/ublue-system-setup.service
 systemctl enable ublue-system-setup.service
 systemctl --global enable ublue-user-setup.service
