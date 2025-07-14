@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+
+for uuid in $(ls /sys/fs/btrfs/); do
+    # Enable dynamic reclaim for data
+    if [ -f "/sys/fs/btrfs/$uuid/allocation/data/dynamic_reclaim" ]; then
+        echo 1 > "/sys/fs/btrfs/$uuid/allocation/data/dynamic_reclaim"
+        echo "Enabled dynamic reclaim for data on $uuid"
+    else
+        echo "Skipping $uuid: no dynamic_reclaim file for data"
+    fi
+
+    # Enable dynamic reclaim for metadata
+    if [ -f "/sys/fs/btrfs/$uuid/allocation/metadata/dynamic_reclaim" ]; then
+        echo 1 > "/sys/fs/btrfs/$uuid/allocation/metadata/dynamic_reclaim"
+        echo "Enabled dynamic reclaim for metadata on $uuid"
+    else
+        echo "Skipping $uuid: no dynamic_reclaim file for metadata"
+    fi
+done

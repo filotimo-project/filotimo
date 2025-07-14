@@ -16,9 +16,14 @@ VEN_ID="$(cat '/sys/devices/virtual/dmi/id/chassis_vendor')"
 CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
 CPU_MODEL=$(grep "model name" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
 
+notify_reboot_needed() {
+  plymouth display-message --text="Configuring hardware — your system will reboot shortly…" || true
+  NEEDS_REBOOT=1
+}
+
 configure_karg_and_notify_reboot() {
   local karg_operation_and_value="$1"
-  plymouth display-message --text="Configuring hardware — your system will reboot shortly…" || true
+  notify_reboot_needed
   NEEDED_KARGS+=("$karg_operation_and_value")
 }
 

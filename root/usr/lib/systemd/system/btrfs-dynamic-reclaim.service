@@ -1,0 +1,11 @@
+[Unit]
+Description=Enable Btrfs dynamic reclaim on all Btrfs disks for Filotimo
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/btrfs-dynamic-reclaim
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

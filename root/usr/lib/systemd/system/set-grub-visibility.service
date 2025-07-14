@@ -1,5 +1,5 @@
 [Unit]
-Description=Sets GRUB to visible on boot and hidden on shutdown - on a force shutdown GRUB will show on next boot for system image rollback
+Description=Sets GRUB to visible on boot and hidden on shutdown for Filotimo - on a force shutdown GRUB will show on next boot for system image rollback
 
 [Service]
 Type=oneshot

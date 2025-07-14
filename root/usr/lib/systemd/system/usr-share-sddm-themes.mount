@@ -1,7 +1,5 @@
-# Workaround to allow KDE Discover to install sddm themes
-
 [Unit]
-Description=KDE writable sddm workaround
+Description=Workaround to allow the installation of SDDM themes for Filotimo
 RequiresMountsFor=/usr/share/sddm/themes /var/sddm_themes/themes /var/sddm_themes/themes.work
 
 [Mount]

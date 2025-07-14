@@ -1,5 +1,5 @@
 [Unit]
-Description=Append user to adbusers group to make Android udev rules working
+Description=Append user to adbusers group to make Android udev rules work for Filotimo
 
 [Service]
 Type=oneshot

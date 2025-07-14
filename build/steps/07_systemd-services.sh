@@ -14,6 +14,7 @@ systemctl enable usr-share-sddm-themes.mount
 systemctl --global enable check-windows-dualboot.service
 systemctl enable smb.service
 systemctl enable adbusers-append.service
+systemctl enable btrfs-dynamic-reclaim.service
 systemctl enable dirty-centisecs.service
 systemctl enable memory-tweaks.service
 systemctl enable plugdev-append.service
