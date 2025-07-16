@@ -10,6 +10,7 @@ dnf5 -y install --refresh --allowerasing \
     fedora-logos \
     filotimo-branding \
     filotimo-atychia \
+    filotimo-appcompatibilityhelper \
     filotimo-plymouth-theme \
     filotimo-backgrounds \
     msttcore-fonts-installer \

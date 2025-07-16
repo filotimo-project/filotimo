@@ -29,3 +29,16 @@ sed -i 's/application\/x-rpm;//g' /usr/share/applications/org.kde.discover.deskt
 
 # Remove gnome ssh askpass environment variable
 rm -rf /etc/profile.d/gnome-ssh-askpass.csh /etc/profile.d/gnome-ssh-askpass.sh
+
+# Have a qtpaths binary for xdg-mime
+ln -s /usr/bin/qtpaths6 /usr/bin/qtpaths
+
+# Ensure appcompatibilityhelper is the default for package mimetypes
+xdg-mime default org.filotimoproject.appcompatibilityhelper.desktop application/x-ms-dos-executable
+xdg-mime default org.filotimoproject.appcompatibilityhelper.desktop application/x-msi
+xdg-mime default org.filotimoproject.appcompatibilityhelper.desktop application/x-ms-shortcut
+xdg-mime default org.filotimoproject.appcompatibilityhelper.desktop application/x-rpm
+xdg-mime default org.filotimoproject.appcompatibilityhelper.desktop application/vnd.debian.binary-package
+# TODO: These are not implemented yet:
+#xdg-mime default org.filotimoproject.appcompatibilityhelper.desktop application/vnd.appimage
+#xdg-mime default org.filotimoproject.appcompatibilityhelper.desktop application/x-iso9660-appimage
