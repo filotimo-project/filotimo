@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set_visible() {
+    /usr/bin/grub2-editenv - unset menu_auto_hide
+    return 0
+}
+
+set_invisible() {
+    # Don't set this if the image is rolled back (on a pinned deployment)
+    if [[ "$(bootc status --json | jq '.status.booted.pinned')" == "true" ]]; then
+        echo "Skipping grub visibility change, rollback detected"
+        return 0
+    fi
+    /usr/bin/grub2-editenv - set menu_auto_hide=2
+}
+
+case "$1" in
+    visible)
+        set_visible
+        ;;
+    invisible)
+        set_invisible
+        ;;
+    *)
+        echo "Usage: $0 {visible|invisible}"
+        exit 1
+        ;;
+esac

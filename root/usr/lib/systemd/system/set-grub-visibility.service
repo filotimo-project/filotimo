@@ -4,8 +4,8 @@ Description=Sets GRUB to visible on boot and hidden on shutdown for Filotimo - o
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/grub2-editenv - unset menu_auto_hide
-ExecStop=/usr/bin/grub2-editenv - set menu_auto_hide=2
+ExecStart=/usr/libexec/set-grub-visibility visible
+ExecStop=/usr/libexec/set-grub-visibility invisible
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target halt.target reboot.target shutdown.target
