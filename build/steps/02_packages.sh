@@ -83,8 +83,10 @@ dnf5 -y install --refresh --allowerasing \
     fcitx5-libthai
 
 # Remove irrelevant/conflicting packages
+# plasma-vault is pretty broken, don't ship this
 dnf5 -y remove \
     plasma-welcome-fedora \
+    plasma-vault \
     fedora-bookmarks \
     fedora-chromium-config \
     ublue-os-update-services \
