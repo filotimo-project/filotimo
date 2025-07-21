@@ -1,15 +1,16 @@
+MenuBar=Disabled
+
 [General]
-DoubleClickViewAction=none
-GlobalViewProps=true
 ShowStatusBar=FullWidth
-ShowZoomSlider=false
 Version=202
+ViewPropsTimestamp=2025,7,21,16,50,42.679
+
+[KFileDialog Settings]
+Places Icons Auto-resize=false
+Places Icons Static Size=22
 
 [MainWindow]
 MenuBar=Disabled
-
-[VersionControl]
-enabledPlugins=
 
 [PreviewSettings]
 Plugins=audiothumbnail,blenderthumbnail,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,fontthumbnail,imagethumbnail,jpegthumbnail,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,mobithumbnail,opendocumentthumbnail,gsthumbnail,rawthumbnail,svgthumbnail,ffmpegthumbs

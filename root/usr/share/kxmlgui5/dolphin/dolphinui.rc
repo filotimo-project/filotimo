@@ -1,5 +1,5 @@
 <!DOCTYPE gui>
-<gui name="dolphin" translationDomain="kxmlgui6" version="46">
+<gui name="dolphin" translationDomain="kxmlgui6" version="43">
  <MenuBar alreadyVisited="1">
   <Menu alreadyVisited="1" name="file" noMerge="1">
    <text translationDomain="kxmlgui6">&amp;File</text>
@@ -101,35 +101,11 @@
   <Separator weakSeparator="1"/>
   <Separator weakSeparator="1"/>
   <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
-  <Separator weakSeparator="1"/>
   <Menu alreadyVisited="1" name="tools" noMerge="1">
    <text translationDomain="kxmlgui6">&amp;Tools</text>
    <Action name="open_preferred_search_tool"/>
    <Action name="open_terminal"/>
    <Action name="open_terminal_here"/>
-   <Action name="manage_disk_space"/>
    <Action name="compare_files"/>
    <Action name="change_remote_encoding"/>
   </Menu>
@@ -168,9 +144,9 @@
   <Action name="view_mode"/>
   <Action name="new_tab"/>
   <Action name="url_navigators"/>
-  <Action name="split_stash"/>
   <Action name="toggle_search"/>
   <Action name="split_view"/>
+  <Action name="split_stash"/>
   <Separator name="separator_1"/>
   <Action name="hamburger_menu"/>
  </ToolBar>
@@ -209,7 +185,6 @@
   <Action name="compact" priority="0"/>
   <Action name="details" priority="0"/>
   <Action name="view_mode" priority="0"/>
-  <Action name="view_settings" priority="0"/>
   <Action name="view_zoom_in" priority="0"/>
   <Action name="view_zoom_reset" priority="0"/>
   <Action name="view_zoom_out" priority="0"/>
@@ -218,8 +193,8 @@
   <Action name="edit_paste" priority="0"/>
   <Action name="toggle_search" priority="0"/>
   <Action name="toggle_filter" priority="0"/>
-  <Action name="new_tab" priority="0"/>
   <Action name="view_redisplay" priority="0"/>
+  <Action name="new_tab" priority="0"/>
   <Action name="split_view" priority="0"/>
  </ActionProperties>
 </gui>
