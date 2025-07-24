@@ -80,7 +80,13 @@ dnf5 -y install --refresh --allowerasing \
     fcitx5-hangul \
     fcitx5-mozc \
     fcitx5-unikey \
-    fcitx5-libthai
+    fcitx5-libthai \
+    sudo-rs
+
+# Link sudo-rs to the correct places
+ln -sf /usr/bin/su-rs /usr/bin/su
+ln -sf /usr/bin/sudo-rs /usr/bin/sudo
+ln -sf /usr/bin/visudo-rs /usr/bin/visudo
 
 # Remove irrelevant/conflicting packages
 # plasma-vault is pretty broken, don't ship this
