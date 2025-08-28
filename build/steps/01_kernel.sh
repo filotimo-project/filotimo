@@ -52,7 +52,7 @@ if [[ $IMAGE_NAME =~ "nvidia" ]]; then
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/nvidia-install.sh
     chmod +x /tmp/nvidia-install.sh
     IMAGE_NAME="kinoite" /tmp/nvidia-install.sh
-    rpm -q --qf '%{VERSION}-%{RELEASE}\n' nvidia-driver kmod-nvidia | awk 'NR==1 {v=$0} NR>1 && $0!=v {exit 1}'
+    rpm -q --qf '%{VERSION}\n' nvidia-driver kmod-nvidia | awk 'NR==1 {v=$0} NR>1 && $0!=v {exit 1}'
 
     dnf5 -y remove xorg-x11-nvidia
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
