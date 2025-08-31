@@ -19,7 +19,7 @@ setup-kde-dev:
     export PATH="$HOME/.local/bin:$PATH"
     cd ~
     curl "https://invent.kde.org/sdk/kde-builder/-/raw/master/scripts/initial_setup.sh?ref_type=heads" > initial_setup.sh
-    bash initial_setup.sh
+    yes | bash initial_setup.sh
     rm initial_setup.sh
     yes | kde-builder --generate-config
     yes | kde-builder --install-distro-packages
