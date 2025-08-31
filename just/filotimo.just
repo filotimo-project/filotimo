@@ -1,14 +1,14 @@
 # Create a new distrobox containing a KDE development environment.
-setup-kde-development-environment:
+setup-kde-dev:
     #!/usr/bin/bash
     set -e
-    printf "A rawhide distrobox will be created with the name kde-development-environment.\n"
+    printf "A distrobox will be created with the name kde-dev.\n"
     printf "You will be placed in this distrobox on completion of this recipe.\n\n"
     sleep 2
-    distrobox create --name kde-development-environment --init --additional-packages "systemd" --image registry.fedoraproject.org/fedora:rawhide
-    podman start kde-development-environment
+    distrobox create --name kde-dev --init --additional-packages "systemd" --image ghcr.io/ublue-os/fedora-toolbox:latest
+    podman start kde-dev
     sleep 20
-    podman exec -it --user "$USER" kde-development-environment bash -c '
+    podman exec -it --user "$USER" kde-dev bash -c '
     sudo dnf install -y --no-gpgchecks librsvg2-devel hunspell-devel clang-tools-extra clang cmake make gdb ninja git git-clang-format qt6-*-devel qt5-*-devel opencv-devel mpv-libs-devel openh264 "pkgconfig(libavcodec)" "pkgconfig(libavfilter)" "pkgconfig(libavformat)" rsms-inter-fonts rsms-inter-vf-fonts ibm-plex-fonts-all plasma-breeze
 
     if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
@@ -28,18 +28,18 @@ setup-kde-development-environment:
     yes | kde-builder workspace
     printf "Complete! Run ujust install-kde-session outside the distrobox to install the session file to allow you to enter the Plasma development workspace.\n"'
 
-# Installs the session file to run a KDE development environment from SDDM. Requires setup-kde-development-environment
-install-kde-development-session:
+# Installs the session file to run a KDE development environment from SDDM. Requires setup-kde-dev
+install-kde-dev-session:
     #!/usr/bin/bash
-    podman container start kde-development-environment
-    if ! podman container exec kde-development-environment test -f /usr/local/share/wayland-sessions/plasmawayland-dev6.desktop; then
-        printf "The file '/usr/local/share/wayland-sessions/plasmawayland-dev6.desktop' does not exist in the KDE development container distrobox.\nYou will need to run ujust setup-kde-development-environment first.\n"
+    podman container start kde-dev
+    if ! podman container exec kde-dev test -f /usr/local/share/wayland-sessions/plasmawayland-dev6.desktop; then
+        printf "The file '/usr/local/share/wayland-sessions/plasmawayland-dev6.desktop' does not exist in the KDE development container distrobox.\nYou will need to run ujust setup-kde-dev first.\n"
         exit 1
     fi
     printf "This will set up an overlayfs over /usr, making it temporarily mutable until the next reboot. This recipe will need to be run again on every reboot.\n"
     sudo bootc usr-overlay
     echo 'chown -f -R $USER:$USER /tmp/.X11-unix' | sudo tee /etc/profile.d/set_tmp_x11_permissions.sh > /dev/null
-    podman container cp kde-development-environment:/usr/local/share/wayland-sessions/plasmawayland-dev6.desktop ~/
+    podman container cp kde-dev:/usr/local/share/wayland-sessions/plasmawayland-dev6.desktop ~/
     sed -i "s@^Exec=.*@Exec=$HOME/.local/bin/start-plasma-dev-session@" ~/plasmawayland-dev6.desktop
     sudo mv ~/plasmawayland-dev6.desktop /usr/share/wayland-sessions
     echo "$HOME/kde/usr/lib64/libexec/kactivitymanagerd & disown
