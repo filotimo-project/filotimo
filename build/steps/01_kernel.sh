@@ -52,12 +52,10 @@ if [[ $IMAGE_NAME =~ "nvidia" ]]; then
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/main/refs/heads/main/build_files/nvidia-install.sh
     chmod +x /tmp/nvidia-install.sh
     IMAGE_NAME="kinoite" /tmp/nvidia-install.sh
-    rpm -q --qf '%{VERSION}\n' nvidia-driver kmod-nvidia | awk 'NR==1 {v=$0} NR>1 && $0!=v {exit 1}'
 
-    dnf5 -y remove xorg-x11-nvidia
+    dnf5 -y remove xorg-x11-nvidia supergfxctl-plasmoid supergfxctl
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
     ln -s libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so
-    systemctl enable supergfxd
 fi
 
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo

@@ -5,6 +5,7 @@ source /ctx/build/steps/prelude.sh
 # Install packages included with system
 dnf5 -y install --allowerasing "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher-2.2.0-travis995.0f91801.x86_64.rpm"
 dnf5 -y remove kdenetwork-filesharing # FIXME why is this necessary?
+# TODO merged the patches above upstream so this should be removed soon
 dnf5 -y install --refresh --allowerasing \
     systemdgenie \
     fedora-logos \
