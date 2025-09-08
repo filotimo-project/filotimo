@@ -126,12 +126,13 @@ fi
 # ...and this part is by me
 mem=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 
-# set zram compression algo to zstd if mem < 16GB (16384000 KB)
-# improves compression ratio quite significantly with not that bad of a latency increase
-if [ "$mem" -lt 16384000 ]; then
+# set zram compression algo to zstd if mem < 8GB (8192000 KB)
+# improves compression ratio quite significantly with not that much of a latency increase
+if [ "$mem" -lt 8192000 ]; then
     echo "zstd" > /sys/block/zram0/comp_algorithm
-    printf "zram compression algorithm set to zstd"
+    printf "physical memory <= 8GB, zram compression algorithm set to zstd"
 else
-    printf "physical memory >= 16GB, zram compression algorithm not changed to zstd"
+    echo "lz4" > /sys/block/zram0/comp_algorithm
+    printf "physical memory >= 8GB, zram compression algorithm set to lz4"
 fi
 
