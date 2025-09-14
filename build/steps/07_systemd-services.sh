@@ -21,6 +21,7 @@ systemctl enable plugdev-append.service
 systemctl enable set-grub-visibility.service
 systemctl enable ublue-os-libvirt-workarounds.service
 systemctl disable flatpak-add-fedora-repos.service
+systemctl --global enable atychiad.service
 
 # Setup hook runners
 # FIXME: workaround for it being fucked upstream
