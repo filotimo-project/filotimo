@@ -70,7 +70,7 @@ jobs:
       
       - name: Upload ISO as artifact
         id: upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ steps.build.outputs.iso_name }}
           path: |
